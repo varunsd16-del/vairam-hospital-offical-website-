@@ -1,0 +1,185 @@
+---
+// AboutPreview Component - Vairam Multi Speciality Hospital
+---
+
+<section class="about-preview">
+  <div class="about-grid">
+    <div class="about-visual reveal reveal-left">
+      <div class="about-img-container">
+        <img src="/images/building-exterior.png" alt="Vairam Hospital Building" class="about-img-main" />
+        <div class="about-experience-badge">
+          <span class="exp-num">15+</span>
+          <span class="exp-text">Years of Excellence</span>
+        </div>
+      </div>
+    </div>
+    <div class="about-content reveal reveal-right">
+      <h3 class="section-badge">About Vairam Hospital</h3>
+      <h2 class="section-title">Advanced Treatment, <br><span class="text-primary">Caring Hands</span></h2>
+      <p class="section-desc">At Vairam Multi Speciality Hospital, we bridge the gap between world-class technology and personalized care. Our mission is to provide safe, affordable, and high-quality treatment to every patient.</p>
+      
+      <div class="features-list">
+        <div class="feature-item">
+          <div class="feature-icon"><i class="fas fa-check-circle"></i></div>
+          <div class="feature-text">24/7 Emergency & Trauma Care</div>
+        </div>
+        <div class="feature-item" style="transition-delay: 0.1s">
+          <div class="feature-icon"><i class="fas fa-check-circle"></i></div>
+          <div class="feature-text">Advanced Diagnostic Laboratory</div>
+        </div>
+        <div class="feature-item" style="transition-delay: 0.2s">
+          <div class="feature-icon"><i class="fas fa-check-circle"></i></div>
+          <div class="feature-text">Modern Operation Theatres</div>
+        </div>
+      </div>
+
+      <a href="/about" class="btn-premium-simple">
+        Read Our Story <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about-preview {
+    padding: 100px 5%;
+    background: var(--white);
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .about-visual {
+    position: relative;
+  }
+
+  .about-img-container {
+    position: relative;
+    padding: 20px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .about-img-main {
+    width: 100%;
+    border-radius: 30px;
+    box-shadow: var(--shadow-premium);
+    position: relative;
+    z-index: 2;
+  }
+
+  .about-experience-badge {
+    position: absolute;
+    bottom: -30px;
+    right: -10px;
+    background: var(--primary);
+    color: white;
+    padding: 30px;
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 20px 40px -10px rgba(13, 148, 136, 0.4);
+    z-index: 5;
+    animation: float 4s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .exp-num {
+    font-size: 2.2rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .exp-text {
+    font-size: 0.8rem;
+    font-weight: 600;
+    opacity: 0.9;
+    text-align: center;
+  }
+
+  .section-badge {
+    color: var(--primary);
+    font-size: 0.9rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 15px;
+    display: block;
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    margin-bottom: 25px;
+    color: var(--secondary);
+    line-height: 1.2;
+  }
+
+  .text-primary {
+    color: var(--primary);
+  }
+
+  .section-desc {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    margin-bottom: 35px;
+    line-height: 1.8;
+  }
+
+  .features-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 40px;
+  }
+
+  .feature-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-weight: 700;
+    color: var(--secondary);
+  }
+
+  .feature-icon {
+    color: var(--primary);
+    font-size: 1.2rem;
+  }
+
+  .btn-premium-simple {
+    text-decoration: none;
+    color: var(--primary);
+    font-weight: 800;
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    transition: var(--transition);
+  }
+
+  .btn-premium-simple:hover {
+    gap: 18px;
+    color: var(--primary-dark);
+  }
+
+  @media (max-width: 1024px) {
+    .about-grid { gap: 40px; }
+  }
+
+  @media (max-width: 768px) {
+    .about-grid { grid-template-columns: 1fr; text-align: center; gap: 60px; }
+    .about-experience-badge { right: 10px; bottom: -20px; padding: 20px; }
+    .features-list { align-items: center; }
+  }
+</style>

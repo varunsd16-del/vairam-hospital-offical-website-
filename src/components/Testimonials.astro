@@ -1,0 +1,321 @@
+---
+// Testimonials Component - Vairam Multi Speciality Hospital
+// Upgraded UI/UX featuring 3-column desktop layout, verified tags, and structured Review Schema.
+
+const testimonials = [
+  {
+    initials: "RK",
+    name: "Rajesh Kumar",
+    stars: 5,
+    text: "The care I received at Vairam Hospital was exceptional. The doctors were attentive, and the facilities were top-notch. Highly recommended for any cardiac issues.",
+    verified: true
+  },
+  {
+    initials: "SM",
+    name: "Sarah M.",
+    stars: 5,
+    text: "My mother had a knee replacement surgery here. The orthopaedic team was brilliant, and her recovery was much faster than we expected. Thank you Vairam!",
+    verified: true
+  },
+  {
+    initials: "AP",
+    name: "Arun Prakash",
+    stars: 4.5,
+    text: "24/7 emergency service saved my father's life. The response time was incredibly fast and the staff handled everything professionally.",
+    verified: true
+  }
+];
+---
+
+<!-- Structured Review Schema (JSON-LD) for SEO, AEO, and GEO search queries -->
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "MedicalBusiness",
+    "@id": "https://vairamhospital.com/#hospital",
+    "name": "Vairam Multi Speciality Hospital",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "reviewCount": "3"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "author": {
+          "@type": "Person",
+          "name": "Rajesh Kumar"
+        },
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "The care I received at Vairam Hospital was exceptional. The doctors were attentive, and the facilities were top-notch. Highly recommended for any cardiac issues."
+      },
+      {
+        "@type": "Review",
+        "author": {
+          "@type": "Person",
+          "name": "Sarah M."
+        },
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "reviewBody": "My mother had a knee replacement surgery here. The orthopaedic team was brilliant, and her recovery was much faster than we expected. Thank you Vairam!"
+      },
+      {
+        "@type": "Review",
+        "author": {
+          "@type": "Person",
+          "name": "Arun Prakash"
+        },
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "4.5"
+        },
+        "reviewBody": "24/7 emergency service saved my father's life. The response time was incredibly fast and the staff handled everything professionally."
+      }
+    ]
+  }
+</script>
+
+<section class="testimonials-section" id="testimonials">
+  <div class="container">
+    
+    <!-- Section Header -->
+    <div class="section-header text-center reveal reveal-up">
+      <span class="section-badge">Testimonials</span>
+      <h2 class="section-title">What Our Patients <span class="text-primary">Say</span></h2>
+      <div class="premium-divider"></div>
+      <p class="section-desc">
+        Hear directly from families, corporate clients, and clinical professionals who have experienced our treatment care.
+      </p>
+    </div>
+    
+    <!-- Testimonials Grid Layout -->
+    <div class="testimonials-grid">
+      {testimonials.map((test, idx) => (
+        <article class="testimonial-card reveal reveal-up" style={`transition-delay: ${idx * 0.15}s;`}>
+          <div class="quote-icon-premium"><i class="fas fa-quote-right"></i></div>
+          
+          <!-- Testimonial statement -->
+          <blockquote class="review-text">
+            "{test.text}"
+          </blockquote>
+          
+          <!-- Patient Profile -->
+          <div class="patient-info">
+            <div class="avatar-premium">{test.initials}</div>
+            <div class="patient-details">
+              <div class="patient-name-row">
+                <h4>{test.name}</h4>
+                {test.verified && (
+                  <span class="verified-tag">
+                    <i class="fas fa-check-circle"></i> Verified
+                  </span>
+                )}
+              </div>
+              
+              <!-- Star rating parser -->
+              <div class="stars-premium" aria-label={`Rating: ${test.stars} stars`}>
+                {Array.from({ length: Math.floor(test.stars) }).map(() => (
+                  <i class="fas fa-star"></i>
+                ))}
+                {test.stars % 1 !== 0 && (
+                  <i class="fas fa-star-half-alt"></i>
+                )}
+              </div>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .testimonials-section {
+    padding: 100px 5% 120px;
+    background: var(--white);
+    position: relative;
+    z-index: 10;
+  }
+
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 60px;
+  }
+
+  .section-badge {
+    color: var(--primary);
+    font-size: 0.9rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 15px;
+    display: block;
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    margin-bottom: 15px;
+    color: var(--secondary);
+    line-height: 1.2;
+  }
+
+  .text-primary {
+    color: var(--primary);
+  }
+
+  .premium-divider {
+    height: 4px;
+    width: 50px;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    margin: 20px auto 25px;
+    border-radius: 2px;
+  }
+
+  .section-desc {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+  }
+
+  /* Testimonials Grid */
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+    margin-top: 50px;
+  }
+
+  .testimonial-card {
+    background: var(--white);
+    padding: 50px 40px;
+    border-radius: 30px;
+    box-shadow: var(--shadow-premium);
+    position: relative;
+    border: 1px solid rgba(13, 148, 136, 0.04);
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 320px;
+  }
+
+  .testimonial-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(13, 148, 136, 0.25);
+    box-shadow: 0 25px 50px -20px rgba(13, 148, 136, 0.12);
+  }
+
+  .quote-icon-premium {
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    font-size: 2.5rem;
+    color: var(--primary);
+    opacity: 0.08;
+    transition: var(--transition);
+  }
+
+  .testimonial-card:hover .quote-icon-premium {
+    opacity: 0.18;
+    transform: scale(1.1) rotate(5deg);
+  }
+
+  .review-text {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    line-height: 1.8;
+    font-style: italic;
+    margin-bottom: 35px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .patient-info {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: auto;
+  }
+
+  .avatar-premium {
+    width: 55px;
+    height: 55px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    font-weight: 800;
+    box-shadow: 0 10px 20px -5px rgba(13, 148, 136, 0.3);
+    flex-shrink: 0;
+  }
+
+  .patient-details {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .patient-name-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .patient-details h4 {
+    color: var(--secondary);
+    font-size: 1.1rem;
+    font-weight: 800;
+  }
+
+  .verified-tag {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--primary-dark);
+    background: rgba(13, 148, 136, 0.06);
+    padding: 3px 8px;
+    border-radius: 50px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    border: 1px solid rgba(13, 148, 136, 0.1);
+  }
+
+  .stars-premium {
+    color: var(--accent);
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    margin-top: 6px;
+  }
+
+  @media (max-width: 991px) {
+    .testimonials-section {
+      padding: 80px 5% 100px;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .testimonials-grid {
+      grid-template-columns: 1fr;
+    }
+    .testimonial-card {
+      padding: 40px 30px;
+      min-height: auto;
+    }
+  }
+</style>

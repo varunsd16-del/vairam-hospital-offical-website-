@@ -1,0 +1,55 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import QuickServices from '../components/QuickServices.astro';
+import AboutPreview from '../components/AboutPreview.astro';
+import WhyChooseUs from '../components/WhyChooseUs.astro';
+import DoctorsPreview from '../components/DoctorsPreview.astro';
+import Testimonials from '../components/Testimonials.astro';
+---
+
+<Layout title="Vairam Multi Speciality Hospital | Home">
+  <Hero />
+
+  <QuickServices />
+  <WhyChooseUs />
+  <AboutPreview />
+  <DoctorsPreview />
+
+  <Testimonials />
+
+  <style>
+    @media (max-width: 1024px) {
+      .hero-container { gap: 30px; }
+    }
+
+    @media (max-width: 768px) {
+      .hero { 
+        text-align: center; 
+        padding: 80px 5% 60px; 
+      }
+      .hero-container { 
+        grid-template-columns: 1fr;
+      }
+      .hero-content { 
+        margin: 0 auto; 
+        order: 2;
+      }
+      .hero-visual {
+        order: 1;
+        margin-bottom: 40px;
+      }
+      .visual-card {
+        transform: none;
+        max-width: 400px;
+        margin: 0 auto;
+      }
+      .hero-btns { flex-direction: column; width: 100%; gap: 15px; }
+      .btn-premium, .btn-outline-premium { justify-content: center; width: 100%; }
+      
+      .hero-stats { justify-content: center; }
+
+      .section-title { font-size: 2.2rem; }
+    }
+  </style>
+</Layout>

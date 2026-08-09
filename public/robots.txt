@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://vairamhospital.com/sitemap.xml

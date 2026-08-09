@@ -1,0 +1,505 @@
+---
+// DoctorsPreview Component - Vairam Multi Speciality Hospital
+// Optimized for SEO, AEO, and GEO search engines with structured JSON-LD Schema.
+
+const previewDoctors = [
+  { 
+    name: "Dr. A. Rajesh", 
+    spec: "Senior Cardiologist", 
+    edu: "MBBS, MD, DM (Cardio)", 
+    img: "/images/consultation.png",
+    icon: "fa-heartbeat",
+    specialtyLink: "/services",
+    availability: "Available Today",
+    desc: "Expert in interventional cardiology, heart failure management, and preventive cardiac wellness in Mayiladuthurai."
+  },
+  { 
+    name: "Dr. K. Vignesh", 
+    spec: "Orthopedic Surgeon", 
+    edu: "MBBS, MS (Ortho)", 
+    img: "/images/consultation.png",
+    icon: "fa-bone",
+    specialtyLink: "/services",
+    availability: "Available Today",
+    desc: "Specialist in joint replacement surgery, trauma management, and advanced arthroscopic treatments."
+  },
+  { 
+    name: "Dr. S. Priya", 
+    spec: "Gynecologist", 
+    edu: "MBBS, DGO, MS", 
+    img: "/images/consultation.png",
+    icon: "fa-baby",
+    specialtyLink: "/services",
+    availability: "Available Today",
+    desc: "Dedicated to complete women's healthcare, pregnancy support, and laparoscopic gynecological surgeries."
+  }
+];
+---
+
+<!-- Structured Metadata for Search (SEO) and Answer Engines (AEO/GEO) -->
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Specialist Doctors at Vairam Hospital Mayiladuthurai",
+    "description": "Meet our team of best doctors and top medical specialists in Mayiladuthurai, providing cardiology, neurology, orthopaedics, gynecology, and general medicine.",
+    "numberOfItems": 3,
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "item": {
+          "@type": "Physician",
+          "name": "Dr. A. Rajesh",
+          "jobTitle": "Senior Cardiologist",
+          "medicalSpecialty": "CardiovascularDisease",
+          "worksFor": {
+            "@type": "Hospital",
+            "name": "Vairam Multi Speciality Hospital"
+          },
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Pattamangala St",
+            "addressLocality": "Mayiladuthurai",
+            "addressRegion": "TN",
+            "postalCode": "609001",
+            "addressCountry": "IN"
+          }
+        }
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "item": {
+          "@type": "Physician",
+          "name": "Dr. K. Vignesh",
+          "jobTitle": "Orthopedic Surgeon",
+          "medicalSpecialty": "Orthopedic",
+          "worksFor": {
+            "@type": "Hospital",
+            "name": "Vairam Multi Speciality Hospital"
+          },
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Pattamangala St",
+            "addressLocality": "Mayiladuthurai",
+            "addressRegion": "TN",
+            "postalCode": "609001",
+            "addressCountry": "IN"
+          }
+        }
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "item": {
+          "@type": "Physician",
+          "name": "Dr. S. Priya",
+          "jobTitle": "Gynecologist",
+          "medicalSpecialty": "Obstetric",
+          "worksFor": {
+            "@type": "Hospital",
+            "name": "Vairam Multi Speciality Hospital"
+          },
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Pattamangala St",
+            "addressLocality": "Mayiladuthurai",
+            "addressRegion": "TN",
+            "postalCode": "609001",
+            "addressCountry": "IN"
+          }
+        }
+      }
+    ]
+  }
+</script>
+
+<section class="doctors-preview-section" id="doctorsPreview">
+  <div class="container">
+    
+    <!-- Section Header optimized for SEO & High Search Intent -->
+    <div class="section-header reveal reveal-up">
+      <span class="section-badge">Medical Team</span>
+      <h2 class="section-title">Meet Our Specialist <br /><span class="text-primary">Doctors in Mayiladuthurai</span></h2>
+      <p class="section-desc">
+        Consult with the best medical specialists in Mayiladuthurai. Our clinical team brings together top-tier cardiologists, orthopedic surgeons, neurologists, and gynecologists to deliver compassionate, high-quality healthcare.
+      </p>
+    </div>
+
+    <!-- Doctors Cards Grid -->
+    <div class="doctors-grid">
+      {previewDoctors.map((doc, idx) => (
+        <article class="doc-preview-card reveal reveal-up" style={`transition-delay: ${idx * 0.15}s;`}>
+          
+          <!-- Image Wrapper with Availability Status -->
+          <div class="doc-image-wrap">
+            <img src={doc.img} alt={`Photo of ${doc.name}, ${doc.spec} at Vairam Hospital Mayiladuthurai`} class="doc-img" />
+            <div class="availability-badge">
+              <span class="status-dot"></span>
+              {doc.availability}
+            </div>
+          </div>
+
+          <!-- Doctor Body Details -->
+          <div class="doc-body">
+            <div class="doc-header">
+              <div class="doc-title-group">
+                <h3 class="doc-name">{doc.name}</h3>
+                <span class="doc-spec">{doc.spec}</span>
+              </div>
+              <div class="doc-spec-icon">
+                <i class={`fas ${doc.icon}`}></i>
+              </div>
+            </div>
+            
+            <p class="doc-edu">{doc.edu}</p>
+            <p class="doc-desc">{doc.desc}</p>
+            
+            <!-- Booking and Detail triggers -->
+            <div class="doc-actions">
+              <a href="/contact" class="btn-book-now" aria-label={`Book an appointment with ${doc.name}`}>
+                Book Appointment <i class="fas fa-calendar-check"></i>
+              </a>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <!-- Secondary Call-to-Action to View All Doctors -->
+    <div class="section-footer reveal reveal-up">
+      <a href="/doctors" class="btn-view-all" aria-label="View all doctors and clinical specialists at Vairam Hospital">
+        View All Specialist Doctors <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .doctors-preview-section {
+    padding: 100px 5% 120px;
+    background: var(--white);
+    position: relative;
+    z-index: 10;
+  }
+
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    max-width: 800px;
+    margin: 0 auto 60px;
+    text-align: center;
+  }
+
+  .section-badge {
+    color: var(--primary-dark);
+    font-size: 0.9rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 15px;
+    display: inline-block;
+    position: relative;
+    padding-left: 20px;
+  }
+
+  .section-badge::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 3px;
+    background: var(--primary);
+    border-radius: 2px;
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 3.5vw, 2.75rem);
+    font-weight: 800;
+    line-height: 1.2;
+    color: var(--secondary);
+    margin-bottom: 20px;
+    letter-spacing: -0.02em;
+  }
+
+  .text-primary {
+    color: var(--primary);
+    background: linear-gradient(120deg, var(--primary) 0%, var(--primary-dark) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .section-desc {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+  }
+
+  /* Doctors Card Grid */
+  .doctors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 40px;
+    margin-bottom: 60px;
+  }
+
+  .doc-preview-card {
+    background: var(--white);
+    border: 1px solid rgba(13, 148, 136, 0.08);
+    border-radius: 28px;
+    box-shadow: 0 15px 35px -15px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  .doc-preview-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(13, 148, 136, 0.25);
+    box-shadow: 0 25px 50px -20px rgba(13, 148, 136, 0.12);
+  }
+
+  /* Image Wrap styling */
+  .doc-image-wrap {
+    height: 280px;
+    position: relative;
+    overflow: hidden;
+    background: #f0f7f7;
+  }
+
+  .doc-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .doc-preview-card:hover .doc-img {
+    transform: scale(1.05);
+  }
+
+  /* Availability status badge */
+  .availability-badge {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(4px);
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--primary-dark);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(13, 148, 136, 0.1);
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    background: #25d366;
+    border-radius: 50%;
+    display: inline-block;
+    position: relative;
+    animation: statusPulse 2s infinite;
+  }
+
+  @keyframes statusPulse {
+    0% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+    }
+    70% {
+      transform: scale(1.1);
+      box-shadow: 0 0 0 6px rgba(37, 211, 102, 0);
+    }
+    100% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+    }
+  }
+
+  /* Card Body */
+  .doc-body {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  .doc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 8px;
+  }
+
+  .doc-title-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .doc-name {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--secondary);
+    line-height: 1.2;
+  }
+
+  .doc-spec {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-top: 4px;
+  }
+
+  /* FontAwesome Icon frame overlay */
+  .doc-spec-icon {
+    width: 44px;
+    height: 44px;
+    background: rgba(13, 148, 136, 0.06);
+    color: var(--primary);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    transition: var(--transition);
+  }
+
+  .doc-preview-card:hover .doc-spec-icon {
+    background: var(--primary);
+    color: var(--white);
+    transform: rotate(5deg);
+  }
+
+  .doc-edu {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-bottom: 15px;
+    background: #f4fbfb;
+    padding: 4px 12px;
+    border-radius: 6px;
+    align-self: flex-start;
+  }
+
+  .doc-desc {
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+    margin-bottom: 25px;
+    flex-grow: 1;
+  }
+
+  /* Action Buttons inside Card */
+  .doc-actions {
+    display: flex;
+    margin-top: auto;
+  }
+
+  .btn-book-now {
+    width: 100%;
+    text-align: center;
+    text-decoration: none;
+    background: linear-gradient(135deg, rgba(20, 184, 166, 0.08) 0%, rgba(13, 148, 136, 0.04) 100%);
+    border: 1px solid rgba(13, 148, 136, 0.12);
+    color: var(--primary-dark);
+    padding: 14px;
+    border-radius: 16px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: var(--transition);
+  }
+
+  .btn-book-now i {
+    font-size: 0.95rem;
+    transition: var(--transition);
+  }
+
+  .doc-preview-card:hover .btn-book-now {
+    background: var(--primary);
+    color: var(--white);
+    border-color: var(--primary);
+    box-shadow: 0 10px 20px -5px rgba(13, 148, 136, 0.3);
+  }
+
+  .doc-preview-card:hover .btn-book-now i {
+    transform: translateY(-1px);
+  }
+
+  /* Section Footer */
+  .section-footer {
+    text-align: center;
+  }
+
+  .btn-view-all {
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--white);
+    color: var(--primary-dark);
+    border: 1.5px solid rgba(13, 148, 136, 0.25);
+    padding: 16px 36px;
+    border-radius: 16px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    transition: var(--transition);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+  }
+
+  .btn-view-all:hover {
+    background: rgba(13, 148, 136, 0.04);
+    border-color: var(--primary);
+    color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px -10px rgba(13, 148, 136, 0.2);
+  }
+
+  .btn-view-all i {
+    transition: var(--transition);
+  }
+
+  .btn-view-all:hover i {
+    transform: translateX(5px);
+  }
+
+  /* Responsiveness overrides */
+  @media (max-width: 991px) {
+    .doctors-preview-section {
+      padding: 80px 5% 100px;
+    }
+    .doctors-grid {
+      gap: 30px;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .doctors-grid {
+      grid-template-columns: 1fr;
+    }
+    .btn-view-all {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+</style>

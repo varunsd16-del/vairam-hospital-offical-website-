@@ -1,0 +1,1468 @@
+---
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/png" href="/images/fav%20icon.png" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Primary Meta Tags -->
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta
+      name="description"
+      content="Vairam Multi Speciality Hospital in Mayiladuthurai offers advanced 24/7 emergency care, cardiology, orthopaedics, and multi-speciality medical services with experienced doctors."
+    />
+    <meta
+      name="keywords"
+      content="Vairam Hospital, Multi Speciality Hospital Mayiladuthurai, Best Hospital in Mayiladuthurai, 24/7 Emergency Care Mayiladuthurai, Cardiology Mayiladuthurai, Orthopaedics Mayiladuthurai, Healthcare Tamil Nadu"
+    />
+    <meta name="author" content="VAC Global Solutions" />
+
+    <!-- Local SEO -->
+    <meta name="geo.region" content="IN-TN" />
+    <meta name="geo.placename" content="Mayiladuthurai" />
+    <meta name="geo.position" content="11.1017;79.6548" />
+    <meta name="ICBM" content="11.1017, 79.6548" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://vairamhospital.com/" />
+    <meta property="og:title" content={title} />
+    <meta
+      property="og:description"
+      content="Vairam Multi Speciality Hospital - Your Health, Our Responsibility. Advanced healthcare in Mayiladuthurai."
+    />
+    <meta property="og:image" content="/images/hero-building.png" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://vairamhospital.com/" />
+    <meta property="twitter:title" content={title} />
+    <meta
+      property="twitter:description"
+      content="Vairam Multi Speciality Hospital - Your Health, Our Responsibility. Advanced healthcare in Mayiladuthurai."
+    />
+    <meta property="twitter:image" content="/images/hero-building.png" />
+
+    <!-- Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+
+    <!-- Structured Data (JSON-LD) for Local Business -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Hospital",
+        "name": "Vairam Multi Speciality Hospital",
+        "image": "https://vairamhospital.com/images/Logo.png",
+        "@id": "https://vairamhospital.com/",
+        "url": "https://vairamhospital.com/",
+        "telephone": "+919344644555",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Pattamangala St",
+          "addressLocality": "Mayiladuthurai",
+          "addressRegion": "TN",
+          "postalCode": "609001",
+          "addressCountry": "IN"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 11.1017,
+          "longitude": 79.6548
+        },
+        "openingHoursSpecification": {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+            "Sunday"
+          ],
+          "opens": "00:00",
+          "closes": "23:59"
+        },
+        "sameAs": [
+          "https://www.facebook.com/vairamhospital",
+          "https://www.instagram.com/vairamhospital"
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <!-- HEADER -->
+    <header>
+      <div class="logo-container">
+        <a href="/">
+          <img
+            src="/images/Vairam_Logo-removebg-preview.png"
+            alt="Vairam Multi Speciality Hospital"
+          />
+        </a>
+      </div>
+
+      <button id="menuToggle" class="menu-toggle">
+        <i class="fas fa-bars"></i>
+      </button>
+
+      <nav id="mainNav">
+        <ul>
+          <li><a href="/">HOME</a></li>
+          <li><a href="/about">ABOUT US</a></li>
+          <li><a href="/services">SERVICES</a></li>
+          <li><a href="/doctors">DOCTORS</a></li>
+          <li><a href="/facilities">FACILITIES</a></li>
+          <li><a href="/contact">CONTACT</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-right">
+        <a href="tel:+919344644555" class="emergency-btn">
+          <i class="fas fa-phone-alt"></i>
+          <div class="btn-text">
+            <span style="font-size: 0.6rem; opacity: 0.8; display: block;"
+              >EMERGENCY (24/7)</span
+            >
+            <span class="num">+91 93446 44555</span>
+          </div>
+        </a>
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <!-- MAIN FOOTER -->
+    <footer>
+      <div class="footer-grid">
+        <!-- Column 1: Brand -->
+        <div class="footer-brand">
+          <img
+            src="/images/Logo.png"
+            alt="Vairam Hospital"
+            class="footer-logo"
+          />
+          <p class="brand-desc">
+            Vairam Multi Speciality Hospital is committed to providing
+            world-class healthcare with a human touch. Our mission is to make
+            advanced medical care accessible and affordable for everyone.
+          </p>
+          <div class="social-links">
+            <a href="https://facebook.com" target="_blank" aria-label="Facebook"
+              ><i class="fab fa-facebook-f"></i></a
+            >
+            <a
+              href="https://instagram.com"
+              target="_blank"
+              aria-label="Instagram"><i class="fab fa-instagram"></i></a
+            >
+            <a href="https://linkedin.com" target="_blank" aria-label="LinkedIn"
+              ><i class="fab fa-linkedin-in"></i></a
+            >
+          </div>
+        </div>
+
+        <!-- Column 2: Quick Links -->
+        <div class="footer-nav">
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="/"><i class="fas fa-chevron-right"></i> Home</a></li>
+            <li>
+              <a href="/about"><i class="fas fa-chevron-right"></i> About Us</a>
+            </li>
+            <li>
+              <a href="/doctors"
+                ><i class="fas fa-chevron-right"></i> Our Doctors</a
+              >
+            </li>
+            <li>
+              <a href="/services"
+                ><i class="fas fa-chevron-right"></i> Specialities</a
+              >
+            </li>
+            <li>
+              <a href="/contact"
+                ><i class="fas fa-chevron-right"></i> Contact Us</a
+              >
+            </li>
+          </ul>
+        </div>
+
+        <!-- Column 3: Medical Services -->
+        <div class="footer-nav">
+          <h4>Our Services</h4>
+          <ul>
+            <li>
+              <a href="/services"
+                ><i class="fas fa-chevron-right"></i> Cardiology</a
+              >
+            </li>
+            <li>
+              <a href="/services"
+                ><i class="fas fa-chevron-right"></i> Orthopaedics</a
+              >
+            </li>
+            <li>
+              <a href="/services"
+                ><i class="fas fa-chevron-right"></i> Paediatrics</a
+              >
+            </li>
+            <li>
+              <a href="/services"
+                ><i class="fas fa-chevron-right"></i> Neurology</a
+              >
+            </li>
+            <li>
+              <a href="/services"
+                ><i class="fas fa-chevron-right"></i> General Medicine</a
+              >
+            </li>
+          </ul>
+        </div>
+
+        <!-- Column 4: Contact & Hours -->
+        <div class="footer-contact">
+          <h4>Get In Touch</h4>
+          <div class="contact-info">
+            <div class="contact-item">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>Pattamangala St, Mayiladuthurai, Tamil Nadu - 609001</span>
+            </div>
+            <div class="contact-item">
+              <i class="fas fa-phone-alt"></i>
+              <span>+91 93446 44555</span>
+            </div>
+            <div class="contact-item">
+              <i class="fas fa-envelope"></i>
+              <span>info@vairamhospital.com</span>
+            </div>
+            <div class="contact-item">
+              <i class="fas fa-clock"></i>
+              <span>Emergency: 24/7 Service</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-divider"></div>
+
+      <div class="footer-bottom">
+        <div class="bottom-left">
+          <p>
+            &copy; 2026 Vairam Multi Speciality Hospital. All rights reserved.
+          </p>
+        </div>
+        <div class="bottom-right">
+          <p>
+            Designed & Developed by <a href="#" class="vac-link"
+              >VAC Global Solutions</a
+            >
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- FLOATING CONTACT BUTTONS -->
+    <div class="floating-contact">
+      <a
+        href="https://wa.me/919344644555"
+        class="whatsapp-float"
+        target="_blank"
+        aria-label="WhatsApp"
+      >
+        <i class="fab fa-whatsapp"></i>
+      </a>
+      <a href="tel:+919344644555" class="call-float" aria-label="Call Us">
+        <i class="fas fa-phone-alt"></i>
+      </a>
+    </div>
+
+    <!-- AI CHATBOT -->
+    <div class="ai-chatbot-container" id="aiChatbot">
+      <div class="chatbot-window" id="chatbotWindow">
+        <div class="chatbot-header">
+          <div class="bot-info">
+            <div class="bot-avatar">
+              <i class="fas fa-robot"></i>
+              <span class="online-status"></span>
+            </div>
+            <div>
+              <h4>Vairam AI Assistant</h4>
+              <p>Online | Ready to help</p>
+            </div>
+          </div>
+          <button class="close-chat" id="closeChat"
+            ><i class="fas fa-times"></i></button
+          >
+        </div>
+        <div class="chatbot-messages" id="chatbotMessages">
+          <div class="message bot">
+            Hello! I'm your Vairam AI assistant. How can I help you today?
+          </div>
+          <div class="quick-replies">
+            <button id="replyAppt">Book Appointment</button>
+            <button id="replyServices">Our Services</button>
+            <button id="replyEmergency">Emergency</button>
+            <button id="replyLocation">Find Hospital</button>
+          </div>
+        </div>
+        <div class="chatbot-input">
+          <input
+            type="text"
+            id="userInputBot"
+            placeholder="Type your message..."
+          />
+          <button id="sendMessageBot"><i class="fas fa-paper-plane"></i></button
+          >
+        </div>
+      </div>
+      <button class="chatbot-trigger" id="chatbotTrigger">
+        <i class="fas fa-comment-dots"></i>
+        <span class="trigger-text">AI Chat</span>
+      </button>
+    </div>
+
+    <!-- BACK TO TOP -->
+    <a href="#" class="back-to-top" id="backToTop">
+      <i class="fas fa-arrow-up"></i>
+    </a>
+
+    <style is:global>
+      :root {
+        /* Premium Palette */
+        --primary: #0d9488; /* Deep Emerald */
+        --primary-light: #14b8a6;
+        --primary-dark: #0f766e;
+        --secondary: #020617; /* Midnight Navy */
+        --accent: #f59e0b; /* Sophisticated Gold */
+
+        /* Surface Colors */
+        --bg-main: #dbf5f1;
+        --bg-glass: rgba(255, 255, 255, 0.75);
+        --white: #ffffff;
+
+        /* Text Colors */
+        --text-main: #0f172a;
+        --text-muted: #475569;
+        --text-white: #ffffff;
+
+        /* Shadows & Effects */
+        --shadow-soft:
+          0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+        --shadow-premium:
+          0 20px 25px -5px rgba(0, 0, 0, 0.05),
+          0 8px 10px -6px rgba(0, 0, 0, 0.05);
+        --glass-border: 1px solid rgba(255, 255, 255, 0.3);
+        --glass-blur: blur(12px);
+
+        /* Typography */
+        --font-heading: "Plus Jakarta Sans", sans-serif;
+        --font-body: "DM Sans", sans-serif;
+
+        /* Compatibility Mapping for legacy colors */
+        --primary-teal: var(--primary);
+        --secondary-navy: var(--secondary);
+        --deep-blue: var(--primary-dark);
+        --text-navy: var(--secondary);
+        --gray-text: var(--text-muted);
+
+        /* Transition */
+        --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: var(--font-body);
+        color: var(--text-main);
+        background: var(--bg-main);
+        overflow-x: hidden;
+        line-height: 1.6;
+        scroll-behavior: smooth;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-family: var(--font-heading);
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+
+      /* ─── HEADER ─── */
+      header {
+        background: var(--bg-glass);
+        backdrop-filter: var(--glass-blur);
+        -webkit-backdrop-filter: var(--glass-blur);
+        border-bottom: var(--glass-border);
+        padding: 10px 5%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: var(--shadow-soft);
+        transition: var(--transition);
+        min-height: 75px;
+      }
+
+      header.scrolled {
+        padding: 6px 5%;
+        min-height: 65px;
+        background: rgba(255, 255, 255, 0.95);
+        box-shadow: var(--shadow-premium);
+      }
+
+      .logo-container {
+        display: flex;
+        align-items: center;
+      }
+
+      .logo-container a {
+        display: flex;
+        align-items: center;
+      }
+
+      .logo-container img {
+        height: 90px !important;
+        width: auto !important;
+        max-height: 80px;
+        object-fit: contain;
+        transition: var(--transition);
+      }
+
+      header.scrolled .logo-container img {
+        height: 95px !important;
+      }
+
+      .menu-toggle {
+        display: none;
+        background: none;
+        border: none;
+        color: var(--primary);
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 5px;
+        transition: var(--transition);
+      }
+
+      nav ul {
+        display: flex;
+        list-style: none;
+        gap: 35px;
+      }
+
+      nav ul li a {
+        text-decoration: none;
+        color: var(--secondary);
+        font-size: 0.85rem;
+        font-weight: 700;
+        position: relative;
+        padding: 8px 0;
+        transition: var(--transition);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      nav ul li a::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background: var(--primary);
+        transition: var(--transition);
+        transform: translateX(-50%);
+      }
+
+      nav ul li a:hover::after {
+        width: 100%;
+      }
+
+      nav ul li a:hover {
+        color: var(--primary);
+      }
+
+      .header-right {
+        display: flex;
+        align-items: center;
+        gap: 25px;
+      }
+
+      .emergency-btn {
+        background: var(--primary);
+        color: var(--white);
+        padding: 10px 24px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 0.85rem;
+        transition: var(--transition);
+        box-shadow: 0 10px 20px -10px rgba(13, 148, 136, 0.5);
+      }
+
+      .emergency-btn:hover {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 15px 30px -12px rgba(13, 148, 136, 0.6);
+        background: var(--primary-dark);
+      }
+
+      .emergency-btn i {
+        font-size: 1.1rem;
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(1.2);
+          opacity: 0.7;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      footer {
+        background: var(--secondary);
+        padding: 80px 5% 40px;
+        color: white;
+        position: relative;
+        overflow: hidden;
+      }
+
+      footer::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary), var(--accent));
+      }
+
+      .footer-grid {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr 1fr 1.5fr;
+        gap: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+        align-items: start;
+      }
+
+      .footer-brand .footer-logo {
+        height: 110px;
+        width: auto;
+        object-fit: contain;
+        margin-bottom: 25px;
+      }
+
+      .brand-desc {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.9rem;
+        line-height: 1.8;
+        margin-bottom: 25px;
+      }
+
+      .footer-nav h4,
+      .footer-contact h4 {
+        color: white;
+        font-size: 1.1rem;
+        font-weight: 800;
+        margin-bottom: 25px;
+        position: relative;
+        padding-bottom: 12px;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      .footer-nav h4::after,
+      .footer-contact h4::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 30px;
+        height: 3px;
+        background: var(--primary);
+        border-radius: 2px;
+      }
+
+      .footer-nav ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .footer-nav ul li a {
+        color: rgba(255, 255, 255, 0.6);
+        text-decoration: none;
+        font-size: 0.95rem;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .footer-nav ul li a i {
+        font-size: 0.8rem;
+        color: var(--primary);
+        opacity: 0.5;
+        transition: var(--transition);
+      }
+
+      .footer-nav ul li a:hover {
+        color: var(--primary-light);
+        transform: translateX(8px);
+      }
+
+      .footer-nav ul li a:hover i {
+        opacity: 1;
+        transform: scale(1.2);
+      }
+
+      .contact-info {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .contact-item {
+        display: flex;
+        gap: 15px;
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.95rem;
+        line-height: 1.6;
+      }
+
+      .contact-item i {
+        color: var(--primary);
+        font-size: 1.2rem;
+        width: 20px;
+      }
+
+      .footer-divider {
+        height: 1px;
+        background: rgba(255, 255, 255, 0.05);
+        max-width: 1400px;
+        margin: 50px auto 30px;
+      }
+
+      .footer-bottom {
+        max-width: 1400px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 0.85rem;
+      }
+
+      /* ─── BACK TO TOP ─── */
+      .back-to-top {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 50px;
+        height: 50px;
+        background: var(--primary-teal);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        z-index: 999;
+      }
+
+      .back-to-top.show {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      /* ─── FLOATING CONTACT ─── */
+      .floating-contact {
+        position: fixed;
+        right: 25px;
+        bottom: 100px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        z-index: 9998;
+      }
+
+      .whatsapp-float,
+      .call-float {
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 24px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        text-decoration: none;
+      }
+
+      .whatsapp-float {
+        background-color: #25d366;
+      }
+
+      .call-float {
+        background-color: var(--primary-teal);
+      }
+
+      .whatsapp-float:hover,
+      .call-float:hover {
+        transform: scale(1.1) translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      }
+
+      @media (max-width: 768px) {
+        .floating-contact {
+          right: 20px;
+          bottom: 90px;
+        }
+        .whatsapp-float,
+        .call-float {
+          width: 50px;
+          height: 50px;
+          font-size: 20px;
+        }
+      }
+
+      /* ─── AI CHATBOT ─── */
+      .ai-chatbot-container {
+        position: fixed;
+        right: 25px;
+        bottom: 30px;
+        z-index: 10000;
+      }
+
+      .chatbot-trigger {
+        width: 65px;
+        height: 65px;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        border-radius: 20px;
+        border: none;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        box-shadow: 0 15px 30px -10px rgba(13, 148, 136, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition);
+        position: relative;
+      }
+
+      .chatbot-trigger:hover {
+        transform: scale(1.1) rotate(5deg);
+      }
+
+      .trigger-text {
+        position: absolute;
+        right: 75px;
+        background: white;
+        color: var(--text-navy);
+        padding: 8px 15px;
+        border-radius: 10px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        white-space: nowrap;
+        opacity: 0;
+        transform: translateX(10px);
+        transition: all 0.3s ease;
+        pointer-events: none;
+      }
+
+      .chatbot-trigger:hover .trigger-text {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      .chatbot-window {
+        position: absolute;
+        bottom: 80px;
+        right: 0;
+        width: 350px;
+        height: 500px;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        opacity: 0;
+        transform: translateY(20px) scale(0.9);
+        pointer-events: none;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        transform-origin: bottom right;
+      }
+
+      .chatbot-window.active {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        pointer-events: all;
+      }
+
+      .chatbot-header {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        padding: 25px;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .bot-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .bot-avatar {
+        width: 40px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        font-size: 1.2rem;
+      }
+
+      .online-status {
+        position: absolute;
+        bottom: 2px;
+        right: 2px;
+        width: 10px;
+        height: 10px;
+        background: #25d366;
+        border: 2px solid white;
+        border-radius: 50%;
+      }
+
+      .bot-info h4 {
+        margin: 0;
+        font-size: 1rem;
+      }
+      .bot-info p {
+        margin: 0;
+        font-size: 0.75rem;
+        opacity: 0.8;
+      }
+
+      .close-chat {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.2rem;
+        cursor: pointer;
+        opacity: 0.7;
+        transition: opacity 0.3s;
+      }
+
+      .close-chat:hover {
+        opacity: 1;
+      }
+
+      .chatbot-messages {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        background: #f8fbfc;
+      }
+
+      .message {
+        padding: 12px 16px;
+        border-radius: 15px;
+        max-width: 85%;
+        font-size: 0.9rem;
+        line-height: 1.5;
+        animation: messageFadeIn 0.3s ease forwards;
+      }
+
+      @keyframes messageFadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .message.bot {
+        background: white;
+        color: var(--text-navy);
+        align-self: flex-start;
+        border-bottom-left-radius: 2px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      }
+
+      .message.user {
+        background: var(--primary-teal);
+        color: white;
+        align-self: flex-end;
+        border-bottom-right-radius: 2px;
+        box-shadow: 0 5px 15px rgba(0, 128, 128, 0.2);
+      }
+
+      .quick-replies {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      .quick-replies button {
+        background: white;
+        border: 1px solid var(--primary-teal);
+        color: var(--primary-teal);
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .quick-replies button:hover {
+        background: var(--primary-teal);
+        color: white;
+      }
+
+      .chatbot-input {
+        padding: 15px;
+        background: white;
+        border-top: 1px solid #eee;
+        display: flex;
+        gap: 10px;
+      }
+
+      .chatbot-input input {
+        flex: 1;
+        border: 1px solid #eee;
+        padding: 10px 15px;
+        border-radius: 10px;
+        outline: none;
+        font-family: inherit;
+        transition: border 0.3s;
+      }
+
+      .chatbot-input input:focus {
+        border-color: var(--primary-teal);
+      }
+
+      .chatbot-input button {
+        background: var(--primary-teal);
+        color: white;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+
+      .chatbot-input button:hover {
+        background: var(--secondary-navy);
+      }
+
+      .slot-btn {
+        background: #f0f7f7;
+        border: 1px solid var(--primary-teal);
+        padding: 8px;
+        border-radius: 8px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        color: var(--primary-teal);
+      }
+
+      .slot-btn.active {
+        background: var(--primary-teal);
+        color: white;
+      }
+
+      @media (max-width: 480px) {
+        .chatbot-window {
+          width: calc(100vw - 40px);
+          height: 450px;
+          right: -10px;
+        }
+      }
+
+      /* ─── ANIMATIONS ─── */
+      .reveal {
+        opacity: 0;
+        transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .reveal.active {
+        opacity: 1;
+        transform: none !important;
+      }
+
+      .reveal-up {
+        transform: translateY(40px);
+      }
+      .reveal-left {
+        transform: translateX(-40px);
+      }
+      .reveal-right {
+        transform: translateX(40px);
+      }
+
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--primary-teal);
+        border-radius: 5px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--secondary-navy);
+      }
+
+      /* ─── MEDIA QUERIES ─── */
+      @media (max-width: 1024px) {
+        header {
+          padding: 8px 3%;
+          min-height: 70px;
+        }
+        nav ul {
+          gap: 15px;
+        }
+        .logo-container img {
+          height: 80px !important;
+        }
+        .emergency-btn {
+          padding: 8px 16px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        header {
+          flex-direction: row; /* Back to row for logo + hamburger */
+          flex-wrap: wrap;
+          padding: 8px 5%;
+          min-height: 65px;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .menu-toggle {
+          display: block;
+          order: 2;
+        }
+
+        .logo-container {
+          width: auto;
+          order: 1;
+        }
+
+        .logo-container img {
+          height: 55px !important;
+        }
+
+        .header-right {
+          display: none; /* Hide emergency and lang on mobile header to save space, or move them inside nav */
+        }
+
+        nav {
+          display: none;
+          width: 100%;
+          order: 3;
+          background: white;
+          padding: 20px 0;
+          border-top: 1px solid #eee;
+          margin-top: 10px;
+        }
+
+        nav.active {
+          display: block;
+          animation: slideDown 0.3s ease forwards;
+        }
+
+        @keyframes slideDown {
+          from {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        nav ul {
+          flex-direction: column;
+          align-items: center;
+          gap: 20px;
+          margin: 0;
+        }
+
+        nav ul li a {
+          font-size: 1rem;
+          padding: 10px 0;
+          display: block;
+          width: 100%;
+        }
+
+        .footer-grid {
+          grid-template-columns: 1fr;
+          text-align: center;
+        }
+        .footer-brand img {
+          margin: 0 auto 20px;
+        }
+      }
+    </style>
+
+    <script>
+      interface BookingData {
+        name?: string;
+        dept?: string;
+        time?: string;
+        phone?: string;
+      }
+
+      declare global {
+        interface Window {
+          selectSlot: (btn: HTMLElement) => void;
+          confirmBookingSchedule: () => void;
+          selectedTime?: string;
+        }
+      }
+
+      // Animation Engine: Intersection Observer
+      const revealCallback: IntersectionObserverCallback = (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("active");
+            // If it's a number counter, start it
+            if (entry.target.classList.contains("stat-num")) {
+              startCounter(entry.target as HTMLElement);
+            }
+          }
+        });
+      };
+
+      const revealObserver = new IntersectionObserver(revealCallback, {
+        root: null,
+        threshold: 0.15,
+        rootMargin: "0px",
+      });
+
+      // Initialize Reveals
+      document.addEventListener("DOMContentLoaded", () => {
+        const reveals = document.querySelectorAll(".reveal");
+        reveals.forEach((el) => revealObserver.observe(el));
+
+        // Header Scroll Effect
+        const header = document.querySelector("header");
+        window.addEventListener("scroll", () => {
+          if (window.scrollY > 50) {
+            header?.classList.add("scrolled");
+          } else {
+            header?.classList.remove("scrolled");
+          }
+        });
+      });
+
+      // Number Counter Logic
+      function startCounter(el: HTMLElement) {
+        const rawTarget = el.getAttribute("data-target") || el.innerText || "0";
+        const target = parseInt(rawTarget, 10) || 0;
+        let count = 0;
+        const duration = 2000; // 2 seconds
+        const increment = target / (duration / 16);
+        const hasPlus = el.innerText.includes("+");
+
+        const updateCount = () => {
+          count += increment;
+          if (count < target) {
+            el.innerText = Math.ceil(count) + (hasPlus ? "+" : "");
+            requestAnimationFrame(updateCount);
+          } else {
+            el.innerText = target + (hasPlus ? "+" : "");
+          }
+        };
+        updateCount();
+      }
+
+      // Back to top
+      const backToTop = document.getElementById("backToTop");
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 300) {
+          backToTop?.classList.add("show");
+        } else {
+          backToTop?.classList.remove("show");
+        }
+      });
+
+      // Mobile Menu Toggle
+      const menuToggle = document.getElementById("menuToggle");
+      const mainNav = document.getElementById("mainNav");
+
+      menuToggle?.addEventListener("click", () => {
+        mainNav?.classList.toggle("active");
+        const icon = menuToggle.querySelector("i");
+        if (icon) {
+          icon.classList.toggle("fa-bars");
+          icon.classList.toggle("fa-times");
+        }
+      });
+
+      // Chatbot Logic
+      const chatbotTrigger = document.getElementById("chatbotTrigger");
+      const chatbotWindow = document.getElementById("chatbotWindow");
+      const closeChatBot = document.getElementById("closeChat");
+      const sendMessageBot = document.getElementById("sendMessageBot");
+      const userInputBot = document.getElementById(
+        "userInputBot",
+      ) as HTMLInputElement | null;
+      const chatbotMessages = document.getElementById("chatbotMessages");
+
+      let isBooking = false;
+      let bookingStep = 0;
+      let bookingData: BookingData = {};
+
+      chatbotTrigger?.addEventListener("click", () => {
+        chatbotWindow?.classList.toggle("active");
+      });
+
+      closeChatBot?.addEventListener("click", () => {
+        chatbotWindow?.classList.remove("active");
+      });
+
+      function addBotMessage(text: string, sender: string, isHTML = false) {
+        const msgEl = document.createElement("div");
+        msgEl.className = `message ${sender}`;
+        if (isHTML) msgEl.innerHTML = text;
+        else msgEl.innerText = text;
+        chatbotMessages?.appendChild(msgEl);
+        if (chatbotMessages)
+          chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+      }
+
+      window.selectSlot = function (btn: HTMLElement) {
+        document
+          .querySelectorAll(".slot-btn")
+          .forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        window.selectedTime = btn.innerText;
+      };
+
+      window.confirmBookingSchedule = function () {
+        const dateInput = document.getElementById(
+          "bookDate",
+        ) as HTMLInputElement | null;
+        const date = dateInput?.value;
+        if (!date || !window.selectedTime) {
+          alert("Please select both date and time slot.");
+          return;
+        }
+        handleBotResponse(`${date} at ${window.selectedTime}`);
+      };
+
+      function processBooking(text: string) {
+        setTimeout(() => {
+          switch (bookingStep) {
+            case 1:
+              bookingData.name = text;
+              bookingStep = 2;
+              addBotMessage(
+                `Thanks, ${text}. Which department would you like to visit? (e.g., Cardiology, Orthopaedics)`,
+                "bot",
+              );
+              break;
+            case 2:
+              bookingData.dept = text;
+              bookingStep = 3;
+              const today = new Date().toISOString().split("T")[0];
+              const pickerHTML = `
+                <div class="booking-picker">
+                  <p style="margin-bottom: 10px; font-weight: 600; color: var(--text-navy);">Select Date & Time:</p>
+                  <input type="date" id="bookDate" min="${today}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 15px;" />
+                  <div class="time-slots" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px;">
+                    <button type="button" class="slot-btn" onclick="selectSlot(this)">09:00 AM</button>
+                    <button type="button" class="slot-btn" onclick="selectSlot(this)">11:00 AM</button>
+                    <button type="button" class="slot-btn" onclick="selectSlot(this)">02:00 PM</button>
+                    <button type="button" class="slot-btn" onclick="selectSlot(this)">04:00 PM</button>
+                  </div>
+                  <button onclick="confirmBookingSchedule()" style="width: 100%; background: var(--secondary-navy); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: 700;">Confirm Schedule</button>
+                </div>
+              `;
+              addBotMessage(pickerHTML, "bot", true);
+              break;
+            case 3:
+              bookingData.time = text;
+              bookingStep = 4;
+              addBotMessage(
+                "Great choice! Please provide your mobile number for confirmation.",
+                "bot",
+              );
+              break;
+            case 4:
+              bookingData.phone = text;
+              isBooking = false;
+              bookingStep = 0;
+              const token = "VAH-" + Math.floor(1000 + Math.random() * 9000);
+              const whatsappMsg = `*Appointment Request - Vairam Hospital*\n\n*Token:* ${token}\n*Patient:* ${bookingData.name}\n*Dept:* ${bookingData.dept}\n*Schedule:* ${bookingData.time}\n*Phone:* ${bookingData.phone}`;
+              const encodedMsg = encodeURIComponent(whatsappMsg);
+              const whatsappLink = `https://wa.me/919344644555?text=${encodedMsg}`;
+
+              const summaryHTML = `
+                <div style="background: white; padding: 15px; border-radius: 12px; border: 1px solid #eee; width: 100%;">
+                  <p style="color: var(--primary-teal); font-weight: 800; font-size: 1.1rem; margin-bottom: 10px;">Booking Confirmed!</p>
+                  <p style="margin-bottom: 15px; font-size: 0.85rem;">Your Token: <b style="color: var(--secondary-navy);">${token}</b></p>
+                  <div style="font-size: 0.85rem; line-height: 1.6; margin-bottom: 15px;">
+                    📍 <b>Patient:</b> ${bookingData.name}<br>
+                    🏥 <b>Dept:</b> ${bookingData.dept}<br>
+                    ⏰ <b>Schedule:</b> ${bookingData.time}<br>
+                    📞 <b>Phone:</b> ${bookingData.phone}
+                  </div>
+                  <a href="${whatsappLink}" target="_blank" style="display: flex; align-items: center; justify-content: center; gap: 8px; background: #25d366; color: white; text-decoration: none; padding: 12px; border-radius: 8px; font-weight: 700; font-size: 0.9rem;">
+                    <i class="fab fa-whatsapp"></i> Send to WhatsApp
+                  </a>
+                </div>
+              `;
+              addBotMessage(summaryHTML, "bot", true);
+              window.open(whatsappLink, "_blank");
+              break;
+          }
+        }, 800);
+      }
+
+      function handleBotResponse(text: string) {
+        if (!isBooking) addBotMessage(text, "user");
+
+        if (isBooking) {
+          addBotMessage(text, "user");
+          processBooking(text);
+          return;
+        }
+
+        setTimeout(() => {
+          let response = "";
+          const lowerText = text.toLowerCase();
+
+          if (lowerText.includes("appointment") || lowerText.includes("book")) {
+            isBooking = true;
+            bookingStep = 1;
+            response =
+              "I can help you book an appointment right here! Let's start with the patient's full name:";
+          } else if (lowerText.includes("service")) {
+            response =
+              "We offer specialized care in Cardiology, Orthopaedics, Neurology, and more. You can see the full list on our Services page.";
+          } else if (lowerText.includes("emergency")) {
+            response =
+              "For emergencies, please call +91 93446 44555 immediately. Our emergency team is available 24/7.";
+          } else if (lowerText.includes("location")) {
+            response =
+              "We are located at Pattamangala St, Mayiladuthurai. We're open 24 hours!";
+          } else {
+            response =
+              "I'm here to help! Type 'book appointment' to get started, or ask me anything about our services.";
+          }
+          addBotMessage(response, "bot");
+        }, 800);
+      }
+
+      sendMessageBot?.addEventListener("click", () => {
+        if (userInputBot) {
+          const text = userInputBot.value;
+          if (text.trim()) {
+            handleBotResponse(text);
+            userInputBot.value = "";
+          }
+        }
+      });
+
+      userInputBot?.addEventListener("keypress", (e: KeyboardEvent) => {
+        if (e.key === "Enter" && userInputBot) {
+          const text = userInputBot.value;
+          if (text.trim()) {
+            handleBotResponse(text);
+            userInputBot.value = "";
+          }
+        }
+      });
+
+      // Quick replies
+      document
+        .getElementById("replyAppt")
+        ?.addEventListener("click", () =>
+          handleBotResponse("Book Appointment"),
+        );
+      document
+        .getElementById("replyServices")
+        ?.addEventListener("click", () => handleBotResponse("Our Services"));
+      document
+        .getElementById("replyEmergency")
+        ?.addEventListener("click", () => handleBotResponse("Emergency"));
+      document
+        .getElementById("replyLocation")
+        ?.addEventListener("click", () => handleBotResponse("Location"));
+    </script>
+  </body>
+</html>

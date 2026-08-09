@@ -1,0 +1,65 @@
+---
+interface Props {
+  title: string;
+  subtitle?: string;
+}
+
+const { title, subtitle } = Astro.props;
+---
+
+<section class="page-header">
+  <div class="header-overlay"></div>
+  <div class="header-content">
+    <h1 class="reveal reveal-up">{title}</h1>
+    {subtitle && <p class="reveal reveal-up" style="transition-delay: 0.2s">{subtitle}</p>}
+  </div>
+</section>
+
+<style>
+  .page-header {
+    height: 300px;
+    background: linear-gradient(135deg, var(--secondary-navy), var(--deep-blue));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('/images/hero-building.png') center/cover;
+    opacity: 0.15;
+    filter: grayscale(100%);
+  }
+
+  .header-content {
+    position: relative;
+    z-index: 5;
+    color: white;
+  }
+
+  .header-content h1 {
+    font-size: 3rem;
+    font-weight: 900;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  .header-content p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    font-weight: 500;
+  }
+
+  @media (max-width: 768px) {
+    .page-header { height: 250px; }
+    .header-content h1 { font-size: 2rem; }
+  }
+</style>
