@@ -91,7 +91,7 @@ export const facilities: Facility[] = [
     category: "support",
     icon: "pill",
     desc: "Licensed in-house pharmacy with generic and branded medicines and discharge counselling.",
-    tags: ["24/7", "Generic options", "Insurance billing"],
+    tags: ["24/7", "Generic options", "Insurance support"],
     features: ["Open 24 hours, all year", "Generic and branded options", "Discharge counselling", "Drug interaction checks"],
   },
   {

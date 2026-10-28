@@ -6,8 +6,10 @@ export const site = {
   name: "Vairam Multi Speciality Hospital",
   shortName: "Vairam Hospital",
   url: "https://vairamhospital.com",
-  phone: "+919344644555",
-  phoneDisplay: "+91 93446 44555",
+  phone: "+914364229798",
+  phoneDisplay: "04364 229798",
+  phone2: "+914364223073",
+  phone2Display: "04364 223073",
   whatsapp: "919344644555",
   email: "info@vairamhospital.com",
   address: {
@@ -23,7 +25,7 @@ export const site = {
   mapEmbed:
     "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.332304388484!2d79.6548!3d11.1017!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a55212c759cd8f1%3A0xc095759a22f3fd4b!2sVairam%20Multi%20Speciality%20Hospital!5e0!3m2!1sen!2sin!4v171393498",
   directions: "https://www.google.com/maps/dir/?api=1&destination=11.1017,79.6548",
-  foundingYear: 2010,
+  foundingYear: 2008,
   hours: [
     { label: "Emergency, ICU & Pharmacy", value: "24 hours, all days" },
     { label: "Outpatient consultations", value: "Mon – Sun, 8:00 AM – 9:00 PM" },
@@ -36,7 +38,7 @@ export const site = {
   },
   // TODO(content): confirm these figures with the hospital before launch.
   stats: [
-    { value: "15+", label: "Years of care in Mayiladuthurai" },
+    { value: `${new Date().getFullYear() - 2008}+`, label: "Years of care in Mayiladuthurai" },
     { value: String(doctors.length), label: "Specialist doctors" },
     { value: String(specialities.length), label: "Specialities under one roof" },
     { value: "24/7", label: "Emergency, ICU & pharmacy" },
@@ -44,6 +46,7 @@ export const site = {
 } as const;
 
 export const telHref = `tel:${site.phone}`;
+export const tel2Href = `tel:${site.phone2}`;
 export const waHref = (text?: string) =>
   `https://wa.me/${site.whatsapp}${text ? `?text=${encodeURIComponent(text)}` : ""}`;
 

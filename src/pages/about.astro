@@ -35,7 +35,7 @@ const pillars = [
   {
     icon: "shield",
     title: "Our promise",
-    text: "Clear explanations, transparent estimates and a care team that treats you like family.",
+    text: "Clear explanations, honest advice and a care team that treats you like family.",
   },
 ] as const;
 
@@ -43,30 +43,37 @@ const values = [
   { icon: "heart", title: "Compassion", text: "Every patient is treated with dignity and patience, and every family is kept informed." },
   { icon: "award", title: "Excellence", text: "Evidence-based protocols and continuous training for doctors, nurses and staff." },
   { icon: "activity", title: "Innovation", text: "Steady investment in modern theatres, diagnostics and critical-care equipment." },
-  { icon: "shield", title: "Integrity", text: "Honest advice, transparent billing and clear communication at every step." },
+  { icon: "shield", title: "Integrity", text: "Honest advice, ethical practice and clear communication at every step." },
 ] as const;
 
 const differentiators = [
   { icon: "users", title: "One coordinated team", text: "Your consultant, nurses, lab and imaging teams work together on a single plan, so nothing falls through the gaps." },
   { icon: "clock", title: "Shorter waits", text: "Scheduled OPD slots, same-day lab reports for most tests and a dedicated emergency triage desk." },
-  { icon: "wallet", title: "Transparent costs", text: "A written estimate before planned procedures, and help with cashless insurance approvals." },
+  { icon: "shield", title: "Insurance support", text: "Help with cashless insurance approvals and paperwork, so you can focus on recovery." },
   { icon: "languages", title: "Care in your language", text: "Doctors and staff who speak Tamil and English, and explain things in plain words." },
   { icon: "bed", title: "Comfortable recovery", text: "Clean, calm rooms with space for a family attendant, and dietitian-planned meals." },
   { icon: "file-text", title: "Continuity after discharge", text: "Clear discharge summaries, follow-up reminders and reports shared on WhatsApp." },
 ] as const;
 
 const milestones = [
-  { year: "2010", title: "Foundation", text: "Vairam opens in Mayiladuthurai with general medicine and a diagnostic laboratory." },
+  { year: String(site.foundingYear), title: "Foundation", text: "Vairam opens in Mayiladuthurai with general medicine and a diagnostic laboratory." },
   { year: "2015", title: "Emergency, ICU & cardiology", text: "A 24/7 emergency and ICU unit opens alongside dedicated cardiology services." },
   { year: "2020", title: "Modular theatres", text: "Surgical infrastructure upgraded to modular standards, adding arthroscopy and neuro critical care." },
   { year: "2026", title: "Digital care", text: "Online appointments, digital reports and wellness programmes for the wider region." },
 ];
 
-// TODO(content): confirm leadership names, titles, photos and the founder's message.
+// TODO(content): confirm leadership titles and the founder's message with the hospital.
 const leaders = [
-  { name: "Dr. R. Vairamohan", title: "Founder & Chief Executive Officer", text: "Surgeon with over 25 years of experience, guiding Vairam's clinical standards and community outreach." },
-  { name: "Dr. A. Rajesh", title: "Chief Medical Officer", text: "Oversees medical operations, clinical quality and ethics across all departments." },
-  { name: "Mrs. V. Meenakshi", title: "Chief Operating Officer", text: "Leads insurance partnerships, patient experience and hospital operations." },
+  {
+    name: "Dr. R. Rajasekaran",
+    title: "Senior Orthopaedic Surgeon",
+    text: "Trauma and orthopaedic surgeon (M.B.B.S., D.Ortho), guiding Vairam's care for families across Mayiladuthurai and the delta.",
+  },
+  {
+    name: "Dr. R. Chitarth",
+    title: "Consultant Orthopaedic Surgeon",
+    text: "M.S., DNB (Ortho), MRCS (Edin). Fellowship-trained in hand & microsurgery and in arthroplasty & sports medicine in Singapore.",
+  },
 ];
 const founder = leaders[0];
 
@@ -81,7 +88,7 @@ const payments = [
   { icon: "wallet", title: "Cashless insurance", text: "Support with pre-authorisation from major insurers and TPAs." },
   { icon: "building", title: "Government schemes", text: "Treatment under eligible state and central health schemes." },
   { icon: "users", title: "Corporate tie-ups", text: "Employee health check-ups and treatment for partner organisations." },
-  { icon: "file-text", title: "Clear estimates", text: "Written cost estimates before planned procedures." },
+  { icon: "file-text", title: "Admission help desk", text: "A dedicated desk to guide you through admission and insurance paperwork." },
 ] as const;
 
 const initials = (n: string) =>
@@ -95,6 +102,7 @@ const initials = (n: string) =>
 ---
 
 <Layout
+  ogImage="/og/about.jpg"
   title="About Us | Vairam Multi Speciality Hospital, Mayiladuthurai"
   description={`Since ${site.foundingYear}, Vairam Multi Speciality Hospital has delivered specialist, emergency and diagnostic care to families in Mayiladuthurai, Sirkazhi, Karaikal and Kumbakonam.`}
 >
@@ -287,7 +295,7 @@ const initials = (n: string) =>
     items={[
       { icon: "shield", title: "Ethical medicine", text: "Only the tests and treatments you need, explained honestly before we begin." },
       { icon: "award", title: "Safety first", text: "Strict infection control, medication checks and regular clinical audits." },
-      { icon: "wallet", title: "Affordable excellence", text: "Specialist care at fair, transparent prices, with insurance support." },
+      { icon: "hospital", title: "Specialist care, close to home", text: "Senior specialists and modern facilities, without travelling to a big city." },
       { icon: "users", title: "Rooted in community", text: "A hospital for local families, staffed by people who share your language." },
     ]}
     cta={{ label: "Meet our doctors", href: "/doctors" }}
@@ -380,8 +388,8 @@ const initials = (n: string) =>
   <section class="section section--white" aria-labelledby="payTitle">
     <div class="container">
       <div class="section-head section-head--center">
-        <p class="eyebrow">Insurance & payments</p>
-        <h2 id="payTitle">Quality care, without financial stress</h2>
+        <p class="eyebrow">Insurance & admissions</p>
+        <h2 id="payTitle">Simple, supported admissions</h2>
       </div>
       <ul role="list" class="pay">
         {
@@ -840,7 +848,9 @@ const initials = (n: string) =>
   /* 9. Leadership */
   .leaders {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 860px;
+    margin-inline: auto;
     gap: var(--s-5);
   }
   .leader {

@@ -7,7 +7,7 @@ export const serviceFaqs: Faq[] = [
   },
   {
     q: "How do I book an appointment with a specialist?",
-    a: "Use any “Book appointment” button on this site, message us on WhatsApp at +91 93446 44555, or call our 24/7 helpdesk.",
+    a: "Use any “Book appointment” button on this site, or call our 24/7 helpdesk on 04364 229798 or 04364 223073.",
   },
   {
     q: "What should I bring to my first appointment?",
@@ -26,11 +26,11 @@ export const serviceFaqs: Faq[] = [
 export const facilityFaqs: Faq[] = [
   {
     q: "Can I see the hospital before an admission?",
-    a: "Yes. Contact our patient experience desk on +91 93446 44555 or walk in on weekdays between 10 AM and 5 PM, and we'll show you the rooms and departments.",
+    a: "Yes. Contact our patient experience desk on 04364 229798 or walk in on weekdays between 10 AM and 5 PM, and we'll show you the rooms and departments.",
   },
   {
     q: "What types of patient rooms are available?",
-    a: "General ward, semi-private, private rooms and suites. Our admissions desk can share current tariffs.",
+    a: "General ward, semi-private, private rooms and suites. Our admissions desk can help you choose the right room.",
   },
   {
     q: "Is the hospital wheelchair accessible?",

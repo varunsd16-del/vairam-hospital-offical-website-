@@ -1,0 +1,16 @@
+# Netlify build settings for the Vairam Hospital website (Astro static site)
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+  # Approval/preview phase: keep the netlify.app copy out of Google.
+  # Set to "false" (or delete this line) when moving to vairamhospital.com.
+  PUBLIC_NOINDEX = "true"
+
+# Long-term caching for fingerprinted build assets
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

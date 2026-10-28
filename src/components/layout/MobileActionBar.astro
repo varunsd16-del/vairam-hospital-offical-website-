@@ -1,17 +1,16 @@
 ---
 import Icon from "../ui/Icon.astro";
-import { telHref, waHref } from "../../data/site";
+import { site, telHref } from "../../data/site";
 ---
 
-<!-- Desktop: single WhatsApp floating shortcut -->
-<a href={waHref()} class="wa-float" target="_blank" rel="noopener" aria-label="Chat with us on WhatsApp">
-  <span class="wa-float__icon">
-    <Icon name="whatsapp" size={22} />
-    <span class="wa-float__badge" aria-hidden="true"></span>
+<!-- Desktop: floating call shortcut -->
+<a href={telHref} class="call-float" aria-label={`Call Vairam Hospital ${site.phoneDisplay}`}>
+  <span class="call-float__icon">
+    <Icon name="phone" size={20} />
   </span>
-  <span class="wa-float__label">
-    <span class="wa-float__sub">Have questions?</span>
-    <span class="wa-float__main">Chat on WhatsApp</span>
+  <span class="call-float__label">
+    <span class="call-float__sub">24/7 Emergency & Appointments</span>
+    <span class="call-float__main">{site.phoneDisplay}</span>
   </span>
 </a>
 
@@ -25,12 +24,6 @@ import { telHref, waHref } from "../../data/site";
       <span>Call 24/7</span>
     </a>
 
-    <a href={waHref()} target="_blank" rel="noopener" class="action-bar__item action-bar__item--wa">
-      <div class="action-bar__icon-box">
-        <Icon name="whatsapp" size={17} />
-      </div>
-      <span>WhatsApp</span>
-    </a>
 
     <button type="button" class="action-bar__item action-bar__item--book" data-book>
       <div class="action-bar__icon-box">
@@ -70,8 +63,8 @@ import { telHref, waHref } from "../../data/site";
 </script>
 
 <style>
-  /* ── Desktop Floating WhatsApp Button ── */
-  .wa-float {
+  /* ── Desktop Floating Call Button ── */
+  .call-float {
     position: fixed;
     right: 24px;
     bottom: 24px;
@@ -79,66 +72,70 @@ import { telHref, waHref } from "../../data/site";
     display: inline-flex;
     align-items: center;
     gap: 12px;
-    padding: 8px 18px 8px 10px;
+    padding: 8px 20px 8px 8px;
     border-radius: 9999px;
-    background: rgba(10, 31, 68, 0.92);
+    background: rgba(10, 31, 68, 0.94);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border: 1px solid rgba(255, 255, 255, 0.15);
     color: var(--white);
-    box-shadow: 
+    box-shadow:
       0 12px 30px -6px rgba(10, 31, 68, 0.35),
       0 4px 12px rgba(0, 0, 0, 0.15);
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
   }
-  .wa-float:hover {
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: 
+  .call-float:hover {
+    transform: translateY(-4px);
+    box-shadow:
       0 18px 36px -6px rgba(10, 31, 68, 0.45),
-      0 0 20px rgba(37, 211, 102, 0.3);
+      0 0 22px rgba(214, 52, 58, 0.3);
   }
-
-  .wa-float__icon {
+  .call-float__icon {
     position: relative;
     display: grid;
     place-items: center;
-    width: 42px;
-    height: 42px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
-    background: #25d366;
+    background: var(--alert-600);
     color: var(--white);
-    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
   }
-
-  .wa-float__badge {
+  .call-float__icon::after {
+    content: "";
     position: absolute;
-    top: 0;
-    right: 0;
-    width: 10px;
-    height: 10px;
+    inset: 0;
     border-radius: 50%;
-    background: #22c55e;
-    border: 2px solid var(--navy-900);
-    box-shadow: 0 0 8px #22c55e;
-    animation: pulse 2s infinite;
+    border: 2px solid var(--alert-600);
+    animation: call-ring 2s cubic-bezier(0, 0, 0.2, 1) infinite;
   }
-
-  .wa-float__label {
+  @keyframes call-ring {
+    to {
+      transform: scale(1.5);
+      opacity: 0;
+    }
+  }
+  .call-float__label {
     display: flex;
     flex-direction: column;
     text-align: left;
   }
-  .wa-float__sub {
+  .call-float__sub {
     font-size: 0.7rem;
     font-weight: 500;
     color: rgba(255, 255, 255, 0.7);
-    line-height: 1.1;
-  }
-  .wa-float__main {
-    font-size: 0.875rem;
-    font-weight: 700;
-    color: var(--white);
     line-height: 1.2;
+  }
+  .call-float__main {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    line-height: 1.2;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .call-float__icon::after {
+      animation: none;
+    }
   }
 
   /* ── Mobile Floating Action Bar ── */
@@ -152,7 +149,7 @@ import { telHref, waHref } from "../../data/site";
   }
 
   @media (max-width: 768px) {
-    .wa-float {
+    .call-float {
       display: none;
     }
 
@@ -180,7 +177,7 @@ import { telHref, waHref } from "../../data/site";
       width: 100%;
       max-width: 420px;
       display: grid;
-      grid-template-columns: 1fr 1fr 1.2fr;
+      grid-template-columns: 1fr 1fr;
       gap: 6px;
       padding: 6px;
       border-radius: 9999px;
@@ -233,20 +230,6 @@ import { telHref, waHref } from "../../data/site";
       color: #ef4444;
     }
     .action-bar__item--call:active {
-      background: rgba(255, 255, 255, 0.14);
-      transform: scale(0.96);
-    }
-
-    /* WhatsApp Button */
-    .action-bar__item--wa {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-    .action-bar__item--wa .action-bar__icon-box {
-      background: rgba(37, 211, 102, 0.25);
-      color: #25d366;
-    }
-    .action-bar__item--wa:active {
       background: rgba(255, 255, 255, 0.14);
       transform: scale(0.96);
     }

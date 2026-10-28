@@ -4,11 +4,12 @@ import PageHeader from "../components/PageHeader.astro";
 import FeatureBand from "../components/ui/FeatureBand.astro";
 import Icon from "../components/ui/Icon.astro";
 import BookingForm from "../components/ui/BookingForm.astro";
-import { site, telHref, waHref } from "../data/site";
+import { site, telHref, tel2Href, waHref } from "../data/site";
 import { contactFaqs } from "../data/faqs";
 ---
 
 <Layout
+  ogImage="/og/contact.jpg"
   title="Contact & Appointments | Vairam Multi Speciality Hospital, Mayiladuthurai"
   description={`Call ${site.phoneDisplay}, WhatsApp or visit Vairam Multi Speciality Hospital on Pattamangala Street, Mayiladuthurai. Book a specialist appointment online.`}
 >
@@ -49,7 +50,7 @@ import { contactFaqs } from "../data/faqs";
             <Icon name="phone" size={22} />
             <div>
               <h2>Phone & WhatsApp</h2>
-              <p><a href={telHref}>{site.phoneDisplay}</a></p>
+              <p><a href={telHref}>{site.phoneDisplay}</a> · <a href={tel2Href}>{site.phone2Display}</a></p>
               <a href={waHref()} target="_blank" rel="noopener" class="link-arrow">Chat on WhatsApp <Icon name="arrow-right" /></a>
             </div>
           </li>

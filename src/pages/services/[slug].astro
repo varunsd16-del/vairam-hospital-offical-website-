@@ -74,6 +74,7 @@ const ld = [
 ---
 
 <Layout
+  ogImage={`/og/${s.id}.jpg`}
   title={`${s.name} in Mayiladuthurai | Vairam Multi Speciality Hospital`}
   description={`${s.desc} Book a ${s.short.toLowerCase()} appointment at Vairam Hospital, Mayiladuthurai.`}
 >
@@ -330,7 +331,7 @@ const ld = [
       <aside class="fq__help">
         <span class="icon-tile"><Icon name="phone" size={24} /></span>
         <h3>Still have questions?</h3>
-        <p>Our helpdesk can answer questions about appointments, costs and insurance.</p>
+        <p>Our helpdesk can answer questions about appointments, admissions and insurance.</p>
         <a href={telHref} class="btn btn--block"><Icon name="phone" /> {site.phoneDisplay}</a>
         <a href="/contact" class="btn btn--outline btn--block">Contact & directions</a>
       </aside>

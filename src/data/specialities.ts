@@ -206,7 +206,7 @@ export const specialities: Speciality[] = [
     why: [
       "Modern sutureless phaco equipment",
       "Experienced eye surgeons",
-      "Affordable premium-lens packages",
+      "Choice of premium intraocular lenses",
     ],
     keywords: "eye doctor cataract ophthalmologist glaucoma vision",
   },

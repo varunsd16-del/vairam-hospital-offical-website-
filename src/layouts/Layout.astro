@@ -17,7 +17,7 @@ interface Props {
 const {
   title,
   description = `${site.name} in ${site.address.city} offers 24/7 emergency care, cardiology, orthopaedics, neurology, paediatrics and multi-speciality services with experienced doctors.`,
-  ogImage = "/images/hero-building.png",
+  ogImage = "/og/og-default.jpg",
   cta = true,
 } = Astro.props;
 
@@ -67,6 +67,7 @@ const jsonLd = {
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {import.meta.env.PUBLIC_NOINDEX === "true" && <meta name="robots" content="noindex, nofollow" />}
 
     <meta name="geo.region" content="IN-TN" />
     <meta name="geo.placename" content={site.address.city} />
@@ -78,10 +79,16 @@ const jsonLd = {
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${site.name}, Mayiladuthurai`} />
+    <meta property="og:locale" content="en_IN" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
+    <meta name="twitter:image:alt" content={`${site.name}, Mayiladuthurai`} />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
