@@ -1,1633 +1,698 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import { Image } from "astro:assets";
+import Layout from "../layouts/Layout.astro";
+import PageHeader from "../components/PageHeader.astro";
+import FeatureBand from "../components/ui/FeatureBand.astro";
+import Icon from "../components/ui/Icon.astro";
+import { facilities, amenities } from "../data/facilities";
+import { gallery, galleryCategories } from "../data/gallery";
+import { facilityFaqs } from "../data/faqs";
+import { site } from "../data/site";
 
-const facilitiesData = [
-  {
-    id: "operating-theaters",
-    name: "Operating Theaters",
-    category: "clinical",
-    categoryLabel: "Clinical",
-    icon: "fa-procedures",
-    shortDesc: "12 modular laminar-flow surgical theaters equipped with robotic-assistance and intraoperative imaging.",
-    tags: ["Laminar Flow", "Robotic-Assisted", "Intraop Imaging"],
-    features: ["12 fully modular theaters", "Robotic-assisted surgical systems", "Intraoperative CT/MRI", "HEPA sterile air systems", "Integrated OR displays", "Post-op recovery suites"],
-    procedures: ["Cardiac bypass surgery", "Laparoscopic procedures", "Orthopedic joint replacement", "Neurosurgery", "Oncological resections"],
-    whyUs: "India-certified operation theaters with the highest sterility grade and tech-forward robotic systems."
-  },
-  {
-    id: "icu",
-    name: "Intensive Care Unit",
-    category: "critical",
-    categoryLabel: "Critical Care",
-    icon: "fa-heartbeat",
-    shortDesc: "50-bed ICU with advanced hemodynamic monitoring, ventilators, and 24/7 specialist intensivists.",
-    tags: ["50 Beds", "24/7 Intensivist", "CRRT Available"],
-    features: ["50 ICU beds with privacy curtains", "Central hemodynamic monitoring", "Advanced ventilator support", "CRRT for kidney support", "Bedside echo & ultrasound", "Dedicated ICU pharmacist"],
-    procedures: ["Post-cardiac surgery care", "Sepsis management", "Multi-organ failure support", "Trauma intensive care", "Post-neurosurgery monitoring"],
-    whyUs: "Our intensivist-led ICU model ensures 24/7 specialist oversight with the lowest complication rates in the region."
-  },
-  {
-    id: "emergency",
-    name: "Emergency Department",
-    category: "critical",
-    categoryLabel: "Critical Care",
-    icon: "fa-ambulance",
-    shortDesc: "Level II trauma center with dedicated triage lanes, resuscitation bays, and rapid diagnostic pathways.",
-    tags: ["Level II Trauma", "24/7 Active", "Rapid Triage"],
-    features: ["Dedicated ambulance bay", "4-lane rapid triage system", "Resuscitation rooms", "Trauma surgery on-call", "Pediatric emergency zone", "Direct ICU escalation pathway"],
-    procedures: ["Trauma resuscitation", "Acute cardiac events", "Stroke thrombolysis", "Acute abdominal emergencies", "Poisoning management"],
-    whyUs: "Our ER response protocols are designed for door-to-treatment in under 5 minutes for critical presentations."
-  },
-  {
-    id: "radiology",
-    name: "Radiology & Imaging",
-    category: "diagnostic",
-    categoryLabel: "Diagnostic",
-    icon: "fa-x-ray",
-    shortDesc: "3T MRI, 256-slice CT scanner, digital X-ray, mammography, and fluoroscopy — all under one roof.",
-    tags: ["3T MRI", "256-Slice CT", "Digital X-Ray"],
-    features: ["3 Tesla wide-bore MRI system", "256-slice dual-source CT", "Flat-panel digital fluoroscopy", "Full-field digital mammography", "3D/4D ultrasound suite", "24/7 radiologist reporting"],
-    procedures: ["Brain & spine MRI", "Cardiac CT angiography", "PET-CT oncology scans", "Breast screening mammography", "Vascular imaging studies"],
-    whyUs: "The most advanced imaging technology in Mayiladuthurai — delivering diagnostic precision for cardiology, oncology, and neuro workups."
-  },
-  {
-    id: "laboratory",
-    name: "Diagnostic Laboratory",
-    category: "diagnostic",
-    categoryLabel: "Diagnostic",
-    icon: "fa-microscope",
-    shortDesc: "NABL-accredited 24/7 laboratory offering 600+ tests with same-day turnaround for inpatients.",
-    tags: ["NABL Accredited", "600+ Tests", "Same-Day TAT"],
-    features: ["NABL ISO 15189 accreditation", "600+ diagnostic tests", "Automated hematology & biochemistry", "Microbiology culture lab", "Molecular PCR diagnostics", "Histopathology & cytology"],
-    procedures: ["Complete blood count", "Liver & kidney function panel", "Thyroid profile", "Tumor marker testing", "Hormone assays", "Blood culture sensitivity"],
-    whyUs: "NABL accreditation guarantees international quality standards — results trusted by top referring physicians across Tamil Nadu."
-  },
-  {
-    id: "patient-rooms",
-    name: "Patient Rooms",
-    category: "amenity",
-    categoryLabel: "Patient Amenities",
-    icon: "fa-bed",
-    shortDesc: "Private, semi-private, and luxury suite accommodations with attendant facilities and smart entertainment.",
-    tags: ["Private Suites", "Smart TV", "Attendant Sofa"],
-    features: ["Single private rooms", "Luxury suites with lounge", "Attendant sofa & bedding", "55\" Smart TV with streaming", "Mini-fridge & microwave", "Temperature-controlled rooms"],
-    procedures: [],
-    whyUs: "Our patient rooms are designed to heal — calm interiors, natural light, and hotel-grade amenities supporting faster recovery."
-  },
-  {
-    id: "pharmacy",
-    name: "24/7 Pharmacy",
-    category: "support",
-    categoryLabel: "Support Services",
-    icon: "fa-pills",
-    shortDesc: "Licensed round-the-clock hospital pharmacy with generic and branded medications, surgical supplies.",
-    tags: ["24/7 Open", "Licensed", "Generic Options"],
-    features: ["Open 24 hours, 365 days", "3,000+ medication stock", "Generic and branded options", "Discharge medicine counseling", "Drug interaction checks", "Insurance billing support"],
-    procedures: [],
-    whyUs: "Our clinical pharmacists actively participate in patient discharge counseling, reducing readmission risks significantly."
-  },
-  {
-    id: "rehabilitation",
-    name: "Rehabilitation Center",
-    category: "clinical",
-    categoryLabel: "Clinical",
-    icon: "fa-running",
-    shortDesc: "Comprehensive physiotherapy, occupational therapy, speech therapy, and aquatic rehabilitation programs.",
-    tags: ["Physiotherapy", "Aquatic Therapy", "Speech Therapy"],
-    features: ["Advanced physiotherapy gym", "Hydrotherapy pool", "Occupational therapy unit", "Speech & swallowing therapy", "Neuro-rehabilitation programs", "Cardiac rehab protocols"],
-    procedures: ["Post-stroke rehabilitation", "Post-joint replacement therapy", "Spinal cord injury rehab", "Cardiac recovery programs", "Pediatric developmental therapy"],
-    whyUs: "Our multi-disciplinary rehabilitation model gets patients back to independent function faster than single-discipline programs."
-  },
-  {
-    id: "blood-bank",
-    name: "Blood Bank",
-    category: "clinical",
-    categoryLabel: "Clinical",
-    icon: "fa-tint",
-    shortDesc: "Licensed blood bank with component separation, 24/7 availability, and NABH-compliant cold chain.",
-    tags: ["NABH Compliant", "24/7 Supply", "All Components"],
-    features: ["Licensed by Drug Control", "All blood group availability", "Platelet, plasma, RBC components", "Leukocyte-depleted products", "Emergency same-group supply", "Donor recruitment program"],
-    procedures: [],
-    whyUs: "Our blood bank ensures zero downtime for emergency surgeries with standby cross-matched units for all OT cases."
-  },
-  {
-    id: "maternity",
-    name: "Maternity Ward",
-    category: "clinical",
-    categoryLabel: "Clinical",
-    icon: "fa-baby",
-    shortDesc: "Natural and assisted delivery suites, Level III NICU, and lactation support for newborns and mothers.",
-    tags: ["Labor Rooms", "Level III NICU", "Lactation Support"],
-    features: ["Private labor & delivery rooms", "Water birth option", "Level III NICU (30 beds)", "Neonatologist 24/7 on-site", "Kangaroo mother care unit", "Lactation consultant on ward"],
-    procedures: ["Normal vaginal delivery", "Cesarean section", "High-risk obstetric care", "Premature infant care", "Newborn resuscitation"],
-    whyUs: "Our maternal-fetal medicine specialists handle the highest-risk pregnancies referred from across the Cauvery delta region."
-  },
-  {
-    id: "cafeteria",
-    name: "Cafeteria & Dining",
-    category: "support",
-    categoryLabel: "Support Services",
-    icon: "fa-utensils",
-    shortDesc: "FSSAI-certified multi-cuisine cafeteria serving patients, attendants, and staff with therapeutic diet options.",
-    tags: ["FSSAI Certified", "Therapeutic Diets", "Multi-Cuisine"],
-    features: ["Open 7AM to 10PM daily", "Patient therapeutic meal plans", "Vegetarian & vegan options", "Diabetic-friendly menus", "Attendant meal packages", "Hygienic kitchen with audits"],
-    procedures: [],
-    whyUs: "Our dietitian-supervised meal plans support clinical recovery — from low-sodium cardiac diets to post-bariatric nutrition protocols."
-  },
-  {
-    id: "parking",
-    name: "Parking Facility",
-    category: "support",
-    categoryLabel: "Support Services",
-    icon: "fa-car",
-    shortDesc: "Multi-level parking for 500+ vehicles with valet, disabled-priority bays, and 24/7 CCTV surveillance.",
-    tags: ["500+ Capacity", "Valet Available", "CCTV Monitored"],
-    features: ["500+ vehicle capacity", "Dedicated valet parking", "Priority disabled-access bays", "2-wheeler parking zone", "24/7 CCTV monitoring", "EV charging stations"],
-    procedures: [],
-    whyUs: "One of the largest hospital parking facilities in Mayiladuthurai, eliminating stress for visiting families and outpatients."
-  }
-];
+// Critical-care units get large feature cards; everything else goes in the compact grid.
+const highlightIds = ["icu", "emergency", "operating-theatres"];
+const highlights = highlightIds.map((id) => facilities.find((f) => f.id === id)!).filter(Boolean);
+const others = facilities.filter((f) => !highlightIds.includes(f.id));
 
-const amenities = [
-  { icon: "fa-wifi", label: "Free Wi-Fi", desc: "High-speed internet across all wards" },
-  { icon: "fa-tv", label: "Smart TV", desc: "55\" 4K entertainment in private rooms" },
-  { icon: "fa-snowflake", label: "Mini Fridge", desc: "In-room refrigeration for meals & meds" },
-  { icon: "fa-couch", label: "Attendant Sofa", desc: "Pull-out sofa bed for family members" },
-  { icon: "fa-video", label: "CCTV Security", desc: "360° campus monitoring 24/7" },
-  { icon: "fa-fire-extinguisher", label: "Fire Safety", desc: "Sprinkler & smoke detection system" },
-  { icon: "fa-university", label: "ATM", desc: "On-premises cash ATM facility" },
-  { icon: "fa-gift", label: "Gift Shop", desc: "Flowers, cards, and essentials store" },
-  { icon: "fa-wheelchair", label: "Wheelchair Access", desc: "Ramps, lifts & mobility aids available" },
-  { icon: "fa-tint", label: "Water Purifier", desc: "RO-purified water at every station" },
-  { icon: "fa-leaf", label: "Garden Area", desc: "Landscaped recovery garden for patients" },
-  { icon: "fa-pray", label: "Prayer Room", desc: "Multi-faith quiet meditation space" }
-];
-
-const galleryImages = [
-  { src: "/images/hero-building.png", label: "Hospital Lobby", span: "tall" },
-  { src: "/images/consultation.png", label: "Consultation Room", span: "" },
-  { src: "/images/building-exterior.png", label: "Hospital Exterior", span: "" },
-  { src: "/images/hero-building.png", label: "Reception Area", span: "wide" },
-  { src: "/images/consultation.png", label: "Waiting Area", span: "" }
-];
-
-const faqs = [
-  { q: "Can I visit the hospital before booking a room?", a: "Yes. We encourage prospective patients to take a guided facility tour. Contact our Patient Experience Desk at +91 93446 44555 or walk in on weekdays between 10 AM and 5 PM. Our team will show you available room categories, the ICU, and diagnostic departments." },
-  { q: "What types of patient rooms are available?", a: "We offer General Ward (shared), Semi-Private (2-bed), Private Room, and Luxury Suite accommodations. Luxury Suites include a separate attendant lounge, Smart TV, mini-fridge, and dedicated nursing. Pricing varies — contact our Admissions Desk for current tariffs." },
-  { q: "Is parking available for outpatient visitors?", a: "Yes. We have a 500+ vehicle multi-level parking facility with valet services. Two-wheelers have a dedicated zone. Priority bays near the main entrance are reserved for patients with mobility challenges. Parking is available 24/7." },
-  { q: "Is the hospital fully wheelchair accessible?", a: "Absolutely. Vairam Hospital is designed for full universal accessibility — ramped entrances, wide-door elevators, accessible restrooms on every floor, dedicated porter service, and wheelchair loan from the main reception." },
-  { q: "What infection control measures are in place?", a: "We operate under NABH infection control protocols — mandatory hand hygiene stations, restricted visitor zones during infections, HEPA-filtered OT air, sterilization audit logs, and daily biomedical waste separation. Our IPC committee reviews compliance every quarter." }
-];
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: facilityFaqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+};
 ---
 
-<Layout title="World-Class Hospital Facilities | Vairam Multi Speciality Hospital Mayiladuthurai">
+<Layout
+  title="Hospital Facilities | ICU, Operation Theatres & Diagnostics | Vairam Hospital"
+  description="Modular operation theatres, intensive care, 24/7 emergency, radiology, laboratory, pharmacy and patient rooms at Vairam Multi Speciality Hospital, Mayiladuthurai."
+>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(faqLd)} />
 
-  <!-- Facilities Structured Schema JSON-LD -->
-  <script type="application/ld+json" is:inline>
-    {
-      "@context": "https://schema.org",
-      "@type": "Hospital",
-      "name": "Vairam Multi Speciality Hospital",
-      "url": "https://vairamhospital.com/facilities",
-      "telephone": "+919344644555",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "Pattamangala St",
-        "addressLocality": "Mayiladuthurai",
-        "addressRegion": "TN",
-        "postalCode": "609001",
-        "addressCountry": "IN"
-      },
-      "medicalSpecialty": [
-        "Cardiology","Neurology","Orthopedics","Pediatrics","Ophthalmology","Emergency Medicine"
-      ],
-      "availableService": [
-        {"@type": "MedicalProcedure", "name": "Operating Theater Services"},
-        {"@type": "MedicalProcedure", "name": "Intensive Care Unit"},
-        {"@type": "MedicalProcedure", "name": "Emergency Department"},
-        {"@type": "MedicalProcedure", "name": "Radiology and Imaging"},
-        {"@type": "MedicalProcedure", "name": "Diagnostic Laboratory"}
-      ]
-    }
-  </script>
+  <PageHeader
+    crumb="Facilities"
+    eyebrow="Hospital facilities"
+    title="ICU, Operation Theatres & Diagnostics in Mayiladuthurai"
+    lede="Vairam Hospital in Mayiladuthurai has a 24/7 ICU and emergency department, modular operation theatres, in-house laboratory and imaging, a 24/7 pharmacy and comfortable patient rooms, all in one building."
+    stats={[
+      { value: `${facilities.length}`, label: "Departments & services" },
+      { value: "24/7", label: "ICU, emergency & pharmacy" },
+      { value: "Modular", label: "Operation theatres" },
+      { value: "Same day", label: "Lab results for inpatients" },
+    ]}
+  />
 
-  <!-- FAQ Schema -->
-  <script type="application/ld+json" is:inline>
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
+  <!-- 1. Critical care highlights -->
+  <section class="section" aria-labelledby="critTitle">
+    <div class="container">
+      <div class="section-head section-head--split">
+        <div class="section-head" style="margin:0">
+          <p class="eyebrow">Critical care</p>
+          <h2 id="critTitle">Ready for every emergency, day and night</h2>
+        </div>
+        <p class="lede">Our ICU, emergency department and theatres sit side by side, so critical patients move between them in minutes.</p>
+      </div>
+
+      <ul role="list" class="hl">
         {
-          "@type": "Question",
-          "name": "Can I visit the hospital before booking a room?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Contact our Patient Experience Desk at +91 93446 44555 or walk in on weekdays between 10 AM and 5 PM for a guided facility tour." }
-        },
-        {
-          "@type": "Question",
-          "name": "What types of patient rooms are available?",
-          "acceptedAnswer": { "@type": "Answer", "text": "We offer General Ward, Semi-Private, Private Room, and Luxury Suite accommodations." }
-        },
-        {
-          "@type": "Question",
-          "name": "Is parking available for outpatient visitors?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Yes. We have a 500+ vehicle multi-level parking facility with valet services, available 24/7." }
+          highlights.map((f, i) => (
+            <li class:list={["hl__card reveal", { "hl__card--lead": i === 0 }]} id={f.id}>
+              <div class="hl__top">
+                <span class:list={["hl__icon", { "hl__icon--alert": f.category === "critical" }]}>
+                  <Icon name={f.icon} size={26} />
+                </span>
+                <span class="hl__live">
+                  <span class="hl__dot" aria-hidden="true" /> 24/7
+                </span>
+              </div>
+              <h3>{f.name}</h3>
+              <p>{f.desc}</p>
+              <ul role="list" class="hl__list">
+                {f.features.map((x) => (
+                  <li>
+                    <Icon name="check" size={16} /> {x}
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ))
         }
-      ]
-    }
-  </script>
+      </ul>
+    </div>
+  </section>
 
-  <style is:global>
-    /* ── CSS SAFETY ── */
-    .fp-init { color: inherit; }
+  <!-- 2. All departments (bento) -->
+  <section class="section section--paper2" aria-labelledby="depTitle">
+    <div class="container">
+      <div class="section-head section-head--center">
+        <p class="eyebrow">Inside Vairam</p>
+        <h2 id="depTitle">Everything you need, under one roof</h2>
+        <p class="lede">Diagnostics, treatment, recovery and everyday comforts, planned so that nothing is more than a short walk away.</p>
+      </div>
+      <ul role="list" class="bento">
+        {
+          others.map((f) => (
+            <li class="bento__card lift reveal" id={f.id}>
+              <span class="icon-tile">
+                <Icon name={f.icon} size={24} />
+              </span>
+              <h3>{f.name}</h3>
+              <p>{f.desc}</p>
+              <ul role="list" class="bento__tags">
+                {f.tags.map((t) => (
+                  <li>{t}</li>
+                ))}
+              </ul>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
 
-    /* ═══════════════════════════════
-       UTILITIES
-    ═══════════════════════════════ */
-    .fp-wrap {
-      max-width: 1440px;
-      margin: 0 auto;
-      padding: 0 28px;
-      width: 100%;
-    }
-    .fp-section-hd {
-      text-align: center;
-      margin-bottom: 56px;
-    }
-    .fp-badge {
-      display: inline-block;
-      background: rgba(13,148,136,0.09);
-      color: #0d9488;
-      font-size: 0.78rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      padding: 6px 18px;
-      border-radius: 50px;
-      margin-bottom: 14px;
-    }
-    .fp-title {
-      font-size: clamp(2rem, 4vw, 2.8rem);
-      font-weight: 800;
-      color: #020617;
-      margin-bottom: 14px;
-      line-height: 1.2;
-    }
-    .fp-desc {
-      font-size: 1.05rem;
-      color: #475569;
-      line-height: 1.65;
-      max-width: 640px;
-      margin: 0 auto;
-    }
+  <!-- 3. Gallery -->
+  <section class="section section--white" aria-labelledby="galTitle">
+    <div class="container">
+      <div class="section-head section-head--split">
+        <div class="section-head" style="margin:0">
+          <p class="eyebrow">Photo gallery</p>
+          <h2 id="galTitle">Take a look around</h2>
+        </div>
+        <div class="chips gal__chips" role="group" aria-label="Filter photos">
+          {galleryCategories.map((c, i) => <button type="button" class="chip" data-filter={c.filter} aria-pressed={i === 0 ? "true" : "false"}>{c.label}</button>)}
+        </div>
+      </div>
 
-    /* ═══════════════════════════════
-       1. HERO
-    ═══════════════════════════════ */
-    .fp-hero {
-      padding: 130px 5% 110px;
-      background: linear-gradient(135deg, #020617 0%, #0f766e 100%);
-      position: relative;
-      overflow: hidden;
-      color: #fff;
-    }
-    .fp-hero-glow {
-      position: absolute;
-      top: -20%; right: -8%;
-      width: 700px; height: 700px;
-      background: radial-gradient(circle, rgba(20,184,166,0.16) 0%, transparent 70%);
-      border-radius: 50%;
-      pointer-events: none;
-    }
-    .fp-hero-glow2 {
-      position: absolute;
-      bottom: -30%; left: -10%;
-      width: 500px; height: 500px;
-      background: radial-gradient(circle, rgba(56,189,248,0.1) 0%, transparent 70%);
-      border-radius: 50%;
-      pointer-events: none;
-    }
-    .fp-hero-inner {
-      max-width: 860px;
-      margin: 0 auto;
-      text-align: center;
-      position: relative;
-      z-index: 1;
-    }
-    .fp-hero-badge {
-      display: inline-block;
-      background: rgba(255,255,255,0.09);
-      border: 1px solid rgba(255,255,255,0.15);
-      color: #14b8a6;
-      font-size: 0.8rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      padding: 8px 22px;
-      border-radius: 50px;
-      margin-bottom: 28px;
-    }
-    .fp-hero-title {
-      font-size: clamp(2.5rem, 5.5vw, 4.2rem);
-      font-weight: 800;
-      line-height: 1.12;
-      letter-spacing: -0.02em;
-      color: #fff;
-      margin-bottom: 24px;
-    }
-    .fp-hero-title .fp-grad {
-      background: linear-gradient(120deg, #14b8a6 0%, #38bdf8 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .fp-hero-sub {
-      font-size: clamp(1rem, 2vw, 1.2rem);
-      line-height: 1.75;
-      color: rgba(255,255,255,0.82);
-      margin-bottom: 44px;
-    }
-    .fp-hero-btns {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-    .fp-btn-primary {
-      background: linear-gradient(135deg, #0d9488, #0f766e);
-      color: #fff;
-      border: none;
-      padding: 15px 32px;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 0.95rem;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      box-shadow: 0 8px 20px -6px rgba(13,148,136,0.4);
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
-      font-family: inherit;
-    }
-    .fp-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 28px -8px rgba(13,148,136,0.5); }
-    .fp-btn-outline {
-      background: rgba(255,255,255,0.08);
-      color: #fff;
-      border: 1.5px solid rgba(255,255,255,0.3);
-      padding: 15px 32px;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 0.95rem;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      transition: all 0.25s ease;
-      font-family: inherit;
-    }
-    .fp-btn-outline:hover { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.5); transform: translateY(-2px); }
+      <ul role="list" class="gal">
+        {
+          gallery.map((g, i) => (
+            <li class:list={["gal__item reveal", g.size && `gal__item--${g.size}`]} data-category={g.category}>
+              <button type="button" class="gal__btn" data-index={i} aria-label={`Open photo: ${g.title}`}>
+                <Image
+                  src={g.src}
+                  alt={`${g.title}, ${site.name}, Mayiladuthurai`}
+                  widths={[480, 800, 1200]}
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 40vw"
+                  loading="lazy"
+                  class="gal__img"
+                />
+                <span class="gal__cap">
+                  <strong>{g.title}</strong>
+                  <small>{g.caption}</small>
+                </span>
+                <span class="gal__zoom" aria-hidden="true">
+                  <Icon name="search" size={18} />
+                </span>
+              </button>
+            </li>
+          ))
+        }
+      </ul>
 
-    /* ═══════════════════════════════
-       2. STATS BAR
-    ═══════════════════════════════ */
-    .fp-stats-bar {
-      background: #fff;
-      border-bottom: 1px solid #e2e8f0;
-      position: sticky;
-      top: 72px;
-      z-index: 90;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.04);
-    }
-    .fp-stats-inner {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      divide-x: 1px solid #e2e8f0;
-    }
-    .fp-stat-item {
-      padding: 22px 28px;
-      text-align: center;
-      border-right: 1px solid #f1f5f9;
-      transition: background 0.2s;
-    }
-    .fp-stat-item:last-child { border-right: none; }
-    .fp-stat-item:hover { background: rgba(13,148,136,0.03); }
-    .fp-stat-num {
-      font-size: 2rem;
-      font-weight: 900;
-      color: #0d9488;
-      line-height: 1;
-      margin-bottom: 4px;
-      display: block;
-    }
-    .fp-stat-label {
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: #64748b;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
+      <ul role="list" class="amen" aria-label="Amenities">
+        {
+          amenities.map((a) => (
+            <li>
+              <Icon name="check" size={16} /> {a}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
 
-    /* ═══════════════════════════════
-       3. FILTER TABS
-    ═══════════════════════════════ */
-    .fp-filter-section {
-      padding: 80px 5% 0;
-      background: #f8fafc;
-    }
-    .fp-filter-tabs {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-bottom: 50px;
-    }
-    .fp-tab-btn {
-      padding: 10px 22px;
-      border-radius: 50px;
-      border: 1.5px solid #e2e8f0;
-      background: #fff;
-      color: #475569;
-      font-size: 0.88rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.25s ease;
-      font-family: inherit;
-    }
-    .fp-tab-btn:hover { border-color: #0d9488; color: #0d9488; background: rgba(13,148,136,0.04); }
-    .fp-tab-btn.active { background: #0d9488; color: #fff; border-color: #0d9488; box-shadow: 0 4px 12px -3px rgba(13,148,136,0.4); }
+  <!-- Lightbox -->
+  <dialog class="lb" id="lightbox" aria-label="Photo viewer">
+    <button type="button" class="lb__btn lb__close" data-lb="close"><Icon name="x" size={22} /><span class="visually-hidden">Close</span></button>
+    <button type="button" class="lb__btn lb__prev" data-lb="-1"><Icon name="arrow-left" size={22} /><span class="visually-hidden">Previous photo</span></button>
+    <button type="button" class="lb__btn lb__next" data-lb="1"><Icon name="arrow-right" size={22} /><span class="visually-hidden">Next photo</span></button>
+    <figure class="lb__fig">
+      <img id="lbImg" alt="" />
+      <figcaption>
+        <strong id="lbTitle"></strong>
+        <span id="lbCap"></span>
+        <span class="lb__count" id="lbCount"></span>
+      </figcaption>
+    </figure>
+  </dialog>
 
-    /* ═══════════════════════════════
-       4. FACILITIES GRID
-    ═══════════════════════════════ */
-    .fp-grid-section {
-      padding: 0 5% 90px;
-      background: #f8fafc;
+  <!-- 4. Safety (navy band) -->
+  <FeatureBand
+    eyebrow="Safety & quality"
+    title="Infrastructure that keeps you safe and comfortable"
+    text="Protocols that protect patients, visitors and staff, reviewed regularly by our quality committee."
+    items={[
+      { icon: "shield", title: "Infection control", text: "HEPA-filtered theatres, sterilisation audits and hand-hygiene stations." },
+      { icon: "activity", title: "Uninterrupted power", text: "Full backup for ICU, theatres and critical equipment, around the clock." },
+      { icon: "siren", title: "Fire & life safety", text: "Smoke detection, extinguishers on every floor and trained evacuation teams." },
+      { icon: "users", title: "Accessible design", text: "Ramps, lifts, wheelchairs and porter support on every floor." },
+    ]}
+    cta={{ label: "Plan your visit", href: "/contact" }}
+  />
+
+  <!-- 5. FAQ -->
+  <section class="section section--white" aria-labelledby="ffaqTitle">
+    <div class="container faq-wrap">
+      <div class="section-head">
+        <p class="eyebrow">Questions</p>
+        <h2 id="ffaqTitle">Facilities FAQ</h2>
+        <p class="lede">Want to see the hospital in person? Call {site.phoneDisplay} to arrange a visit.</p>
+      </div>
+      <div class="faq">
+        {
+          facilityFaqs.map((f) => (
+            <details>
+              <summary>{f.q}</summary>
+              <p>{f.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* ── 1. Critical-care highlights ── */
+  .hl {
+    display: grid;
+    grid-template-columns: 1.25fr 1fr 1fr;
+    gap: var(--s-5);
+  }
+  .hl__card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-3);
+    padding: var(--s-7) var(--s-6);
+    border-radius: var(--r-lg);
+    background: var(--white);
+    border: 1px solid var(--line);
+    overflow: hidden;
+    scroll-margin-top: calc(var(--header-h) + 24px);
+    transition: transform 450ms var(--ease), box-shadow 450ms var(--ease);
+  }
+  .hl__card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-2);
+  }
+  .hl__card--lead {
+    color: rgb(255 255 255 / 0.8);
+    border: 0;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cpath d='M18 13h4v5h5v4h-5v5h-4v-5h-5v-4h5z' fill='%23ffffff' fill-opacity='0.05'/%3E%3C/svg%3E"),
+      linear-gradient(150deg, var(--navy-950), var(--navy-900) 55%, #0d3266);
+    box-shadow: var(--shadow-3);
+  }
+  .hl__card--lead h3 {
+    color: var(--white);
+  }
+  .hl__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--s-3);
+  }
+  .hl__icon {
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border-radius: var(--r-md);
+    background: var(--blue-50);
+    color: var(--blue-600);
+  }
+  .hl__icon--alert {
+    background: var(--alert-600);
+    color: var(--white);
+  }
+  .hl__live {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    border-radius: var(--r-sm);
+    background: var(--alert-50);
+    color: var(--alert-600);
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+  .hl__card--lead .hl__live {
+    background: rgb(255 255 255 / 0.1);
+    color: #ffb3b5;
+  }
+  .hl__dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+    animation: hl-pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes hl-pulse {
+    50% {
+      opacity: 0.3;
     }
-    .fp-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 28px;
-    }
-    .fp-facility-card {
-      background: #fff;
-      border-radius: 22px;
-      border: 1px solid rgba(13,148,136,0.08);
-      box-shadow: 0 6px 20px -8px rgba(0,0,0,0.06);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      cursor: pointer;
-    }
-    .fp-facility-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 20px 40px -12px rgba(13,148,136,0.15);
-    }
-    .fp-facility-card.hidden { display: none; }
-    .fp-card-img-wrap {
-      position: relative;
-      height: 200px;
-      background: linear-gradient(135deg, #0f172a 0%, #134e4a 100%);
-      overflow: hidden;
-      flex-shrink: 0;
-    }
-    .fp-card-img-wrap img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      opacity: 0.55;
-      transition: transform 0.4s ease, opacity 0.4s ease;
-    }
-    .fp-facility-card:hover .fp-card-img-wrap img {
-      transform: scale(1.06);
-      opacity: 0.7;
-    }
-    .fp-card-cat-badge {
-      position: absolute;
-      top: 16px; left: 16px;
-      background: rgba(13,148,136,0.9);
-      color: #fff;
-      font-size: 0.72rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      padding: 5px 12px;
-      border-radius: 50px;
-    }
-    .fp-card-icon-wrap {
-      position: absolute;
-      bottom: 16px; right: 16px;
-      width: 44px; height: 44px;
-      background: rgba(255,255,255,0.15);
-      backdrop-filter: blur(8px);
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.2);
-      display: flex; align-items: center; justify-content: center;
-      color: #fff;
-      font-size: 1.2rem;
-    }
-    .fp-card-overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(13,148,136,0.85);
-      display: flex; align-items: center; justify-content: center;
+  }
+  .hl__card h3 {
+    font-size: 1.375rem;
+  }
+  .hl__card > p {
+    font-size: var(--fs-sm);
+    color: var(--ink-muted);
+  }
+  .hl__card--lead > p {
+    color: rgb(255 255 255 / 0.78);
+  }
+  .hl__list {
+    display: grid;
+    gap: var(--s-2);
+    margin-top: auto;
+    padding-top: var(--s-5);
+    border-top: 1px solid var(--line);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    color: var(--ink-2);
+  }
+  .hl__card--lead .hl__list {
+    border-top-color: rgb(255 255 255 / 0.14);
+    color: rgb(255 255 255 / 0.9);
+  }
+  .hl__list li {
+    display: flex;
+    align-items: center;
+    gap: var(--s-2);
+  }
+  .hl__list :global(svg) {
+    flex: none;
+    color: var(--teal-500);
+  }
+
+  /* ── 2. Bento grid ── */
+  .bento {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--s-4);
+  }
+  .bento__card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-3);
+    padding: var(--s-6);
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    scroll-margin-top: calc(var(--header-h) + 24px);
+  }
+  .bento__card .icon-tile {
+    margin-bottom: var(--s-2);
+  }
+  .bento__card h3 {
+    font-size: 1.1875rem;
+  }
+  .bento__card p {
+    flex: 1;
+    font-size: var(--fs-sm);
+    color: var(--ink-muted);
+  }
+  .bento__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: var(--s-2);
+  }
+  .bento__tags li {
+    padding: 4px 10px;
+    border-radius: var(--r-sm);
+    background: var(--paper-2);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--ink-2);
+  }
+
+  /* ── 3. Gallery (masonry-style grid) ── */
+  .gal {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 240px;
+    grid-auto-flow: dense;
+    gap: var(--s-4);
+  }
+  .gal__item--wide {
+    grid-column: span 2;
+  }
+  .gal__item--tall {
+    grid-row: span 2;
+  }
+  .gal__item[hidden] {
+    display: none;
+  }
+  .gal__btn {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    background: var(--paper-2);
+    cursor: zoom-in;
+    isolation: isolate;
+  }
+  .gal__btn :global(.gal__img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 900ms var(--ease);
+  }
+  .gal__btn::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 45%, rgb(5 15 36 / 0.8));
+    opacity: 0.85;
+    transition: opacity 400ms var(--ease);
+  }
+  .gal__btn:hover :global(.gal__img),
+  .gal__btn:focus-visible :global(.gal__img) {
+    transform: scale(1.06);
+  }
+  .gal__btn:hover::after {
+    opacity: 1;
+  }
+  .gal__cap {
+    position: absolute;
+    left: var(--s-5);
+    right: var(--s-5);
+    bottom: var(--s-4);
+    z-index: 1;
+    display: grid;
+    text-align: left;
+    color: var(--white);
+  }
+  .gal__cap strong {
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+  .gal__cap small {
+    font-size: var(--fs-xs);
+    color: rgb(255 255 255 / 0.8);
+  }
+  .gal__zoom {
+    position: absolute;
+    top: var(--s-4);
+    right: var(--s-4);
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.92);
+    color: var(--navy-900);
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 350ms var(--ease), transform 350ms var(--ease);
+  }
+  .gal__btn:hover .gal__zoom,
+  .gal__btn:focus-visible .gal__zoom {
+    opacity: 1;
+    transform: none;
+  }
+
+  .amen {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--s-2) var(--s-3);
+    margin-top: var(--s-8);
+    padding-top: var(--s-6);
+    border-top: 1px solid var(--line);
+  }
+  .amen li {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: var(--r-sm);
+    background: var(--paper-2);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    color: var(--ink-2);
+  }
+  .amen :global(svg) {
+    color: var(--teal-600);
+  }
+
+  /* ── Lightbox ── */
+  .lb {
+    width: 100vw;
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: rgb(5 15 36 / 0.94);
+    color: var(--white);
+  }
+  .lb[open] {
+    display: grid;
+    place-items: center;
+    animation: lb-in 300ms var(--ease);
+  }
+  .lb::backdrop {
+    background: transparent;
+  }
+  @keyframes lb-in {
+    from {
       opacity: 0;
-      transition: opacity 0.3s ease;
     }
-    .fp-facility-card:hover .fp-card-overlay { opacity: 1; }
-    .fp-overlay-btn {
-      background: #fff;
-      color: #0d9488;
-      border: none;
-      padding: 12px 26px;
-      border-radius: 50px;
-      font-weight: 800;
-      font-size: 0.9rem;
-      cursor: pointer;
-      font-family: inherit;
-      display: flex; align-items: center; gap: 8px;
-      transform: translateY(10px);
-      transition: transform 0.3s ease;
+  }
+  .lb__fig {
+    display: grid;
+    gap: var(--s-4);
+    max-width: min(1200px, 88vw);
+    margin: 0;
+  }
+  .lb__fig img {
+    max-height: 76dvh;
+    width: auto;
+    max-width: 100%;
+    margin-inline: auto;
+    border-radius: var(--r-lg);
+    animation: lb-img 400ms var(--ease);
+  }
+  @keyframes lb-img {
+    from {
+      opacity: 0;
+      transform: scale(0.97);
     }
-    .fp-facility-card:hover .fp-overlay-btn { transform: translateY(0); }
-    .fp-card-body {
-      padding: 26px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      flex: 1;
-    }
-    .fp-card-name {
-      font-size: 1.15rem;
-      font-weight: 800;
-      color: #020617;
-      margin: 0;
-      line-height: 1.3;
-    }
-    .fp-card-desc {
-      font-size: 0.88rem;
-      color: #475569;
-      line-height: 1.6;
-      margin: 0;
-    }
-    .fp-card-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .fp-card-tag {
-      background: rgba(13,148,136,0.07);
-      color: #0d9488;
-      font-size: 0.75rem;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 50px;
-    }
-    .fp-card-view-btn {
-      background: transparent;
-      border: 1.5px solid #e2e8f0;
-      color: #475569;
-      padding: 10px 20px;
-      border-radius: 10px;
-      font-weight: 700;
-      font-size: 0.88rem;
-      cursor: pointer;
-      font-family: inherit;
-      display: flex; align-items: center; gap: 8px;
-      transition: all 0.25s ease;
-      width: fit-content;
-      margin-top: auto;
-    }
-    .fp-card-view-btn:hover { border-color: #0d9488; color: #0d9488; background: rgba(13,148,136,0.04); }
+  }
+  .lb__fig figcaption {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--s-2) var(--s-4);
+    justify-content: center;
+    text-align: center;
+    color: rgb(255 255 255 / 0.75);
+    font-size: var(--fs-sm);
+  }
+  .lb__fig figcaption strong {
+    color: var(--white);
+    font-size: 1.0625rem;
+  }
+  .lb__count {
+    color: rgb(255 255 255 / 0.5);
+  }
+  .lb__btn {
+    position: fixed;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.1);
+    color: var(--white);
+    transition: background var(--dur) var(--ease);
+  }
+  .lb__btn:hover {
+    background: rgb(255 255 255 / 0.22);
+  }
+  .lb__close {
+    top: var(--s-5);
+    right: var(--s-5);
+  }
+  .lb__prev,
+  .lb__next {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .lb__prev {
+    left: var(--s-5);
+  }
+  .lb__next {
+    right: var(--s-5);
+  }
 
-    /* Empty state */
-    .fp-empty-state {
-      display: none;
-      text-align: center;
-      padding: 80px 20px;
+  .faq-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    gap: var(--s-8);
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 1024px) {
+    .hl {
+      grid-template-columns: 1fr 1fr;
+    }
+    .hl__card--lead {
       grid-column: 1 / -1;
     }
-    .fp-empty-state i { font-size: 3rem; color: #cbd5e1; margin-bottom: 16px; }
-    .fp-empty-state p { color: #94a3b8; font-size: 1rem; }
-
-    /* ═══════════════════════════════
-       5. PATIENT AMENITIES
-    ═══════════════════════════════ */
-    .fp-amenities-section {
-      padding: 100px 5%;
-      background: #ffffff;
-      border-top: 1px solid #f1f5f9;
-    }
-    .fp-amenities-grid {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 20px;
-    }
-    .fp-amenity-card {
-      background: #f8fafc;
-      border: 1px solid rgba(13,148,136,0.08);
-      border-radius: 18px;
-      padding: 24px 16px;
-      text-align: center;
-      display: flex; flex-direction: column; align-items: center; gap: 12px;
-      transition: all 0.28s ease;
-    }
-    .fp-amenity-card:hover {
-      background: #fff;
-      border-color: rgba(13,148,136,0.2);
-      transform: translateY(-4px);
-      box-shadow: 0 12px 28px -8px rgba(13,148,136,0.1);
-    }
-    .fp-amenity-icon {
-      width: 52px; height: 52px;
-      background: rgba(13,148,136,0.08);
-      color: #0d9488;
-      border-radius: 14px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.3rem;
-      transition: all 0.28s ease;
-    }
-    .fp-amenity-card:hover .fp-amenity-icon { background: #0d9488; color: #fff; }
-    .fp-amenity-name {
-      font-size: 0.88rem;
-      font-weight: 800;
-      color: #020617;
-      margin: 0;
-    }
-    .fp-amenity-desc {
-      font-size: 0.78rem;
-      color: #64748b;
-      line-height: 1.4;
-      margin: 0;
-    }
-
-    /* ═══════════════════════════════
-       6. GALLERY
-    ═══════════════════════════════ */
-    .fp-gallery-section {
-      padding: 100px 5%;
-      background: #f8fafc;
-    }
-    .fp-gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: auto auto;
-      gap: 18px;
-    }
-    .fp-gal-item {
-      position: relative;
-      border-radius: 20px;
-      overflow: hidden;
-      cursor: pointer;
-      background: #020617;
-      min-height: 240px;
-    }
-    .fp-gal-item.fp-tall { grid-row: span 2; min-height: 500px; }
-    .fp-gal-item.fp-wide { grid-column: span 2; }
-    .fp-gal-item img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: transform 0.5s ease, opacity 0.5s ease;
-      opacity: 0.8;
-    }
-    .fp-gal-item:hover img { transform: scale(1.07); opacity: 0.6; }
-    .fp-gal-overlay {
-      position: absolute; inset: 0;
-      background: linear-gradient(to top, rgba(2,6,23,0.8) 0%, transparent 60%);
-      display: flex; flex-direction: column;
-      justify-content: flex-end; align-items: flex-start;
-      padding: 22px;
-      opacity: 0.7;
-      transition: opacity 0.3s ease;
-    }
-    .fp-gal-item:hover .fp-gal-overlay { opacity: 1; }
-    .fp-gal-label {
-      color: #fff;
-      font-size: 0.95rem;
-      font-weight: 700;
-    }
-    .fp-gal-zoom {
-      position: absolute; top: 16px; right: 16px;
-      width: 38px; height: 38px;
-      background: rgba(255,255,255,0.15);
-      backdrop-filter: blur(6px);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      color: #fff; font-size: 0.9rem;
-      opacity: 0;
-      transition: opacity 0.3s ease, transform 0.3s ease;
-      transform: scale(0.8);
-    }
-    .fp-gal-item:hover .fp-gal-zoom { opacity: 1; transform: scale(1); }
-
-    /* ═══════════════════════════════
-       7. VIRTUAL TOUR CTA
-    ═══════════════════════════════ */
-    .fp-tour-section {
-      padding: 100px 5%;
-      background: linear-gradient(135deg, #020617 0%, #0f766e 100%);
-      position: relative;
-      overflow: hidden;
-    }
-    .fp-tour-glow {
-      position: absolute; top: -20%; right: -5%;
-      width: 600px; height: 600px;
-      background: radial-gradient(circle, rgba(20,184,166,0.15) 0%, transparent 70%);
-      border-radius: 50%; pointer-events: none;
-    }
-    .fp-tour-inner {
-      display: grid;
+    .bento,
+    .gal {
       grid-template-columns: 1fr 1fr;
-      gap: 80px;
-      align-items: center;
-      position: relative;
-      z-index: 1;
     }
-    .fp-tour-text h2 {
-      font-size: clamp(2rem, 4vw, 3rem);
-      font-weight: 800;
-      color: #fff;
-      margin-bottom: 18px;
-      line-height: 1.2;
+  }
+  @media (max-width: 960px) {
+    .faq-wrap {
+      grid-template-columns: 1fr;
+      gap: var(--s-4);
     }
-    .fp-tour-text h2 span {
-      background: linear-gradient(120deg, #14b8a6 0%, #38bdf8 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+  }
+  @media (max-width: 640px) {
+    .hl,
+    .bento {
+      grid-template-columns: 1fr;
     }
-    .fp-tour-text p {
-      font-size: 1.05rem;
-      color: rgba(255,255,255,0.8);
-      line-height: 1.7;
-      margin-bottom: 34px;
+    .gal {
+      grid-template-columns: 1fr;
+      grid-auto-rows: 220px;
     }
-    .fp-tour-btns {
-      display: flex; gap: 14px; flex-wrap: wrap;
+    .gal__item--wide {
+      grid-column: auto;
     }
-    .fp-tour-stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin-top: 34px;
+    .gal__item--tall {
+      grid-row: span 1;
     }
-    .fp-tour-stat {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 16px;
-      padding: 18px 20px;
-      display: flex; align-items: center; gap: 14px;
+    .gal__zoom {
+      opacity: 1;
+      transform: none;
     }
-    .fp-tour-stat i { font-size: 1.4rem; color: #14b8a6; }
-    .fp-tour-stat-num { font-size: 1.3rem; font-weight: 800; color: #fff; }
-    .fp-tour-stat-lbl { font-size: 0.8rem; color: rgba(255,255,255,0.6); font-weight: 600; }
-    .fp-tour-video {
-      position: relative;
-      border-radius: 24px;
-      overflow: hidden;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      aspect-ratio: 16/10;
-      display: flex; align-items: center; justify-content: center;
-      backdrop-filter: blur(10px);
+    .lb__prev,
+    .lb__next {
+      top: auto;
+      bottom: var(--s-5);
+      transform: none;
     }
-    .fp-tour-video img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      opacity: 0.4;
-      position: absolute; inset: 0;
-    }
-    .fp-play-btn {
-      position: relative; z-index: 1;
-      width: 72px; height: 72px;
-      background: rgba(13,148,136,0.9);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer;
-      border: none;
-      transition: all 0.3s ease;
-      box-shadow: 0 0 0 0 rgba(13,148,136,0.4);
-      animation: fp-pulse 2.5s infinite;
-    }
-    .fp-play-btn:hover { background: #0d9488; transform: scale(1.08); }
-    .fp-play-btn i { color: #fff; font-size: 1.4rem; margin-left: 4px; }
-    @keyframes fp-pulse {
-      0% { box-shadow: 0 0 0 0 rgba(13,148,136,0.4); }
-      70% { box-shadow: 0 0 0 20px rgba(13,148,136,0); }
-      100% { box-shadow: 0 0 0 0 rgba(13,148,136,0); }
-    }
+  }
+</style>
 
-    /* ═══════════════════════════════
-       8. SAFETY & QUALITY
-    ═══════════════════════════════ */
-    .fp-safety-section {
-      padding: 100px 5%;
-      background: #fff;
-    }
-    .fp-safety-inner {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 80px;
-      align-items: center;
-    }
-    .fp-safety-img {
-      border-radius: 28px;
-      overflow: hidden;
-      position: relative;
-      aspect-ratio: 4/3;
-      background: linear-gradient(135deg, #0f172a, #134e4a);
-    }
-    .fp-safety-img img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      opacity: 0.7;
-    }
-    .fp-safety-overlay {
-      position: absolute; inset: 0;
-      background: linear-gradient(to top, rgba(2,6,23,0.6) 0%, transparent 60%);
-    }
-    .fp-safety-badge-float {
-      position: absolute;
-      bottom: 24px; left: 24px;
-      background: rgba(13,148,136,0.9);
-      backdrop-filter: blur(8px);
-      border-radius: 14px;
-      padding: 14px 20px;
-      color: #fff;
-    }
-    .fp-safety-badge-float .num { font-size: 1.8rem; font-weight: 900; line-height: 1; }
-    .fp-safety-badge-float .lbl { font-size: 0.78rem; color: rgba(255,255,255,0.8); font-weight: 600; }
-    .fp-safety-content h2 {
-      font-size: clamp(1.9rem, 3.5vw, 2.5rem);
-      font-weight: 800;
-      color: #020617;
-      margin-bottom: 16px;
-      line-height: 1.2;
-    }
-    .fp-safety-content p {
-      font-size: 1rem;
-      color: #475569;
-      line-height: 1.7;
-      margin-bottom: 36px;
-    }
-    .fp-safety-feats {
-      display: flex; flex-direction: column; gap: 20px;
-    }
-    .fp-safety-feat {
-      display: flex;
-      gap: 18px;
-      align-items: flex-start;
-      padding: 20px 24px;
-      background: #f8fafc;
-      border-radius: 16px;
-      border: 1px solid rgba(13,148,136,0.08);
-      transition: all 0.28s ease;
-    }
-    .fp-safety-feat:hover { background: #fff; border-color: rgba(13,148,136,0.2); transform: translateX(4px); box-shadow: 0 8px 20px -8px rgba(13,148,136,0.1); }
-    .fp-feat-icon {
-      width: 44px; height: 44px;
-      background: rgba(13,148,136,0.08);
-      color: #0d9488;
-      border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.1rem;
-      flex-shrink: 0;
-      transition: all 0.28s ease;
-    }
-    .fp-safety-feat:hover .fp-feat-icon { background: #0d9488; color: #fff; }
-    .fp-feat-text h4 { font-size: 1rem; font-weight: 800; color: #020617; margin-bottom: 4px; }
-    .fp-feat-text p { font-size: 0.86rem; color: #475569; line-height: 1.5; margin: 0; }
-
-    /* ═══════════════════════════════
-       9. FAQ SECTION
-    ═══════════════════════════════ */
-    .fp-faq-section {
-      padding: 100px 5%;
-      background: #f8fafc;
-      border-top: 1px solid #e2e8f0;
-    }
-    .fp-faq-list {
-      max-width: 860px;
-      margin: 0 auto;
-      display: flex; flex-direction: column; gap: 14px;
-    }
-    .fp-faq-item {
-      background: #fff;
-      border: 1px solid rgba(13,148,136,0.09);
-      border-radius: 16px;
-      overflow: hidden;
-      transition: border-color 0.28s, box-shadow 0.28s;
-    }
-    .fp-faq-item.active {
-      border-color: rgba(13,148,136,0.22);
-      box-shadow: 0 10px 28px -10px rgba(13,148,136,0.1);
-    }
-    .fp-faq-btn {
-      width: 100%;
-      padding: 22px 28px;
-      background: transparent;
-      border: none;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-      cursor: pointer;
-      text-align: left;
-      font-family: inherit;
-    }
-    .fp-faq-btn:hover { background: rgba(13,148,136,0.02); }
-    .fp-faq-btn span { font-size: 1rem; font-weight: 800; color: #020617; line-height: 1.4; }
-    .fp-faq-btn i { color: #0d9488; font-size: 0.9rem; transition: transform 0.3s; flex-shrink: 0; }
-    .fp-faq-item.active .fp-faq-btn i { transform: rotate(180deg); }
-    .fp-faq-answer {
-      overflow: hidden;
-      transition: max-height 0.35s ease;
-    }
-    .fp-faq-answer p {
-      padding: 0 28px 22px;
-      font-size: 0.93rem;
-      line-height: 1.65;
-      color: #475569;
-      margin: 0;
-    }
-
-    /* ═══════════════════════════════
-       MODALS
-    ═══════════════════════════════ */
-    .fp-modal {
-      display: none;
-      position: fixed; inset: 0;
-      z-index: 9000;
-      background: rgba(2,6,23,0.75);
-      backdrop-filter: blur(8px);
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-    .fp-modal.active { display: flex; }
-    .fp-modal-card {
-      background: #fff;
-      border-radius: 28px;
-      width: 100%;
-      max-width: 760px;
-      max-height: 88vh;
-      overflow-y: auto;
-      position: relative;
-      animation: fp-slide-up 0.3s ease;
-    }
-    @keyframes fp-slide-up {
-      from { transform: translateY(30px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-    .fp-modal-img {
-      width: 100%; height: 260px;
-      object-fit: cover;
-      border-radius: 28px 28px 0 0;
-    }
-    .fp-modal-body { padding: 36px; }
-    .fp-modal-cat {
-      display: inline-block;
-      background: rgba(13,148,136,0.09);
-      color: #0d9488;
-      font-size: 0.78rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      padding: 5px 14px;
-      border-radius: 50px;
-      margin-bottom: 14px;
-    }
-    .fp-modal-title { font-size: 1.7rem; font-weight: 800; color: #020617; margin-bottom: 12px; }
-    .fp-modal-desc { font-size: 0.95rem; color: #475569; line-height: 1.65; margin-bottom: 26px; }
-    .fp-modal-section-title { font-size: 1rem; font-weight: 800; color: #020617; margin-bottom: 14px; }
-    .fp-modal-feats {
-      display: flex; flex-direction: column; gap: 10px; margin-bottom: 26px;
-    }
-    .fp-modal-feat {
-      display: flex; align-items: center; gap: 10px;
-      font-size: 0.9rem; color: #334155; font-weight: 500;
-    }
-    .fp-modal-feat i { color: #0d9488; font-size: 0.85rem; }
-    .fp-modal-procs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
-    .fp-modal-proc {
-      background: #f1f5f9;
-      color: #334155;
-      font-size: 0.82rem;
-      font-weight: 700;
-      padding: 6px 14px;
-      border-radius: 50px;
-    }
-    .fp-modal-why {
-      background: rgba(13,148,136,0.06);
-      border-left: 3px solid #0d9488;
-      border-radius: 0 12px 12px 0;
-      padding: 16px 20px;
-      margin-bottom: 28px;
-      font-size: 0.9rem;
-      color: #1e293b;
-      line-height: 1.6;
-    }
-    .fp-modal-close {
-      position: absolute; top: 18px; right: 18px;
-      width: 38px; height: 38px;
-      background: rgba(255,255,255,0.9);
-      border: none;
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 1.1rem;
-      color: #475569;
-      display: flex; align-items: center; justify-content: center;
-      transition: all 0.2s;
-    }
-    .fp-modal-close:hover { background: #fff; color: #dc2626; }
-    .fp-modal-book-btn {
-      width: 100%;
-      background: linear-gradient(135deg, #0d9488, #0f766e);
-      color: #fff;
-      border: none;
-      padding: 15px;
-      border-radius: 14px;
-      font-weight: 700;
-      font-size: 1rem;
-      cursor: pointer;
-      font-family: inherit;
-      display: flex; align-items: center; justify-content: center; gap: 10px;
-      box-shadow: 0 8px 20px -6px rgba(13,148,136,0.35);
-      transition: all 0.25s ease;
-    }
-    .fp-modal-book-btn:hover { transform: translateY(-2px); box-shadow: 0 14px 28px -8px rgba(13,148,136,0.45); }
-
-    /* Gallery lightbox */
-    .fp-lightbox {
-      display: none;
-      position: fixed; inset: 0;
-      z-index: 9999;
-      background: rgba(2,6,23,0.95);
-      align-items: center; justify-content: center;
-    }
-    .fp-lightbox.active { display: flex; }
-    .fp-lightbox img {
-      max-width: 90vw; max-height: 85vh;
-      border-radius: 16px;
-      object-fit: contain;
-    }
-    .fp-lb-close {
-      position: absolute; top: 20px; right: 28px;
-      color: #fff; font-size: 2rem; cursor: pointer;
-      background: none; border: none;
-      transition: color 0.2s;
-    }
-    .fp-lb-close:hover { color: #14b8a6; }
-    .fp-lb-caption {
-      position: absolute; bottom: 30px;
-      color: #94a3b8; font-size: 1rem; font-weight: 600; text-align: center;
-      width: 100%;
-    }
-
-    /* ═══════════════════════════════
-       RESPONSIVE
-    ═══════════════════════════════ */
-    @media (max-width: 1200px) {
-      .fp-amenities-grid { grid-template-columns: repeat(4, 1fr); }
-      .fp-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 1024px) {
-      .fp-tour-inner { grid-template-columns: 1fr; gap: 50px; }
-      .fp-safety-inner { grid-template-columns: 1fr; gap: 50px; }
-      .fp-gallery-grid { grid-template-columns: repeat(2, 1fr); }
-      .fp-gal-item.fp-tall { grid-row: span 1; }
-      .fp-gal-item.fp-wide { grid-column: span 2; }
-    }
-    @media (max-width: 768px) {
-      .fp-hero { padding: 110px 5% 80px; }
-      .fp-stats-inner { grid-template-columns: repeat(2, 1fr); }
-      .fp-grid { grid-template-columns: 1fr; }
-      .fp-amenities-grid { grid-template-columns: repeat(3, 1fr); }
-      .fp-gallery-grid { grid-template-columns: 1fr; }
-      .fp-gal-item.fp-wide { grid-column: span 1; }
-      .fp-filter-section, .fp-grid-section, .fp-amenities-section,
-      .fp-gallery-section, .fp-tour-section, .fp-safety-section, .fp-faq-section {
-        padding: 70px 5%;
-      }
-    }
-    @media (max-width: 480px) {
-      .fp-amenities-grid { grid-template-columns: repeat(2, 1fr); }
-      .fp-stats-inner { grid-template-columns: 1fr 1fr; }
-    }
-  </style>
-
-  <!-- ════════════════════════════════════════
-       1. HERO
-  ════════════════════════════════════════ -->
-  <section class="fp-hero" aria-label="Facilities hero">
-    <div class="fp-hero-glow" aria-hidden="true"></div>
-    <div class="fp-hero-glow2" aria-hidden="true"></div>
-    <div class="fp-wrap fp-hero-inner reveal reveal-up">
-      <span class="fp-hero-badge">World-Class Medical Infrastructure</span>
-      <h1 class="fp-hero-title">
-        Facilities Built for<br />
-        <span class="fp-grad">Clinical Excellence</span>
-      </h1>
-      <p class="fp-hero-sub">
-        Explore Vairam Multi Speciality Hospital's advanced clinical infrastructure — 12 operating theaters, 50-bed ICU, 3T MRI, Level II trauma center, and premium patient amenities — serving Mayiladuthurai, Sirkazhi, Karaikal, Kumbakonam, and Chidambaram.
-      </p>
-      <div class="fp-hero-btns">
-        <button class="fp-btn-primary" id="fpStartTourBtn">
-          <i class="fas fa-play-circle" aria-hidden="true"></i>
-          Take a Virtual Tour
-        </button>
-        <a href="/contact" class="fp-btn-outline">
-          <i class="fas fa-calendar-check" aria-hidden="true"></i>
-          Book a Visit
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ════════════════════════════════════════
-       2. STICKY STATS BAR
-  ════════════════════════════════════════ -->
-  <div class="fp-stats-bar" aria-label="Key statistics">
-    <div class="fp-wrap fp-stats-inner">
-      <div class="fp-stat-item">
-        <span class="fp-stat-num">500+</span>
-        <span class="fp-stat-label">Hospital Beds</span>
-      </div>
-      <div class="fp-stat-item">
-        <span class="fp-stat-num">12</span>
-        <span class="fp-stat-label">Operation Theaters</span>
-      </div>
-      <div class="fp-stat-item">
-        <span class="fp-stat-num">24/7</span>
-        <span class="fp-stat-label">Emergency Care</span>
-      </div>
-      <div class="fp-stat-item">
-        <span class="fp-stat-num">50+</span>
-        <span class="fp-stat-label">Specialized Units</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- ════════════════════════════════════════
-       3. FILTER TABS + FACILITIES GRID
-  ════════════════════════════════════════ -->
-  <section class="fp-filter-section" aria-label="Facilities filter">
-    <div class="fp-wrap">
-      <div class="fp-section-hd reveal reveal-up">
-        <span class="fp-badge">Our Facilities</span>
-        <h2 class="fp-title">Advanced Clinical Infrastructure</h2>
-        <p class="fp-desc">Browse our full range of specialized medical facilities — designed to deliver diagnostic precision, surgical excellence, and compassionate patient care.</p>
-      </div>
-      <div class="fp-filter-tabs" role="tablist" aria-label="Filter by category">
-        <button class="fp-tab-btn active" data-filter="all" role="tab" aria-selected="true">All Facilities</button>
-        <button class="fp-tab-btn" data-filter="clinical" role="tab" aria-selected="false">Clinical</button>
-        <button class="fp-tab-btn" data-filter="diagnostic" role="tab" aria-selected="false">Diagnostic</button>
-        <button class="fp-tab-btn" data-filter="critical" role="tab" aria-selected="false">Critical Care</button>
-        <button class="fp-tab-btn" data-filter="support" role="tab" aria-selected="false">Support Services</button>
-        <button class="fp-tab-btn" data-filter="amenity" role="tab" aria-selected="false">Patient Amenities</button>
-      </div>
-    </div>
-  </section>
-
-  <section class="fp-grid-section" aria-label="Facilities grid">
-    <div class="fp-wrap">
-      <div class="fp-grid" id="fpFacilitiesGrid">
-        {facilitiesData.map(f => (
-          <article
-            class="fp-facility-card reveal reveal-up"
-            data-category={f.category}
-            data-id={f.id}
-            role="button"
-            tabindex="0"
-            aria-label={`View ${f.name} details`}
-          >
-            <div class="fp-card-img-wrap">
-              <img src="/images/hero-building.png" alt={f.name} loading="lazy" />
-              <span class="fp-card-cat-badge">{f.categoryLabel}</span>
-              <div class="fp-card-icon-wrap"><i class={`fas ${f.icon}`} aria-hidden="true"></i></div>
-              <div class="fp-card-overlay">
-                <button class="fp-overlay-btn fp-open-detail-btn" data-id={f.id}>
-                  <i class="fas fa-expand-alt" aria-hidden="true"></i>
-                  View Details
-                </button>
-              </div>
-            </div>
-            <div class="fp-card-body">
-              <h3 class="fp-card-name">{f.name}</h3>
-              <p class="fp-card-desc">{f.shortDesc}</p>
-              <div class="fp-card-tags">
-                {f.tags.map(t => <span class="fp-card-tag">{t}</span>)}
-              </div>
-              <button class="fp-card-view-btn fp-open-detail-btn" data-id={f.id}>
-                <i class="fas fa-arrow-right" aria-hidden="true"></i>
-                View Details
-              </button>
-            </div>
-          </article>
-        ))}
-        <div class="fp-empty-state" id="fpEmptyState">
-          <i class="fas fa-search" aria-hidden="true"></i>
-          <p>No facilities found in this category.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ════════════════════════════════════════
-       4. PATIENT AMENITIES
-  ════════════════════════════════════════ -->
-  <section class="fp-amenities-section" aria-label="Patient amenities">
-    <div class="fp-wrap">
-      <div class="fp-section-hd reveal reveal-up">
-        <span class="fp-badge">Patient Comfort</span>
-        <h2 class="fp-title">Hotel-Grade Patient Amenities</h2>
-        <p class="fp-desc">Every element of your stay is designed for comfort and peace of mind — from smart entertainment to security systems.</p>
-      </div>
-      <div class="fp-amenities-grid">
-        {amenities.map((a, i) => (
-          <div class="fp-amenity-card reveal reveal-up" style={`transition-delay: ${i * 0.05}s`}>
-            <div class="fp-amenity-icon"><i class={`fas ${a.icon}`} aria-hidden="true"></i></div>
-            <p class="fp-amenity-name">{a.label}</p>
-            <p class="fp-amenity-desc">{a.desc}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- ════════════════════════════════════════
-       5. GALLERY
-  ════════════════════════════════════════ -->
-  <section class="fp-gallery-section" aria-label="Hospital gallery">
-    <div class="fp-wrap">
-      <div class="fp-section-hd reveal reveal-up">
-        <span class="fp-badge">Visual Tour</span>
-        <h2 class="fp-title">Inside Vairam Hospital</h2>
-        <p class="fp-desc">A glimpse of our world-class clinical environment — designed for healing, dignity, and professional excellence.</p>
-      </div>
-      <div class="fp-gallery-grid reveal reveal-up">
-        {galleryImages.map((img, i) => (
-          <div
-            class={`fp-gal-item ${img.span === 'tall' ? 'fp-tall' : ''} ${img.span === 'wide' ? 'fp-wide' : ''}`}
-            data-src={img.src}
-            data-label={img.label}
-            role="button"
-            tabindex="0"
-            aria-label={`View ${img.label}`}
-          >
-            <img src={img.src} alt={img.label} loading="lazy" />
-            <div class="fp-gal-overlay">
-              <span class="fp-gal-label">{img.label}</span>
-            </div>
-            <div class="fp-gal-zoom"><i class="fas fa-expand" aria-hidden="true"></i></div>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- ════════════════════════════════════════
-       6. VIRTUAL TOUR CTA
-  ════════════════════════════════════════ -->
-  <section class="fp-tour-section" aria-label="Virtual tour call to action">
-    <div class="fp-tour-glow" aria-hidden="true"></div>
-    <div class="fp-wrap fp-tour-inner">
-      <div class="fp-tour-text reveal reveal-left">
-        <h2>Take a <span>Virtual Tour</span></h2>
-        <p>Explore Vairam Hospital from the comfort of your home. Our 360° immersive virtual tour covers 20+ locations including our operation theaters, ICU, maternity ward, diagnostic center, and patient lounges.</p>
-        <div class="fp-tour-btns">
-          <button class="fp-btn-primary" id="fpVirtualTourBtn">
-            <i class="fas fa-vr-cardboard" aria-hidden="true"></i>
-            Start Virtual Tour
-          </button>
-          <a href="/contact" class="fp-btn-outline">
-            <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-            Schedule In-Person Visit
-          </a>
-        </div>
-        <div class="fp-tour-stats">
-          <div class="fp-tour-stat">
-            <i class="fas fa-street-view" aria-hidden="true"></i>
-            <div>
-              <div class="fp-tour-stat-num">360°</div>
-              <div class="fp-tour-stat-lbl">Immersive Views</div>
-            </div>
-          </div>
-          <div class="fp-tour-stat">
-            <i class="fas fa-film" aria-hidden="true"></i>
-            <div>
-              <div class="fp-tour-stat-num">HD</div>
-              <div class="fp-tour-stat-lbl">Video Quality</div>
-            </div>
-          </div>
-          <div class="fp-tour-stat">
-            <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
-            <div>
-              <div class="fp-tour-stat-num">20+</div>
-              <div class="fp-tour-stat-lbl">Locations</div>
-            </div>
-          </div>
-          <div class="fp-tour-stat">
-            <i class="fas fa-lock-open" aria-hidden="true"></i>
-            <div>
-              <div class="fp-tour-stat-num">Free</div>
-              <div class="fp-tour-stat-lbl">No Registration</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="fp-tour-video reveal reveal-right">
-        <img src="/images/hero-building.png" alt="Hospital virtual tour preview" />
-        <button class="fp-play-btn" id="fpPlayTourBtn" aria-label="Play virtual tour video">
-          <i class="fas fa-play" aria-hidden="true"></i>
-        </button>
-      </div>
-    </div>
-  </section>
-
-  <!-- ════════════════════════════════════════
-       7. SAFETY & QUALITY
-  ════════════════════════════════════════ -->
-  <section class="fp-safety-section" aria-label="Safety and quality standards">
-    <div class="fp-wrap fp-safety-inner">
-      <div class="fp-safety-img reveal reveal-left">
-        <img src="/images/hero-building.png" alt="Hospital safety standards" />
-        <div class="fp-safety-overlay" aria-hidden="true"></div>
-        <div class="fp-safety-badge-float" aria-label="NABH accredited">
-          <div class="num">NABH</div>
-          <div class="lbl">Accredited Hospital</div>
-        </div>
-      </div>
-      <div class="fp-safety-content reveal reveal-right">
-        <span class="fp-badge">Standards & Protocols</span>
-        <h2>Safety & Quality at Every Level</h2>
-        <p>Vairam Hospital operates under NABH and ISO 9001 certified quality management systems. Every clinical process — from sterilization to medication dispensing — follows verified international standards.</p>
-        <div class="fp-safety-feats">
-          <div class="fp-safety-feat">
-            <div class="fp-feat-icon"><i class="fas fa-shield-virus" aria-hidden="true"></i></div>
-            <div class="fp-feat-text">
-              <h4>Infection Control Protocols</h4>
-              <p>NABH-compliant IPC committee, HEPA-filtered OT airflows, and antimicrobial surface protocols.</p>
-            </div>
-          </div>
-          <div class="fp-safety-feat">
-            <div class="fp-feat-icon"><i class="fas fa-fire-alt" aria-hidden="true"></i></div>
-            <div class="fp-feat-text">
-              <h4>Fire Safety Systems</h4>
-              <p>Smoke detectors, sprinkler networks, auto fire doors, and quarterly fire evacuation drills.</p>
-            </div>
-          </div>
-          <div class="fp-safety-feat">
-            <div class="fp-feat-icon"><i class="fas fa-recycle" aria-hidden="true"></i></div>
-            <div class="fp-feat-text">
-              <h4>Biomedical Waste Management</h4>
-              <p>Colour-coded segregation, licensed biomedical waste contractor, and PCB-compliant disposal records.</p>
-            </div>
-          </div>
-          <div class="fp-safety-feat">
-            <div class="fp-feat-icon"><i class="fas fa-bolt" aria-hidden="true"></i></div>
-            <div class="fp-feat-text">
-              <h4>100% Power Backup</h4>
-              <p>Diesel generators and UPS systems ensure uninterrupted power for OTs, ICU, and life support systems.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ════════════════════════════════════════
-       8. FAQ SECTION
-  ════════════════════════════════════════ -->
-  <section class="fp-faq-section" aria-label="Frequently asked questions">
-    <div class="fp-wrap">
-      <div class="fp-section-hd reveal reveal-up">
-        <span class="fp-badge">Common Questions</span>
-        <h2 class="fp-title">Facilities FAQ</h2>
-        <p class="fp-desc">Everything you need to know before your visit to Vairam Multi Speciality Hospital.</p>
-      </div>
-      <div class="fp-faq-list reveal reveal-up">
-        {faqs.map((faq, i) => (
-          <div class="fp-faq-item">
-            <button class="fp-faq-btn" aria-expanded="false">
-              <span>{faq.q}</span>
-              <i class="fas fa-chevron-down" aria-hidden="true"></i>
-            </button>
-            <div class="fp-faq-answer" style="max-height:0">
-              <p>{faq.a}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- ════════════════════════════════════════
-       FACILITY DETAIL MODAL
-  ════════════════════════════════════════ -->
-  <div class="fp-modal" id="fpDetailModal" role="dialog" aria-modal="true" aria-labelledby="fpModalTitle">
-    <div class="fp-modal-card">
-      <img src="/images/hero-building.png" alt="" class="fp-modal-img" id="fpModalImg" />
-      <button class="fp-modal-close" id="fpModalCloseBtn" aria-label="Close modal">
-        <i class="fas fa-times" aria-hidden="true"></i>
-      </button>
-      <div class="fp-modal-body">
-        <span class="fp-modal-cat" id="fpModalCat">Clinical</span>
-        <h2 class="fp-modal-title" id="fpModalTitle">Facility Name</h2>
-        <p class="fp-modal-desc" id="fpModalDesc">Description</p>
-        <h3 class="fp-modal-section-title">Key Features</h3>
-        <div class="fp-modal-feats" id="fpModalFeats"></div>
-        <div id="fpModalProcsWrap">
-          <h3 class="fp-modal-section-title">Common Procedures</h3>
-          <div class="fp-modal-procs" id="fpModalProcs"></div>
-        </div>
-        <div class="fp-modal-why" id="fpModalWhy"></div>
-        <button class="fp-modal-book-btn" id="fpModalBookBtn">
-          <i class="fab fa-whatsapp" aria-hidden="true"></i>
-          Book Appointment for This Facility
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- VIRTUAL TOUR MODAL -->
-  <div class="fp-modal" id="fpTourModal" role="dialog" aria-modal="true" aria-label="Virtual tour">
-    <div class="fp-modal-card" style="max-width:900px; overflow:hidden;">
-      <button class="fp-modal-close" id="fpTourCloseBtn" aria-label="Close virtual tour">
-        <i class="fas fa-times" aria-hidden="true"></i>
-      </button>
-      <div style="background:#020617; padding: 60px 40px; text-align:center; color:#fff;">
-        <i class="fas fa-vr-cardboard" style="font-size:4rem; color:#14b8a6; margin-bottom:20px; display:block;" aria-hidden="true"></i>
-        <h2 style="font-size:2rem; font-weight:800; margin-bottom:14px;">360° Virtual Tour</h2>
-        <p style="color:rgba(255,255,255,0.75); font-size:1rem; margin-bottom:28px;">Our interactive virtual tour is launching soon. In the meantime, schedule an in-person facility tour with our Patient Experience Team.</p>
-        <a href="/contact" class="fp-btn-primary" style="display:inline-flex; margin: 0 auto;">
-          <i class="fas fa-calendar-check" aria-hidden="true"></i>
-          Schedule In-Person Visit
-        </a>
-      </div>
-    </div>
-  </div>
-
-  <!-- GALLERY LIGHTBOX -->
-  <div class="fp-lightbox" id="fpLightbox" role="dialog" aria-modal="true" aria-label="Image lightbox">
-    <button class="fp-lb-close" id="fpLbClose" aria-label="Close lightbox">
-      <i class="fas fa-times" aria-hidden="true"></i>
-    </button>
-    <img src="" alt="" id="fpLbImg" />
-    <div class="fp-lb-caption" id="fpLbCaption"></div>
-  </div>
-
-  <!-- SCRIPTS -->
-  <script is:inline define:vars={{ facilitiesData }}>
-    document.addEventListener("DOMContentLoaded", () => {
-
-      // ─── Filter Tabs ───
-      const tabBtns = document.querySelectorAll(".fp-tab-btn");
-      const cards   = document.querySelectorAll(".fp-facility-card");
-      const emptyEl = document.getElementById("fpEmptyState");
-
-      function runFilter(filter) {
-        let visible = 0;
-        cards.forEach(card => {
-          const match = filter === "all" || card.dataset.category === filter;
-          if (match) { card.classList.remove("hidden"); visible++; }
-          else        { card.classList.add("hidden"); }
-        });
-        emptyEl.style.display = visible === 0 ? "block" : "none";
-      }
-
-      tabBtns.forEach(btn => {
-        btn.addEventListener("click", () => {
-          tabBtns.forEach(b => { b.classList.remove("active"); b.setAttribute("aria-selected","false"); });
-          btn.classList.add("active");
-          btn.setAttribute("aria-selected","true");
-          runFilter(btn.dataset.filter);
-        });
+<script>
+  // Gallery filter
+  const chips = Array.from(document.querySelectorAll<HTMLButtonElement>(".gal__chips .chip"));
+  const items = Array.from(document.querySelectorAll<HTMLElement>(".gal__item"));
+  chips.forEach((chip) =>
+    chip.addEventListener("click", () => {
+      const f = chip.dataset.filter;
+      chips.forEach((c) => c.setAttribute("aria-pressed", String(c === chip)));
+      items.forEach((it) => {
+        it.hidden = f !== "all" && it.dataset.category !== f;
+        if (!it.hidden) it.classList.add("is-visible");
       });
+    }),
+  );
 
-      // ─── Facility Detail Modal ───
-      const detailModal   = document.getElementById("fpDetailModal");
-      const modalCloseBtn = document.getElementById("fpModalCloseBtn");
-      const modalBookBtn  = document.getElementById("fpModalBookBtn");
-      let activeModalFacility = null;
+  // Lightbox
+  const lb = document.getElementById("lightbox") as HTMLDialogElement | null;
+  const img = document.getElementById("lbImg") as HTMLImageElement | null;
+  const title = document.getElementById("lbTitle")!;
+  const cap = document.getElementById("lbCap")!;
+  const count = document.getElementById("lbCount")!;
+  const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>(".gal__btn"));
+  let current = 0;
 
-      function openDetail(id) {
-        const f = facilitiesData.find(x => x.id === id);
-        if (!f) return;
-        activeModalFacility = f;
+  const visible = () => buttons.filter((b) => !b.closest<HTMLElement>(".gal__item")!.hidden);
 
-        document.getElementById("fpModalCat").textContent   = f.categoryLabel;
-        document.getElementById("fpModalTitle").textContent = f.name;
-        document.getElementById("fpModalDesc").textContent  = f.shortDesc;
-        document.getElementById("fpModalWhy").textContent   = f.whyUs;
+  function show(btn: HTMLButtonElement) {
+    const list = visible();
+    current = list.indexOf(btn);
+    const thumb = btn.querySelector("img")!;
+    if (img) {
+      // largest candidate from the responsive srcset
+      const best = thumb.srcset
+        ? thumb.srcset.split(",").map((s) => s.trim().split(" ")[0]).pop()!
+        : thumb.currentSrc || thumb.src;
+      img.src = best;
+      img.alt = thumb.alt;
+      img.style.animation = "none";
+      void img.offsetWidth;
+      img.style.animation = "";
+    }
+    title.textContent = btn.querySelector("strong")?.textContent ?? "";
+    cap.textContent = btn.querySelector("small")?.textContent ?? "";
+    count.textContent = `${current + 1} / ${list.length}`;
+  }
 
-        const featsEl = document.getElementById("fpModalFeats");
-        featsEl.innerHTML = f.features.map(ft =>
-          `<div class="fp-modal-feat"><i class="fas fa-check-circle"></i><span>${ft}</span></div>`
-        ).join("");
-
-        const procsWrap = document.getElementById("fpModalProcsWrap");
-        const procsEl   = document.getElementById("fpModalProcs");
-        if (f.procedures && f.procedures.length > 0) {
-          procsEl.innerHTML = f.procedures.map(p => `<span class="fp-modal-proc">${p}</span>`).join("");
-          procsWrap.style.display = "block";
-        } else {
-          procsWrap.style.display = "none";
-        }
-
-        detailModal.classList.add("active");
-        document.body.style.overflow = "hidden";
-      }
-
-      function closeDetail() {
-        detailModal.classList.remove("active");
-        document.body.style.overflow = "";
-        activeModalFacility = null;
-      }
-
-      document.querySelectorAll(".fp-open-detail-btn").forEach(btn => {
-        btn.addEventListener("click", e => { e.stopPropagation(); openDetail(btn.dataset.id); });
-      });
-      cards.forEach(card => {
-        card.addEventListener("click", () => openDetail(card.dataset.id));
-        card.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") openDetail(card.dataset.id); });
-      });
-
-      modalCloseBtn.addEventListener("click", closeDetail);
-      detailModal.addEventListener("click", e => { if (e.target === detailModal) closeDetail(); });
-
-      modalBookBtn.addEventListener("click", () => {
-        if (!activeModalFacility) return;
-        const msg = `Hello Vairam Hospital, I would like to book an appointment related to your ${activeModalFacility.name} facility. Please confirm availability.`;
-        window.open(`https://wa.me/919344644555?text=${encodeURIComponent(msg)}`, "_blank");
-      });
-
-      // ─── Virtual Tour Modal ───
-      const tourModal    = document.getElementById("fpTourModal");
-      const tourCloseBtn = document.getElementById("fpTourCloseBtn");
-
-      function openTour() { tourModal.classList.add("active"); document.body.style.overflow = "hidden"; }
-      function closeTour() { tourModal.classList.remove("active"); document.body.style.overflow = ""; }
-
-      document.getElementById("fpStartTourBtn").addEventListener("click", openTour);
-      document.getElementById("fpVirtualTourBtn").addEventListener("click", openTour);
-      document.getElementById("fpPlayTourBtn").addEventListener("click", openTour);
-      tourCloseBtn.addEventListener("click", closeTour);
-      tourModal.addEventListener("click", e => { if (e.target === tourModal) closeTour(); });
-
-      // ─── Gallery Lightbox ───
-      const lightbox  = document.getElementById("fpLightbox");
-      const lbImg     = document.getElementById("fpLbImg");
-      const lbCaption = document.getElementById("fpLbCaption");
-      const lbClose   = document.getElementById("fpLbClose");
-
-      document.querySelectorAll(".fp-gal-item").forEach(item => {
-        item.addEventListener("click", () => {
-          lbImg.src = item.dataset.src;
-          lbImg.alt = item.dataset.label;
-          lbCaption.textContent = item.dataset.label;
-          lightbox.classList.add("active");
-          document.body.style.overflow = "hidden";
-        });
-        item.addEventListener("keydown", e => {
-          if (e.key === "Enter") item.click();
-        });
-      });
-
-      lbClose.addEventListener("click", () => { lightbox.classList.remove("active"); document.body.style.overflow = ""; });
-      lightbox.addEventListener("click", e => { if (e.target === lightbox || e.target === lbImg) { lightbox.classList.remove("active"); document.body.style.overflow = ""; } });
-
-      // ─── FAQ Accordion ───
-      document.querySelector(".fp-faq-list").addEventListener("click", e => {
-        const btn = e.target.closest(".fp-faq-btn");
-        if (!btn) return;
-        const item   = btn.parentElement;
-        const answer = item.querySelector(".fp-faq-answer");
-        const isOpen = item.classList.contains("active");
-
-        document.querySelectorAll(".fp-faq-item").forEach(i => {
-          i.classList.remove("active");
-          i.querySelector(".fp-faq-btn").setAttribute("aria-expanded","false");
-          i.querySelector(".fp-faq-answer").style.maxHeight = "0";
-        });
-
-        if (!isOpen) {
-          item.classList.add("active");
-          btn.setAttribute("aria-expanded","true");
-          answer.style.maxHeight = answer.scrollHeight + "px";
-        }
-      });
-
-      // ─── Escape key closes all modals ───
-      document.addEventListener("keydown", e => {
-        if (e.key === "Escape") {
-          closeDetail(); closeTour();
-          lightbox.classList.remove("active");
-          document.body.style.overflow = "";
-        }
-      });
-    });
-  </script>
-
-</Layout>
+  buttons.forEach((b) =>
+    b.addEventListener("click", () => {
+      show(b);
+      lb?.showModal();
+    }),
+  );
+  const step = (dir: number) => {
+    const list = visible();
+    show(list[(current + dir + list.length) % list.length]);
+  };
+  lb?.addEventListener("click", (e) => {
+    const t = (e.target as HTMLElement).closest<HTMLElement>("[data-lb]");
+    if (t) {
+      if (t.dataset.lb === "close") lb.close();
+      else step(Number(t.dataset.lb));
+    } else if (e.target === lb) lb.close();
+  });
+  lb?.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight") step(1);
+    if (e.key === "ArrowLeft") step(-1);
+  });
+</script>

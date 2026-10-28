@@ -1,2114 +1,436 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
+import PageHeader from "../components/PageHeader.astro";
+import FeatureBand from "../components/ui/FeatureBand.astro";
+import Icon from "../components/ui/Icon.astro";
+import { specialities, categories } from "../data/specialities";
+import { serviceFaqs } from "../data/faqs";
+import { site } from "../data/site";
 
-// Service data structure for SEO, dynamic rendering, and interactive modal injection
-const servicesData = [
-  {
-    id: "cardiology",
-    name: "Cardiology & Heart Care",
-    sub: "Cardiac Diagnostics & Interventions",
-    category: "specialty-care",
-    icon: "fa-heartbeat",
-    image: "/images/consultation.png",
-    desc: "Comprehensive cardiac diagnostics, interventional therapies, and rehabilitative care managed by the best cardiologists in Mayiladuthurai.",
-    features: [
-      "Digital Electrocardiogram (ECG / EKG)",
-      "High-Resolution Echocardiogram (Echo)",
-      "Treadmill Stress Test (TMT)",
-      "24/7 Cardiac Emergency & Cath Lab Support"
-    ],
-    procedures: [
-      "Coronary Angiography",
-      "Coronary Angioplasty & Stenting",
-      "Pacemaker Implantation",
-      "Holter Rhythm Monitoring"
-    ],
-    whyChooseUs: [
-      "State-of-the-art flat-panel Cath Lab unit",
-      "Expert cardiac surgeons and critical care nurses",
-      "Fast door-to-balloon times for heart attack trauma"
-    ],
-    keywords: "cardiologist Mayiladuthurai, heart doctor Sirkazhi, angiography Karaikal, ECG Kumbakonam, cardiac hospital"
-  },
-  {
-    id: "neurology",
-    name: "Neurology & Stroke Care",
-    sub: "Brain & Nervous System Health",
-    category: "specialty-care",
-    icon: "fa-brain",
-    image: "/images/consultation.png",
-    desc: "Advanced clinical diagnostics, stroke management, neuro-critical treatments, and comprehensive nerve rehabilitation therapies.",
-    features: [
-      "Digital Electroencephalogram (EEG)",
-      "24/7 Thrombolytic Stroke Response Wards",
-      "Epilepsy & Seizure Management",
-      "Neuropathy & Chronic Pain Care"
-    ],
-    procedures: [
-      "Electromyography (EMG) Studies",
-      "Nerve Conduction Velocity (NCV) Tests",
-      "Stroke Thrombolytic Therapy",
-      "Neuro-Rehabilitation Programs"
-    ],
-    whyChooseUs: [
-      "Dedicated multi-bed neurological ICU",
-      "Specialized physiotherapists for stroke recovery",
-      "Advanced CT and imaging diagnostic partnerships"
-    ],
-    keywords: "best neurologist Mayiladuthurai, stroke hospital Sirkazhi, EEG test Karaikal, brain doctor Kumbakonam"
-  },
-  {
-    id: "orthopedics",
-    name: "Orthopedics & Joint Care",
-    sub: "Bone, Muscle & Joint Restoration",
-    category: "surgical",
-    icon: "fa-bone",
-    image: "/images/building-exterior.png",
-    desc: "Advanced joint replacement surgeries, arthroscopy, bone trauma care, and post-surgical rehabilitative care from expert orthopedic surgeons.",
-    features: [
-      "Total Knee Replacement (TKA)",
-      "Total Hip Replacement (THA)",
-      "Keyhole Arthroscopic Joint Repairs",
-      "24/7 Accident & Fracture Trauma Center"
-    ],
-    procedures: [
-      "Joint Arthroplasty (Knee/Hip)",
-      "ACL & Ligament Reconstruction",
-      "Fracture Internal & External Fixation",
-      "Spine Decompression Surgery"
-    ],
-    whyChooseUs: [
-      "Advanced modular laminar-flow cleanroom OTs",
-      "Computer-assisted navigation alignment systems",
-      "Highly experienced trauma surgeons available 24/7"
-    ],
-    keywords: "orthopedic surgeon Mayiladuthurai, knee replacement Sirkazhi, fracture doctor Karaikal, bone specialist Kumbakonam"
-  },
-  {
-    id: "pediatrics",
-    name: "Pediatrics & Child Care",
-    sub: "Infant, Child & Adolescent Healthcare",
-    category: "wellness",
-    icon: "fa-baby",
-    image: "/images/consultation.png",
-    desc: "Compassionate healthcare for infants and children, standard immunization schedules, growth tracking, and critical neonatal ICU support.",
-    features: [
-      "Level-III Neonatal Intensive Care Unit (NICU)",
-      "Comprehensive Immunization & Vaccination Clinic",
-      "Pediatric Asthma & Allergy Testing",
-      "Childhood Development & Nutrition Screening"
-    ],
-    procedures: [
-      "Newborn Screening & Vital Tracking",
-      "Pediatric Advanced Life Support (PALS)",
-      "Routine Child Health Appraisals",
-      "Infection & Fever Care Management"
-    ],
-    whyChooseUs: [
-      "Child-friendly and comforting examination spaces",
-      "24/7 availability of specialized senior pediatricians",
-      "State-of-the-art incubation and neonatal monitoring units"
-    ],
-    keywords: "best pediatrician Mayiladuthurai, child doctor Sirkazhi, baby vaccination Karaikal, NICU hospital Kumbakonam"
-  },
-  {
-    id: "radiology",
-    name: "Radiology & Diagnostic Imaging",
-    sub: "High-Precision Medical Scans",
-    category: "diagnostic",
-    icon: "fa-x-ray",
-    image: "/images/hero-building.png",
-    desc: "High-resolution digital imaging services that provide precise structural scans to guide accurate medical treatments.",
-    features: [
-      "High-Definition Digital X-Rays",
-      "4D Obstetric & Abdominal Ultrasound Scans",
-      "Color Doppler Vascular Studies",
-      "Coordination for Advanced CT & MRI Scans"
-    ],
-    procedures: [
-      "Obstetric Anomaly Scans",
-      "Vascular Color Doppler",
-      "Digital Chest & Joint Radiography",
-      "Targeted Soft Tissue Ultrasounds"
-    ],
-    whyChooseUs: [
-      "Low-radiation modern imaging equipment",
-      "Certified full-time senior consulting radiologists",
-      "Prompt report dispatch with digital copies"
-    ],
-    keywords: "ultrasound scan Mayiladuthurai, digital x-ray Sirkazhi, diagnostic scans Karaikal, scan center Kumbakonam"
-  },
-  {
-    id: "laboratory",
-    name: "Laboratory Services",
-    sub: "Pathology & Biochemistry Profiling",
-    category: "diagnostic",
-    icon: "fa-microscope",
-    image: "/images/building-exterior.png",
-    desc: "Fully automated, quality-controlled laboratory testing delivering rapid and precise blood and clinical biochemistry evaluations.",
-    features: [
-      "Comprehensive Blood Profile Analysis",
-      "Thyroid, Hormone & Vitamin Assays",
-      "Executive Health Checkup Packages",
-      "Diabetic HbA1c & Lipids Monitoring"
-    ],
-    procedures: [
-      "Complete Blood Count (CBC)",
-      "Kidney & Liver Function Profiles",
-      "Fast-track Cardiac Marker Blood Assays",
-      "Urine Microalbumin & Culture Assays"
-    ],
-    whyChooseUs: [
-      "Fully automated biochemistry analyzer units",
-      "Strict quality control calibration standards",
-      "Automated reports delivered via SMS & WhatsApp"
-    ],
-    keywords: "blood test lab Mayiladuthurai, health checkup Sirkazhi, diagnostic laboratory Karaikal, thyroid test Kumbakonam"
-  },
-  {
-    id: "ophthalmology",
-    name: "Ophthalmology & Eye Care",
-    sub: "Comprehensive Vision & Surgical Services",
-    category: "surgical",
-    icon: "fa-eye",
-    image: "/images/consultation.png",
-    desc: "Expert vision testing, diagnostic screening, and advanced sutureless cataract surgeries for optimal visual health.",
-    features: [
-      "Micro-Incision Cataract Surgery (Phaco)",
-      "Glaucoma Assessment & Pressure Screening",
-      "Diabetic Retinopathy Retinal Examinations",
-      "Refraction & Custom Eyeglass Prescription"
-    ],
-    procedures: [
-      "Phacoemulsification with Premium IOL",
-      "Non-Contact Intraocular Pressure Test",
-      "Retinal Fundus Photography Screenings",
-      "Dry Eye Treatment Plans"
-    ],
-    whyChooseUs: [
-      "State-of-the-art sutureless phaco equipment",
-      "Experienced surgical ophthalmologists",
-      "Affordable packages for premium intraocular lenses"
-    ],
-    keywords: "eye doctor Mayiladuthurai, cataract surgery Sirkazhi, ophthalmologist Karaikal, eye clinic Kumbakonam"
-  },
-  {
-    id: "physiotherapy",
-    name: "Physical Therapy & Rehab",
-    sub: "Restoring Mobility & Strength",
-    category: "wellness",
-    icon: "fa-running",
-    image: "/images/consultation.png",
-    desc: "Professional physical therapy and rehabilitation programs to assist recovery from injuries, strokes, and orthopedic surgeries.",
-    features: [
-      "Post-Stroke Mobility Restoration",
-      "Orthopedic Post-Surgical Rehabilitation",
-      "Sports Injury Management & Recovery",
-      "Chronic Spinal & Joint Pain Relief"
-    ],
-    procedures: [
-      "Interferential Therapy (IFT) & TENS",
-      "Therapeutic Ultrasound Recovery Modalities",
-      "Joint & Spine Manual Mobilization",
-      "Strengthening & Gait Re-Education Programs"
-    ],
-    whyChooseUs: [
-      "Well-equipped physical therapy rehabilitation room",
-      "Individualized attention from qualified therapists",
-      "Clear home recovery guide structures"
-    ],
-    keywords: "physiotherapist Mayiladuthurai, physical therapy Sirkazhi, stroke rehabilitation Karaikal, back pain treatment Kumbakonam"
-  },
-  {
-    id: "emergency",
-    name: "Emergency & Trauma Care",
-    sub: "24/7 Critical Response Unit",
-    category: "specialty-care",
-    icon: "fa-ambulance",
-    image: "/images/hero-building.png",
-    desc: "Mayiladuthurai's leading 24/7 emergency response unit, equipped with trauma specialists and advanced life support resources.",
-    features: [
-      "24/7 Multi-Bed Trauma Resuscitation Unit",
-      "Advanced Cardiac Life Support (ACLS) Care",
-      "Fully Equipped Cardiac & Trauma Ambulance",
-      "Rapid Management of Poisoning & Strokes"
-    ],
-    procedures: [
-      "Emergency Airway Intubation & Ventilation",
-      "Defibrillation & Cardiac Resuscitation",
-      "Acute Fracture Splinting & Stitching",
-      "Rapid Triage Assessment & Operations"
-    ],
-    whyChooseUs: [
-      "24/7 trauma-certified medical teams",
-      "Critical-care ambulances on instant standby",
-      "Cashless insurance approvals for emergencies"
-    ],
-    keywords: "24/7 emergency hospital Mayiladuthurai, trauma center Sirkazhi, ambulance number Karaikal, emergency ICU Kumbakonam"
-  }
-];
-
-const categories = [
-  { filter: "all", label: "All Services" },
-  { filter: "specialty-care", label: "Specialty Care" },
-  { filter: "diagnostic", label: "Diagnostic" },
-  { filter: "surgical", label: "Surgical" },
-  { filter: "wellness", label: "Wellness" }
-];
-
-const faqs = [
-  {
-    q: "Which insurance plans and cashless policies do you accept?",
-    a: "Vairam Hospital is partnered with all major private insurance providers, corporate third-party administrators (TPAs), and state/central government employee health insurance schemes. Please contact our corporate insurance desk for pre-authorization details."
-  },
-  {
-    q: "How can I schedule an appointment with a specialist?",
-    a: "You can book easily by clicking the 'Book Appointment' button on this page, which will open our scheduler. Alternatively, you can directly message us on WhatsApp at +91 93446 44555, or call our 24/7 helpdesk lines."
-  },
-  {
-    q: "What documents should I bring to my first appointment?",
-    a: "For your first consultation, please bring any previous medical files, prescription charts, diagnostic scans (X-rays, MRIs, lab reports), a valid national photo ID card (like Aadhaar), and your health insurance/corporate scheme cards if applicable."
-  },
-  {
-    q: "Do you provide online or telemedicine consultations?",
-    a: "Yes! We offer virtual telemedicine sessions via secure video calls for follow-ups, general medicine consulting, and review of lab reports. You can coordinate scheduling with our appointment desk online."
-  },
-  {
-    q: "What are the operational hours for emergency and diagnostic scan services?",
-    a: "Our Emergency & Trauma Ward, Ambulance Service, ICU, and emergency diagnostic scans operate 24 hours a day, 7 days a week. Regular outpatient consults and routine laboratory scans are open Monday to Sunday, from 8:00 AM to 9:00 PM."
-  }
-];
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: serviceFaqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+const servicesLd = {
+  "@context": "https://schema.org",
+  "@type": "MedicalBusiness",
+  name: site.name,
+  url: `${site.url}/services`,
+  areaServed: site.areaServed,
+  availableService: specialities.map((s) => ({ "@type": "MedicalTherapy", name: s.name, description: s.desc })),
+};
 ---
 
-<Layout title="Medical Services | Vairam Multi Speciality Hospital Mayiladuthurai">
-  
-  <!-- Structured Data JSON-LD for AEO/GEO/SEO -->
-  <script type="application/ld+json" is:inline>
-    {
-      "@context": "https://schema.org",
-      "@type": "MedicalBusiness",
-      "name": "Vairam Multi Speciality Hospital",
-      "description": "Vairam Multi Speciality Hospital offers high-intent diagnostics, cardiology, orthopaedics, and surgery services in Mayiladuthurai, Sirkazhi, Karaikal, and Kumbakonam.",
-      "url": "https://vairamhospital.com/services",
-      "logo": "https://vairamhospital.com/images/Logo.png",
-      "telephone": "+919344644555",
-      "priceRange": "$$",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "Pattamangala St",
-        "addressLocality": "Mayiladuthurai",
-        "addressRegion": "TN",
-        "postalCode": "609001",
-        "addressCountry": "IN"
-      },
-      "areaServed": ["Mayiladuthurai", "Sirkazhi", "Karaikal", "Kumbakonam", "Chidambaram"],
-      "hasOfferCatalog": {
-        "@type": "OfferCatalog",
-        "name": "Clinical Medical Services",
-        "itemListElement": [
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "MedicalService",
-              "name": "Cardiology & Heart Care",
-              "description": "Advanced cardiology, Echocardiogram, Angiogram, and Cath Lab services."
+<Layout
+  title="Specialities & Treatments | Vairam Multi Speciality Hospital, Mayiladuthurai"
+  description="Cardiology, neurology, orthopaedics, paediatrics, radiology, laboratory, eye care, physiotherapy and 24/7 emergency care at Vairam Hospital, Mayiladuthurai."
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(servicesLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+  </Fragment>
+
+  <PageHeader
+    crumb="Specialities"
+    eyebrow="Specialities & treatments"
+    title="Medical Specialities & Treatments in Mayiladuthurai"
+    lede="Vairam Hospital offers cardiology, neurology, orthopaedics, paediatrics, plastic surgery, eye care, physiotherapy, radiology, laboratory and 24/7 emergency care in Mayiladuthurai, from diagnosis to surgery and rehabilitation under one roof."
+    stats={[
+      { value: `${specialities.length}`, label: "Specialist departments" },
+      { value: "24/7", label: "Emergency & trauma care" },
+      { value: "Same day", label: "Most lab & scan reports" },
+      { value: "Cashless", label: "Insurance support" },
+    ]}
+  />
+
+  <section class="section">
+    <div class="container sv">
+      <aside class="sv__aside">
+        <div class="sv__search">
+          <Icon name="search" size={18} />
+          <label for="svSearch" class="visually-hidden">Search specialities</label>
+          <input id="svSearch" class="input" type="search" placeholder="Search specialities" autocomplete="off" />
+        </div>
+        <div class="chips sv__chips" role="group" aria-label="Filter by category">
+          {categories.map((c, i) => <button type="button" class="chip" data-filter={c.filter} aria-pressed={i === 0 ? "true" : "false"}>{c.label}</button>)}
+        </div>
+        <nav class="sv__index" aria-label="Specialities">
+          <ul role="list">
+            {
+              specialities.map((s) => (
+                <li>
+                  <a href={`#${s.id}`} data-index-for={s.id}>
+                    <Icon name={s.icon} size={18} /> {s.short}
+                  </a>
+                </li>
+              ))
             }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "MedicalService",
-              "name": "Orthopedics & Joint Replacement",
-              "description": "Knee replacement, trauma fracture clinic, and modular operation theaters."
-            }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "MedicalService",
-              "name": "Emergency & Trauma Care",
-              "description": "24/7 critical trauma care ward and advanced life support ambulance services."
-            }
-          }
-        ]
-      }
-    }
-  </script>
+          </ul>
+        </nav>
+      </aside>
 
-  <!-- 1. HERO SECTION -->
-  <section class="services-hero">
-    <div class="hero-bg-glow" aria-hidden="true"></div>
-    <div class="container hero-content text-center reveal reveal-up">
-      <span class="hero-badge">Clinical Excellence Standards</span>
-      <h1 class="hero-title">Our Medical Services & <br /><span class="text-gradient">Specialist Treatment Centers</span></h1>
-      <p class="hero-subtitle">
-        Providing modern diagnostic scans, modular cleanroom surgeries, and 24/7 emergency response. Serving families across Mayiladuthurai, Sirkazhi, Karaikal, and Kumbakonam with premium medical ethics since 2010.
-      </p>
-      
-      <!-- Search Input Integration -->
-      <div class="search-bar-wrapper">
-        <i class="fas fa-search search-icon"></i>
-        <input 
-          type="text" 
-          id="servicesSearchInput" 
-          placeholder="Search for specialty treatments, scans, doctors, or symptoms..." 
-          aria-label="Search clinical services"
-        />
-        <button id="searchClearBtn" class="search-clear-btn" aria-label="Clear search input">
-          <i class="fas fa-times"></i>
-        </button>
-      </div>
-    </div>
-  </section>
-
-  <!-- 2. FILTER TABS & SERVICE GRID -->
-  <section class="services-grid-section">
-    <div class="container">
-      
-      <!-- Category Tabs -->
-      <div class="category-tabs reveal reveal-up">
-        {categories.map((c, i) => (
-          <button 
-            class={`tab-btn ${i === 0 ? 'active' : ''}`} 
-            data-filter={c.filter}
-            role="tab"
-            aria-selected={i === 0 ? "true" : "false"}
-          >
-            {c.label}
-          </button>
-        ))}
-      </div>
-
-      <!-- Live Search/Filter Status Message -->
-      <div class="filter-status-box" id="filterStatusBox" style="display: none;">
-        <p><i class="fas fa-info-circle"></i> Showing results matching "<span id="statusQueryText"></span>". <button id="resetFiltersLink">Reset filters</button></p>
-      </div>
-
-      <!-- Services Grid -->
-      <div class="services-grid" id="servicesGrid">
-        {servicesData.map((s, i) => (
-          <article 
-            class="service-card reveal reveal-up" 
-            data-category={s.category}
-            data-keywords={s.keywords}
-            data-title={s.name.toLowerCase()}
-            data-desc={s.desc.toLowerCase()}
-            id={`card-${s.id}`}
-            style={`transition-delay: ${(i % 3) * 0.1}s`}
-          >
-            <div class="card-image-box">
-              <img src={s.image} alt={`${s.name} at Vairam Hospital Mayiladuthurai`} class="card-img" />
-              <div class="card-badge">
-                {s.category.replace('-', ' ')}
+      <div class="sv__list">
+        <p class="sv__status" id="svStatus" role="status" hidden></p>
+        {
+          specialities.map((s) => (
+            <article
+              id={s.id}
+              class:list={["sv__item", { "sv__item--alert": s.id === "emergency" }]}
+              data-category={s.category}
+              data-search={`${s.name} ${s.sub} ${s.desc} ${s.keywords} ${s.features.join(" ")} ${s.procedures.join(" ")}`.toLowerCase()}
+            >
+              <header class="sv__head">
+                <span class="icon-tile sv__icon">
+                  <Icon name={s.icon} size={28} />
+                </span>
+                <div>
+                  <p class="sv__sub">{s.sub}</p>
+                  <h2><a href={`/services/${s.id}`} class="sv__title-link">{s.name}</a></h2>
+                </div>
+              </header>
+              <p class="sv__desc">{s.desc}</p>
+              <div class="sv__cols">
+                <div>
+                  <h3>Services</h3>
+                  <ul class="check-list">{s.features.map((f) => <li>{f}</li>)}</ul>
+                </div>
+                <div>
+                  <h3>Common procedures</h3>
+                  <ul class="check-list">{s.procedures.map((f) => <li>{f}</li>)}</ul>
+                </div>
               </div>
-            </div>
-            
-            <div class="card-body">
-              <div class="card-icon-box">
-                <i class={`fas ${s.icon}`}></i>
+              <div class="sv__why">
+                <h3>Why patients choose us</h3>
+                <ul role="list">{s.why.map((w) => <li>{w}</li>)}</ul>
               </div>
-              <h3 class="card-title">{s.name}</h3>
-              <p class="card-subtitle">{s.sub}</p>
-              <p class="card-desc">{s.desc}</p>
-              
-              <div class="card-divider"></div>
-              
-              <ul class="card-features">
-                {s.features.slice(0, 3).map((f) => (
-                  <li>
-                    <i class="fas fa-check-circle"></i>
-                    <span>{f}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <button 
-                class="learn-more-btn" 
-                data-id={s.id}
-                aria-label={`Learn more about ${s.name}`}
-              >
-                Learn More <i class="fas fa-arrow-right"></i>
-              </button>
-            </div>
-          </article>
-        ))}
-      </div>
-
-      <!-- Empty State -->
-      <div class="empty-state-container" id="emptyState" style="display: none;">
-        <div class="empty-state-icon">
-          <i class="fas fa-folder-open"></i>
-        </div>
-        <h3>No Services Found</h3>
-        <p>We couldn't find any medical service matching your query. Try searching for symptoms or other department names.</p>
-        <button class="btn-primary" id="emptyStateResetBtn">View All Services</button>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- 3. HOW OUR SERVICES WORK (4-Step Timeline) -->
-  <section class="workflow-section">
-    <div class="container">
-      <div class="section-header text-center reveal reveal-up">
-        <span class="section-badge">Patient Journey</span>
-        <h2 class="section-title">How Our Services Work</h2>
-        <p class="section-desc">We structure our medical services to guarantee seamless patient access, precision diagnostics, and recovery timelines.</p>
-      </div>
-
-      <div class="workflow-timeline">
-        <div class="timeline-bar" aria-hidden="true"></div>
-        
-        <!-- Step 1 -->
-        <div class="workflow-step reveal reveal-up" style="transition-delay: 0s;">
-          <div class="step-num">01</div>
-          <div class="step-icon-wrapper">
-            <i class="far fa-calendar-check"></i>
-          </div>
-          <h3>Book Appointment</h3>
-          <p>Request schedules online, via WhatsApp link redirection, or direct call checkups.</p>
-        </div>
-
-        <!-- Step 2 -->
-        <div class="workflow-step reveal reveal-up" style="transition-delay: 0.15s;">
-          <div class="step-num">02</div>
-          <div class="step-icon-wrapper">
-            <i class="fas fa-user-md"></i>
-          </div>
-          <h3>Consultation</h3>
-          <p>Meet our leading doctor specialists for comprehensive assessments in Mayiladuthurai.</p>
-        </div>
-
-        <!-- Step 3 -->
-        <div class="workflow-step reveal reveal-up" style="transition-delay: 0.3s;">
-          <div class="step-num">03</div>
-          <div class="step-icon-wrapper">
-            <i class="fas fa-file-invoice-dollar"></i>
-          </div>
-          <h3>Diagnosis</h3>
-          <p>Receive high-precision diagnostic scanning and clinical blood profile analytics.</p>
-        </div>
-
-        <!-- Step 4 -->
-        <div class="workflow-step reveal reveal-up" style="transition-delay: 0.45s;">
-          <div class="step-num">04</div>
-          <div class="step-icon-wrapper">
-            <i class="fas fa-heartbeat"></i>
-          </div>
-          <h3>Treatment</h3>
-          <p>Receive modular cleanroom surgeries, post-surgical ICU supervision, and rehabilitation.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 4. FAQ ACCORDION SECTION -->
-  <section class="faq-section">
-    <div class="container">
-      <div class="section-header text-center reveal reveal-up">
-        <span class="section-badge">FAQ</span>
-        <h2 class="section-title">Frequently Asked Questions</h2>
-        <p class="section-desc">Got questions about scheduling, insurance pre-authorizations, or trauma emergency procedures? Find rapid guidance below.</p>
-      </div>
-
-      <div class="faq-accordion-wrapper reveal reveal-up">
-        {faqs.map((faq, idx) => (
-          <div class="faq-item" id={`faq-${idx}`}>
-            <button class="faq-question" aria-expanded="false" aria-controls={`faq-answer-${idx}`}>
-              <span>{faq.q}</span>
-              <span class="faq-toggle-icon"><i class="fas fa-chevron-down"></i></span>
-            </button>
-            <div class="faq-answer" id={`faq-answer-${idx}`} style="max-height: 0px;" role="region">
-              <div class="faq-answer-inner">
-                <p>{faq.a}</p>
+              <div class="sv__actions">
+                {s.id === "emergency" ? (
+                  <a href={`tel:${site.phone}`} class="btn btn--alert">
+                    <Icon name="phone" /> Call {site.phoneDisplay}
+                  </a>
+                ) : (
+                  <button type="button" class="btn" data-book data-dept={s.short}>
+                    <Icon name="calendar" /> Book an appointment
+                  </button>
+                )}
+                <a href={`/services/${s.id}`} class="btn btn--outline">
+                  Full details <Icon name="arrow-right" />
+                </a>
               </div>
-            </div>
-          </div>
-        ))}
+            </article>
+          ))
+        }
+        <div class="sv__empty" id="svEmpty" hidden>
+          <h2>No matching speciality</h2>
+          <p>Try another word, or call us and we'll guide you to the right doctor.</p>
+          <button type="button" class="btn btn--outline" id="svReset">Show all specialities</button>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- 5. CTA SECTION -->
-  <section class="cta-banner-section">
-    <div class="cta-glow-dot" aria-hidden="true"></div>
-    <div class="container cta-banner-container text-center reveal reveal-up">
-      <h2 class="cta-banner-title">Access Mayiladuthurai's Leading Specialty Doctors Today</h2>
-      <p class="cta-banner-desc">
-        We offer 24/7 ICU support, cashless emergency admissions, and executive medical profiling. Reach our desk immediately.
-      </p>
-      <div class="cta-banner-actions">
-        <button id="servicesPageOpenBookingBtn" class="btn-primary-gradient">
-          <i class="far fa-calendar-check"></i> Book Online Consultation
-        </button>
-        <a href="tel:+919344644555" class="btn-outline-white">
-          Call 24/7 Emergency Line <i class="fas fa-phone-alt"></i>
-        </a>
+  <FeatureBand
+    eyebrow="Integrated care"
+    title="One hospital for every step of your treatment"
+    text="Diagnosis, specialist consultation, surgery, critical care and rehabilitation all happen under one roof, coordinated by one team."
+    items={[
+      { icon: "microscope", title: "Diagnostics in-house", text: "Lab, X-ray and ultrasound in the same building, so results reach your doctor fast." },
+      { icon: "users", title: "Multi-specialist review", text: "Complex cases are discussed across departments for the best treatment plan." },
+      { icon: "hospital", title: "Surgery with ICU backup", text: "Modular theatres supported by a 24/7 ICU and emergency team." },
+      { icon: "activity", title: "Rehab & follow-up", text: "Physiotherapy and structured follow-up until you are fully back on your feet." },
+    ]}
+    cta={{ label: "Book a consultation", action: "book" }}
+  />
+
+  <section class="section section--white" aria-labelledby="faqTitle">
+    <div class="container faq-wrap">
+      <div class="section-head">
+        <p class="eyebrow">Questions</p>
+        <h2 id="faqTitle">Frequently asked questions</h2>
+        <p class="lede">Can't find what you need? Call {site.phoneDisplay} and our helpdesk will assist.</p>
+      </div>
+      <div class="faq">
+        {
+          serviceFaqs.map((f) => (
+            <details>
+              <summary>{f.q}</summary>
+              <p>{f.a}</p>
+            </details>
+          ))
+        }
       </div>
     </div>
   </section>
-
-  <!-- 6. SERVICE DETAIL POPUP MODAL (Dynamic Content Injected) -->
-  <div class="detail-modal-overlay" id="serviceDetailModal" aria-hidden="true" role="dialog">
-    <div class="detail-modal-card">
-      <div class="modal-card-header">
-        <h3 id="modalTitleText"><i class="fas fa-heartbeat"></i> Cardiology & Heart Care</h3>
-        <button class="close-detail-modal-btn" id="closeDetailModalBtn" aria-label="Close details modal"><i class="fas fa-times"></i></button>
-      </div>
-      
-      <div class="modal-scroll-body">
-        <div class="modal-featured-img-box">
-          <img id="modalFeaturedImage" src="/images/consultation.png" alt="Clinical Center" />
-          <div class="modal-img-badge" id="modalCategoryBadge">Specialty Care</div>
-        </div>
-
-        <div class="modal-content-grid">
-          <div class="modal-desc-column">
-            <h4>Service Overview</h4>
-            <p id="modalDescText">Detailed overview here...</p>
-
-            <h4>Key Diagnostics & Operations</h4>
-            <ul class="modal-items-list" id="modalProceduresList">
-              <!-- JS Injected items -->
-            </ul>
-          </div>
-          
-          <div class="modal-highlights-column">
-            <h4>Core Features</h4>
-            <ul class="modal-bullet-list" id="modalFeaturesList">
-              <!-- JS Injected items -->
-            </ul>
-
-            <div class="modal-why-box">
-              <h4><i class="fas fa-shield-alt"></i> Why Choose Us</h4>
-              <ul class="modal-why-list" id="modalWhyList">
-                <!-- JS Injected items -->
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="modal-footer-actions">
-        <button class="btn-outline-secondary" id="modalCloseBackBtn">Go Back</button>
-        <button class="btn-primary" id="modalConfirmBookBtn">Book Consultation Now</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- 7. APPOINTMENT BOOKING MODAL -->
-  <div class="booking-modal-overlay" id="servicesBookingModal" aria-hidden="true" role="dialog">
-    <div class="booking-modal-card">
-      <div class="modal-card-header">
-        <h3><i class="far fa-calendar-check"></i> Book Medical Appointment</h3>
-        <button class="close-modal-btn" id="closeServicesBookingBtn" aria-label="Close booking modal"><i class="fas fa-times"></i></button>
-      </div>
-      
-      <form class="modal-booking-form" id="servicesPageBookingForm">
-        <div class="form-group">
-          <label for="bookPatientName">Patient Full Name *</label>
-          <input type="text" id="bookPatientName" required placeholder="e.g. Rajesh Kumar" />
-        </div>
-        
-        <div class="form-group">
-          <label for="bookPatientPhone">Mobile Number *</label>
-          <input type="tel" id="bookPatientPhone" required placeholder="e.g. 93446 44555" pattern="[0-9\s+-]{10,15}" />
-        </div>
-        
-        <div class="form-grid">
-          <div class="form-group">
-            <label for="bookSpeciality">Select Specialty *</label>
-            <select id="bookSpeciality" required>
-              <option value="">-- Choose Department --</option>
-              <option value="Cardiology">Cardiology</option>
-              <option value="Neurology">Neurology</option>
-              <option value="Orthopaedics">Orthopaedics</option>
-              <option value="Paediatrics">Paediatrics</option>
-              <option value="General Medicine">General Medicine</option>
-              <option value="Diagnostics">Diagnostics & Lab</option>
-              <option value="Ophthalmology">Ophthalmology</option>
-              <option value="Physiotherapy">Physiotherapy & Rehab</option>
-              <option value="Emergency">Emergency Trauma Unit</option>
-            </select>
-          </div>
-          
-          <div class="form-group">
-            <label for="bookBookingDate">Appointment Date *</label>
-            <input type="date" id="bookBookingDate" required />
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="bookTimeSlot">Preferred Time Slot *</label>
-          <select id="bookTimeSlot" required>
-            <option value="">-- Select Time Slot --</option>
-            <option value="09:00 AM">09:00 AM - 11:00 AM</option>
-            <option value="11:00 AM">11:00 AM - 01:00 PM</option>
-            <option value="02:00 PM">02:00 PM - 04:00 PM</option>
-            <option value="04:00 PM">04:00 PM - 06:00 PM</option>
-          </select>
-        </div>
-
-        <button type="submit" class="submit-modal-btn">Confirm & Redirect to WhatsApp</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- STYLES -->
-  <style>
-    /* CSS Parser Safety */
-    .services-init-safety-check {
-      color: inherit;
-    }
-
-    /* 1. HERO SECTION */
-    .services-hero {
-      padding: 120px 5% 90px;
-      background: #020617;
-      background: linear-gradient(135deg, #020617 0%, #0f766e 100%);
-      position: relative;
-      overflow: hidden;
-      color: #ffffff;
-    }
-
-    .hero-bg-glow {
-      position: absolute;
-      top: -20%;
-      right: -10%;
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(20, 184, 166, 0.18) 0%, transparent 70%);
-      border-radius: 50%;
-      pointer-events: none;
-    }
-
-    .hero-content {
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    .hero-badge {
-      display: inline-block;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      color: #14b8a6;
-      font-size: 0.85rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      padding: 8px 20px;
-      border-radius: 50px;
-      margin-bottom: 25px;
-    }
-
-    .hero-title {
-      font-size: clamp(2.4rem, 5vw, 4rem);
-      font-weight: 800;
-      line-height: 1.2;
-      letter-spacing: -0.02em;
-      margin-bottom: 25px;
-      color: #ffffff;
-    }
-
-    .text-gradient {
-      background: linear-gradient(120deg, #14b8a6 0%, #38bdf8 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .hero-subtitle {
-      font-size: clamp(1.05rem, 2vw, 1.3rem);
-      line-height: 1.7;
-      color: rgba(255, 255, 255, 0.85);
-      font-weight: 400;
-      margin-bottom: 45px;
-    }
-
-    /* Search Bar Input */
-    .search-bar-wrapper {
-      max-width: 650px;
-      margin: 0 auto;
-      position: relative;
-      box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.25);
-      border-radius: 18px;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .search-icon {
-      position: absolute;
-      left: 24px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #94a3b8;
-      font-size: 1.2rem;
-      pointer-events: none;
-    }
-
-    .search-bar-wrapper input {
-      width: 100%;
-      padding: 20px 60px 20px 65px;
-      font-size: 1.05rem;
-      border: none;
-      outline: none;
-      background: rgba(255, 255, 255, 0.95);
-      color: #0f172a;
-      font-family: inherit;
-      transition: background 0.3s;
-    }
-
-    .search-bar-wrapper input:focus {
-      background: #ffffff;
-    }
-
-    .search-clear-btn {
-      position: absolute;
-      right: 20px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      color: #64748b;
-      font-size: 1.1rem;
-      cursor: pointer;
-      padding: 5px;
-      display: none;
-      transition: color 0.3s;
-    }
-
-    .search-clear-btn:hover {
-      color: #0f172a;
-    }
-
-    /* 2. FILTER TABS & SERVICE GRID */
-    .services-grid-section {
-      padding: 60px 5% 100px;
-      background: #ffffff;
-    }
-
-    .category-tabs {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      flex-wrap: wrap;
-      margin-bottom: 50px;
-    }
-
-    .tab-btn {
-      padding: 12px 28px;
-      background: #f1f5f9;
-      color: #475569;
-      border: 1.5px solid transparent;
-      border-radius: 50px;
-      font-weight: 700;
-      font-size: 0.95rem;
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      font-family: inherit;
-    }
-
-    .tab-btn:hover {
-      background: #e2e8f0;
-      color: #0f172a;
-    }
-
-    .tab-btn.active {
-      background: #0d9488;
-      color: #ffffff;
-      box-shadow: 0 10px 20px -5px rgba(13, 148, 136, 0.3);
-    }
-
-    .filter-status-box {
-      max-width: 1200px;
-      margin: -20px auto 40px;
-      padding: 14px 24px;
-      background: #f0fdfa;
-      border: 1px solid rgba(13, 148, 136, 0.15);
-      border-radius: 12px;
-    }
-
-    .filter-status-box p {
-      margin: 0;
-      font-size: 0.95rem;
-      color: #0f766e;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .filter-status-box button {
-      background: none;
-      border: none;
-      text-decoration: underline;
-      color: #0d9488;
-      font-weight: 700;
-      cursor: pointer;
-      padding: 0;
-      margin-left: 5px;
-      font-family: inherit;
-    }
-
-    /* Grid Layout */
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-      gap: 40px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    /* Card Details */
-    .service-card {
-      background: #ffffff;
-      border-radius: 24px;
-      border: 1px solid rgba(13, 148, 136, 0.08);
-      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.04);
-      overflow: hidden;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-    }
-
-    .service-card:hover {
-      transform: translateY(-8px);
-      border-color: rgba(13, 148, 136, 0.3);
-      box-shadow: var(--shadow-premium);
-    }
-
-    .card-image-box {
-      height: 220px;
-      position: relative;
-      overflow: hidden;
-      background: #f8fafc;
-    }
-
-    .card-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .service-card:hover .card-img {
-      transform: scale(1.06);
-    }
-
-    .card-badge {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(4px);
-      padding: 6px 14px;
-      border-radius: 50px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: #0f766e;
-      border: 1px solid rgba(13, 148, 136, 0.1);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    }
-
-    .card-body {
-      padding: 30px;
-      display: flex;
-      flex-direction: column;
-      flex-grow: 1;
-      position: relative;
-    }
-
-    .card-icon-box {
-      width: 54px;
-      height: 54px;
-      border-radius: 14px;
-      background: rgba(13, 148, 136, 0.08);
-      color: #0d9488;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-      position: absolute;
-      top: -27px;
-      right: 30px;
-      box-shadow: 0 8px 20px -4px rgba(13, 148, 136, 0.15);
-      transition: all 0.3s;
-      border: 2px solid #ffffff;
-    }
-
-    .service-card:hover .card-icon-box {
-      background: #0d9488;
-      color: #ffffff;
-      transform: scale(1.05) rotate(5deg);
-    }
-
-    .card-title {
-      font-size: 1.35rem;
-      font-weight: 800;
-      color: #020617;
-      margin-bottom: 8px;
-    }
-
-    .card-subtitle {
-      font-size: 0.88rem;
-      font-weight: 700;
-      color: #0d9488;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 15px;
-    }
-
-    .card-desc {
-      font-size: 0.95rem;
-      line-height: 1.6;
-      color: #475569;
-      margin-bottom: 20px;
-    }
-
-    .card-divider {
-      height: 1px;
-      background: #e2e8f0;
-      margin-bottom: 20px;
-      width: 100%;
-    }
-
-    .card-features {
-      list-style: none;
-      padding: 0;
-      margin: 0 0 30px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      flex-grow: 1;
-    }
-
-    .card-features li {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      font-size: 0.92rem;
-      color: #334155;
-    }
-
-    .card-features li i {
-      color: #14b8a6;
-      margin-top: 3px;
-      flex-shrink: 0;
-    }
-
-    .learn-more-btn {
-      width: 100%;
-      background: #f8fafc;
-      color: #0f766e;
-      border: 1.5px solid rgba(13, 148, 136, 0.1);
-      padding: 14px;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 0.95rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: all 0.3s;
-      font-family: inherit;
-    }
-
-    .service-card:hover .learn-more-btn {
-      background: #0d9488;
-      color: #ffffff;
-      border-color: #0d9488;
-      box-shadow: 0 8px 16px -4px rgba(13, 148, 136, 0.3);
-    }
-
-    .learn-more-btn i {
-      transition: transform 0.3s;
-    }
-
-    .learn-more-btn:hover i {
-      transform: translateX(4px);
-    }
-
-    /* Empty state */
-    .empty-state-container {
-      text-align: center;
-      padding: 80px 20px;
-      max-width: 500px;
-      margin: 0 auto;
-    }
-
-    .empty-state-icon {
-      font-size: 4rem;
-      color: #cbd5e1;
-      margin-bottom: 20px;
-    }
-
-    .empty-state-container h3 {
-      font-size: 1.5rem;
-      color: #0f172a;
-      margin-bottom: 10px;
-    }
-
-    .empty-state-container p {
-      color: #64748b;
-      margin-bottom: 25px;
-      line-height: 1.6;
-    }
-
-    .btn-primary {
-      background: #0d9488;
-      color: #ffffff;
-      padding: 12px 28px;
-      border-radius: 12px;
-      font-weight: 700;
-      border: none;
-      cursor: pointer;
-      font-family: inherit;
-      transition: all 0.3s;
-    }
-
-    .btn-primary:hover {
-      background: #0f766e;
-      transform: translateY(-1px);
-    }
-
-    /* 3. HOW OUR SERVICES WORK TIMELINE */
-    .workflow-section {
-      padding: 100px 5%;
-      background: #f8fafc;
-      border-top: 1px solid #e2e8f0;
-      border-bottom: 1px solid #e2e8f0;
-    }
-
-    .section-header {
-      max-width: 800px;
-      margin: 0 auto 60px;
-    }
-
-    .section-badge {
-      color: #0f766e;
-      font-size: 0.9rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      margin-bottom: 15px;
-      display: inline-block;
-      position: relative;
-      padding-left: 24px;
-    }
-
-    .section-badge::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 14px;
-      height: 3px;
-      background: #0d9488;
-      border-radius: 2px;
-    }
-
-    .section-title {
-      font-size: clamp(2rem, 3.5vw, 2.75rem);
-      font-weight: 800;
-      color: #020617;
-      margin-bottom: 20px;
-      letter-spacing: -0.02em;
-    }
-
-    .section-desc {
-      font-size: 1.05rem;
-      color: #475569;
-      line-height: 1.7;
-    }
-
-    .workflow-timeline {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 30px;
-      max-width: 1200px;
-      margin: 0 auto;
-      position: relative;
-    }
-
-    .timeline-bar {
-      position: absolute;
-      top: 75px;
-      left: 5%;
-      right: 5%;
-      height: 4px;
-      background: rgba(13, 148, 136, 0.15);
-      z-index: 1;
-    }
-
-    .workflow-step {
-      background: #ffffff;
-      padding: 40px 30px;
-      border-radius: 24px;
-      border: 1px solid rgba(13, 148, 136, 0.05);
-      box-shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.03);
-      text-align: center;
-      position: relative;
-      z-index: 2;
-      transition: all 0.3s;
-    }
-
-    .workflow-step:hover {
-      transform: translateY(-6px);
-      border-color: rgba(13, 148, 136, 0.2);
-      box-shadow: var(--shadow-premium);
-    }
-
-    .step-num {
-      position: absolute;
-      top: 20px;
-      right: 25px;
-      font-size: 1.8rem;
-      font-weight: 800;
-      color: rgba(13, 148, 136, 0.1);
-      line-height: 1;
-    }
-
-    .step-icon-wrapper {
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
-      background: #f0fdfa;
-      color: #0d9488;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.7rem;
-      margin: 0 auto 25px;
-      border: 4px solid #ffffff;
-      box-shadow: 0 10px 20px -8px rgba(13, 148, 136, 0.2);
-      transition: all 0.3s;
-    }
-
-    .workflow-step:hover .step-icon-wrapper {
-      background: #0d9488;
-      color: #ffffff;
-      transform: scale(1.05);
-    }
-
-    .workflow-step h3 {
-      font-size: 1.2rem;
-      font-weight: 800;
-      color: #020617;
-      margin-bottom: 12px;
-    }
-
-    .workflow-step p {
-      font-size: 0.9rem;
-      line-height: 1.6;
-      color: #475569;
-    }
-
-    /* 4. FAQ ACCORDION SECTION */
-    .faq-section {
-      padding: 100px 5%;
-      background: #ffffff;
-    }
-
-    .faq-accordion-wrapper {
-      max-width: 800px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-
-    .faq-item {
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 16px;
-      overflow: hidden;
-      transition: border 0.3s, background 0.3s;
-    }
-
-    .faq-item.active {
-      border-color: rgba(13, 148, 136, 0.3);
-      background: #ffffff;
-      box-shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.05);
-    }
-
-    .faq-question {
-      width: 100%;
-      padding: 22px 30px;
-      background: none;
-      border: none;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      text-align: left;
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: #020617;
-      cursor: pointer;
-      font-family: inherit;
-      gap: 20px;
-    }
-
-    .faq-toggle-icon {
-      font-size: 0.95rem;
-      color: #0d9488;
-      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      width: 24px;
-      height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(13, 148, 136, 0.06);
-      border-radius: 50%;
-    }
-
-    .faq-item.active .faq-toggle-icon {
-      transform: rotate(180deg);
-      background: #0d9488;
-      color: #ffffff;
-    }
-
-    .faq-answer {
-      transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      overflow: hidden;
-    }
-
-    .faq-answer-inner {
-      padding: 0 30px 22px;
-      font-size: 0.95rem;
-      line-height: 1.7;
-      color: #475569;
-      border-top: 1px dashed transparent;
-    }
-
-    .faq-item.active .faq-answer-inner {
-      border-top-color: #e2e8f0;
-    }
-
-    /* 5. CTA SECTION */
-    .cta-banner-section {
-      padding: 100px 5%;
-      background: linear-gradient(135deg, #020617 0%, #0f766e 100%);
-      position: relative;
-      overflow: hidden;
-      color: #ffffff;
-    }
-
-    .cta-glow-dot {
-      position: absolute;
-      bottom: -30%;
-      left: -10%;
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, rgba(20, 184, 166, 0.15) 0%, transparent 70%);
-      border-radius: 50%;
-      pointer-events: none;
-    }
-
-    .cta-banner-container {
-      max-width: 900px;
-      margin: 0 auto;
-      position: relative;
-      z-index: 2;
-    }
-
-    .cta-banner-title {
-      font-size: clamp(1.8rem, 3.5vw, 2.5rem);
-      font-weight: 800;
-      line-height: 1.3;
-      margin-bottom: 20px;
-      letter-spacing: -0.01em;
-    }
-
-    .cta-banner-desc {
-      font-size: 1.1rem;
-      line-height: 1.7;
-      color: rgba(255, 255, 255, 0.8);
-      margin-bottom: 40px;
-    }
-
-    .cta-banner-actions {
-      display: flex;
-      gap: 20px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .btn-primary-gradient {
-      background: #0d9488;
-      color: #ffffff;
-      border: none;
-      padding: 16px 36px;
-      border-radius: 16px;
-      font-weight: 700;
-      font-size: 1rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      box-shadow: 0 10px 20px -10px rgba(13, 148, 136, 0.5);
-      transition: all 0.3s;
-      font-family: inherit;
-    }
-
-    .btn-primary-gradient:hover {
-      background: #0f766e;
-      transform: translateY(-2px);
-      box-shadow: 0 15px 30px -12px rgba(13, 148, 136, 0.6);
-    }
-
-    .btn-outline-white {
-      background: transparent;
-      color: #ffffff;
-      border: 1.5px solid rgba(255, 255, 255, 0.25);
-      padding: 16px 36px;
-      border-radius: 16px;
-      font-weight: 700;
-      font-size: 1rem;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      transition: all 0.3s;
-      font-family: inherit;
-    }
-
-    .btn-outline-white:hover {
-      background: rgba(255, 255, 255, 0.05);
-      border-color: #ffffff;
-      transform: translateY(-2px);
-    }
-
-    /* 6. SERVICE DETAIL POPUP MODAL */
-    .detail-modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(2, 6, 23, 0.6);
-      backdrop-filter: blur(8px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 10000;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      padding: 20px;
-    }
-
-    .detail-modal-overlay.active {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .detail-modal-card {
-      background: #ffffff;
-      width: 100%;
-      max-width: 900px;
-      height: 90%;
-      max-height: 800px;
-      border-radius: 28px;
-      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.2);
-      border: 1px solid rgba(13, 148, 136, 0.1);
-      overflow: hidden;
-      transform: translateY(40px) scale(0.95);
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .detail-modal-overlay.active .detail-modal-card {
-      transform: translateY(0) scale(1);
-    }
-
-    .modal-card-header {
-      background: linear-gradient(135deg, #020617 0%, #0f766e 100%);
-      padding: 25px 35px;
-      color: #ffffff;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-shrink: 0;
-    }
-
-    .modal-card-header h3 {
-      font-size: 1.3rem;
-      font-weight: 800;
-      margin: 0;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .close-detail-modal-btn {
-      background: none;
-      border: none;
-      color: rgba(255, 255, 255, 0.8);
-      font-size: 1.25rem;
-      cursor: pointer;
-      padding: 5px;
-      transition: all 0.3s;
-    }
-
-    .close-detail-modal-btn:hover {
-      color: #ffffff;
-      transform: rotate(90deg);
-    }
-
-    .modal-scroll-body {
-      padding: 35px;
-      overflow-y: auto;
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 30px;
-    }
-
-    .modal-featured-img-box {
-      position: relative;
-      height: 250px;
-      border-radius: 20px;
-      overflow: hidden;
-      flex-shrink: 0;
-    }
-
-    .modal-featured-img-box img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .modal-img-badge {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      background: #0d9488;
-      color: #ffffff;
-      padding: 6px 14px;
-      border-radius: 50px;
-      font-size: 0.78rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .modal-content-grid {
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 40px;
-    }
-
-    .modal-desc-column h4,
-    .modal-highlights-column h4 {
-      font-size: 1.1rem;
-      font-weight: 800;
-      color: #020617;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .modal-desc-column p {
-      font-size: 0.98rem;
-      line-height: 1.7;
-      color: #475569;
-      margin-bottom: 25px;
-    }
-
-    .modal-items-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 10px;
-    }
-
-    .modal-items-list li {
-      padding: 10px 16px;
-      background: #f8fafc;
-      border-radius: 10px;
-      border-left: 3px solid #0d9488;
-      font-size: 0.92rem;
-      font-weight: 600;
-      color: #334155;
-    }
-
-    .modal-bullet-list {
-      list-style: none;
-      padding: 0;
-      margin: 0 0 25px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .modal-bullet-list li {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      font-size: 0.92rem;
-      color: #334155;
-    }
-
-    .modal-bullet-list li i {
-      color: #0d9488;
-      margin-top: 3px;
-    }
-
-    .modal-why-box {
-      background: #f0fdfa;
-      border: 1px solid rgba(13, 148, 136, 0.15);
-      padding: 24px;
-      border-radius: 20px;
-    }
-
-    .modal-why-box h4 {
-      color: #0f766e;
-      margin-bottom: 15px;
-    }
-
-    .modal-why-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .modal-why-list li {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      font-size: 0.88rem;
-      line-height: 1.5;
-      color: #115e59;
-    }
-
-    .modal-why-list li i {
-      color: #0d9488;
-      margin-top: 3px;
-    }
-
-    .modal-footer-actions {
-      padding: 20px 35px;
-      background: #f8fafc;
-      border-top: 1px solid #e2e8f0;
-      display: flex;
-      justify-content: flex-end;
-      gap: 15px;
-      flex-shrink: 0;
-    }
-
-    .btn-outline-secondary {
-      background: transparent;
-      color: #475569;
-      border: 1.5px solid #cbd5e1;
-      padding: 12px 24px;
-      border-radius: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      font-family: inherit;
-      transition: all 0.3s;
-    }
-
-    .btn-outline-secondary:hover {
-      background: #f1f5f9;
-      border-color: #94a3b8;
-      color: #0f172a;
-    }
-
-    /* 7. APPOINTMENT BOOKING MODAL */
-    .booking-modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(2, 6, 23, 0.6);
-      backdrop-filter: blur(8px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 11000;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      padding: 20px;
-    }
-
-    .booking-modal-overlay.active {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .booking-modal-card {
-      background: #ffffff;
-      width: 100%;
-      max-width: 550px;
-      border-radius: 28px;
-      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.2);
-      border: 1px solid rgba(13, 148, 136, 0.1);
-      overflow: hidden;
-      transform: translateY(40px) scale(0.95);
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .booking-modal-overlay.active .booking-modal-card {
-      transform: translateY(0) scale(1);
-    }
-
-    .modal-booking-form {
-      padding: 35px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .form-group label {
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: #020617;
-    }
-
-    .form-group input,
-    .form-group select {
-      padding: 12px 16px;
-      border: 1.5px solid #e2e8f0;
-      border-radius: 12px;
-      font-family: inherit;
-      font-size: 0.95rem;
-      outline: none;
-      transition: border 0.3s;
-      background: #f8fafc;
-      color: #0f172a;
-    }
-
-    .form-group input:focus,
-    .form-group select:focus {
-      border-color: #0d9488;
-      background: #ffffff;
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-
-    .submit-modal-btn {
-      background: #0d9488;
-      color: #ffffff;
-      border: none;
-      padding: 14px;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: all 0.3s;
-      margin-top: 10px;
-      box-shadow: 0 8px 16px -4px rgba(13, 148, 136, 0.3);
-      font-family: inherit;
-    }
-
-    .submit-modal-btn:hover {
-      background: #0f766e;
-      box-shadow: 0 12px 24px -6px rgba(13, 148, 136, 0.4);
-    }
-
-    /* Responsive Adjustments */
-    @media (max-width: 991px) {
-      .workflow-timeline {
-        grid-template-columns: 1fr;
-        gap: 40px;
-      }
-      .timeline-bar {
-        display: none;
-      }
-      .modal-content-grid {
-        grid-template-columns: 1fr;
-        gap: 30px;
-      }
-      .detail-modal-card {
-        height: 95%;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .category-tabs {
-        gap: 10px;
-      }
-      .tab-btn {
-        padding: 10px 20px;
-        font-size: 0.85rem;
-      }
-      .services-hero {
-        padding: 100px 5% 70px;
-      }
-      .workflow-section,
-      .faq-section,
-      .services-grid-section,
-      .cta-banner-section {
-        padding: 70px 5%;
-      }
-      .modal-scroll-body {
-        padding: 20px;
-      }
-      .modal-featured-img-box {
-        height: 180px;
-      }
-      .form-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
-
-  <!-- INTERACTIVE VANILLA JAVASCRIPT -->
-  <script is:inline define:vars={{ servicesData }}>
-    document.addEventListener("DOMContentLoaded", () => {
-      
-      // Cache DOM Elements
-      const searchInput = document.getElementById("servicesSearchInput");
-      const searchClearBtn = document.getElementById("searchClearBtn");
-      const tabButtons = document.querySelectorAll(".tab-btn");
-      const serviceCards = document.querySelectorAll(".service-card");
-      const emptyState = document.getElementById("emptyState");
-      const filterStatusBox = document.getElementById("filterStatusBox");
-      const statusQueryText = document.getElementById("statusQueryText");
-      const resetFiltersLink = document.getElementById("resetFiltersLink");
-      const emptyStateResetBtn = document.getElementById("emptyStateResetBtn");
-      const servicesGrid = document.getElementById("servicesGrid");
-
-      // Detail Modal Cache
-      const detailModal = document.getElementById("serviceDetailModal");
-      const closeDetailModalBtn = document.getElementById("closeDetailModalBtn");
-      const modalCloseBackBtn = document.getElementById("modalCloseBackBtn");
-      const modalConfirmBookBtn = document.getElementById("modalConfirmBookBtn");
-      
-      const modalTitleText = document.getElementById("modalTitleText");
-      const modalFeaturedImage = document.getElementById("modalFeaturedImage");
-      const modalCategoryBadge = document.getElementById("modalCategoryBadge");
-      const modalDescText = document.getElementById("modalDescText");
-      const modalProceduresList = document.getElementById("modalProceduresList");
-      const modalFeaturesList = document.getElementById("modalFeaturesList");
-      const modalWhyList = document.getElementById("modalWhyList");
-
-      // Booking Modal Cache
-      const bookingModal = document.getElementById("servicesBookingModal");
-      const closeServicesBookingBtn = document.getElementById("closeServicesBookingBtn");
-      const servicesPageOpenBookingBtn = document.getElementById("servicesPageOpenBookingBtn");
-      const bookingForm = document.getElementById("servicesPageBookingForm");
-      const bookSpeciality = document.getElementById("bookSpeciality");
-
-      // State variables
-      let activeTabFilter = "all";
-      let activeSearchQuery = "";
-      let activeSelectedServiceId = null;
-
-      // ────────────────────────────────────────────────────────
-      // 1. FILTERING & SEARCH LOGIC
-      // ────────────────────────────────────────────────────────
-      
-      function runFilters() {
-        let visibleCount = 0;
-        const query = activeSearchQuery.trim().toLowerCase();
-
-        serviceCards.forEach(card => {
-          const cardCategory = card.getAttribute("data-category");
-          const cardTitle = card.getAttribute("data-title");
-          const cardDesc = card.getAttribute("data-desc");
-          const cardKeywords = card.getAttribute("data-keywords").toLowerCase();
-
-          // Category filter match
-          const tabMatch = (activeTabFilter === "all" || cardCategory === activeTabFilter);
-          
-          // Search query match (title, desc, or keywords)
-          const searchMatch = (
-            query === "" ||
-            cardTitle.includes(query) ||
-            cardDesc.includes(query) ||
-            cardKeywords.includes(query)
-          );
-
-          if (tabMatch && searchMatch) {
-            card.style.display = "flex";
-            visibleCount++;
-          } else {
-            card.style.display = "none";
-          }
-        });
-
-        // Toggle Empty State
-        if (visibleCount === 0) {
-          servicesGrid.style.display = "none";
-          emptyState.style.display = "block";
-        } else {
-          servicesGrid.style.display = "grid";
-          emptyState.style.display = "none";
-        }
-
-        // Toggle Filter Status Banner
-        if (query !== "") {
-          filterStatusBox.style.display = "block";
-          statusQueryText.textContent = activeSearchQuery;
-          searchClearBtn.style.display = "block";
-        } else {
-          filterStatusBox.style.display = "none";
-          searchClearBtn.style.display = "none";
-        }
-      }
-
-      function resetAllFilters() {
-        activeTabFilter = "all";
-        activeSearchQuery = "";
-        searchInput.value = "";
-        
-        tabButtons.forEach(btn => {
-          if (btn.getAttribute("data-filter") === "all") {
-            btn.classList.add("active");
-            btn.setAttribute("aria-selected", "true");
-          } else {
-            btn.classList.remove("active");
-            btn.setAttribute("aria-selected", "false");
-          }
-        });
-
-        runFilters();
-      }
-
-      // Input Event
-      searchInput.addEventListener("input", (e) => {
-        activeSearchQuery = e.target.value;
-        runFilters();
-      });
-
-      // Clear Button click
-      searchClearBtn.addEventListener("click", () => {
-        searchInput.value = "";
-        activeSearchQuery = "";
-        runFilters();
-      });
-
-      // Tab Buttons click
-      tabButtons.forEach(button => {
-        button.addEventListener("click", () => {
-          tabButtons.forEach(b => {
-            b.classList.remove("active");
-            b.setAttribute("aria-selected", "false");
-          });
-          button.classList.add("active");
-          button.setAttribute("aria-selected", "true");
-          
-          activeTabFilter = button.getAttribute("data-filter");
-          runFilters();
-        });
-      });
-
-      // Resets
-      resetFiltersLink.addEventListener("click", resetAllFilters);
-      emptyStateResetBtn.addEventListener("click", resetAllFilters);
-
-      // ────────────────────────────────────────────────────────
-      // 2. DYNAMIC SERVICE DETAIL MODAL BINDINGS
-      // ────────────────────────────────────────────────────────
-
-      function openDetailModal(serviceId) {
-        const data = servicesData.find(s => s.id === serviceId);
-        if (!data) return;
-
-        activeSelectedServiceId = serviceId;
-
-        // Inject Content
-        modalTitleText.innerHTML = `<i class="fas ${data.icon}"></i> ${data.name}`;
-        modalFeaturedImage.src = data.image;
-        modalFeaturedImage.alt = `${data.name} Center visual`;
-        modalCategoryBadge.textContent = data.category.replace('-', ' ');
-        modalDescText.textContent = data.desc;
-
-        // Procedures List
-        modalProceduresList.innerHTML = "";
-        data.procedures.forEach(proc => {
-          const li = document.createElement("li");
-          li.textContent = proc;
-          modalProceduresList.appendChild(li);
-        });
-
-        // Features list
-        modalFeaturesList.innerHTML = "";
-        data.features.forEach(feat => {
-          const li = document.createElement("li");
-          li.innerHTML = `<i class="fas fa-check-circle"></i> <span>${feat}</span>`;
-          modalFeaturesList.appendChild(li);
-        });
-
-        // Why choose us highlights
-        modalWhyList.innerHTML = "";
-        data.whyChooseUs.forEach(why => {
-          const li = document.createElement("li");
-          li.innerHTML = `<i class="fas fa-star"></i> <span>${why}</span>`;
-          modalWhyList.appendChild(li);
-        });
-
-        // Open Modal
-        detailModal.classList.add("active");
-        detailModal.setAttribute("aria-hidden", "false");
-        document.body.style.overflow = "hidden";
-      }
-
-      function closeDetailModal() {
-        detailModal.classList.remove("active");
-        detailModal.setAttribute("aria-hidden", "true");
-        if (!bookingModal.classList.contains("active")) {
-          document.body.style.overflow = "";
-        }
-      }
-
-      // Attach "Learn More" Triggers
-      servicesGrid.addEventListener("click", (e) => {
-        const btn = e.target.closest(".learn-more-btn");
-        if (btn) {
-          const id = btn.getAttribute("data-id");
-          openDetailModal(id);
-        }
-      });
-
-      closeDetailModalBtn.addEventListener("click", closeDetailModal);
-      modalCloseBackBtn.addEventListener("click", closeDetailModal);
-
-      // ────────────────────────────────────────────────────────
-      // 3. APPOINTMENT BOOKING MODAL ACTIONS
-      // ────────────────────────────────────────────────────────
-
-      function openBookingModal(preselectedDept = "") {
-        // Map service IDs to the dropdown option values
-        const deptMap = {
-          "cardiology": "Cardiology",
-          "neurology": "Neurology",
-          "orthopedics": "Orthopaedics",
-          "pediatrics": "Paediatrics",
-          "radiology": "Diagnostics",
-          "laboratory": "Diagnostics",
-          "ophthalmology": "Ophthalmology",
-          "physiotherapy": "Physiotherapy",
-          "emergency": "Emergency"
-        };
-
-        if (preselectedDept && deptMap[preselectedDept]) {
-          bookSpeciality.value = deptMap[preselectedDept];
-        } else {
-          bookSpeciality.value = "";
-        }
-
-        bookingModal.classList.add("active");
-        bookingModal.setAttribute("aria-hidden", "false");
-        document.body.style.overflow = "hidden";
-      }
-
-      function closeBookingModal() {
-        bookingModal.classList.remove("active");
-        bookingModal.setAttribute("aria-hidden", "true");
-        if (!detailModal.classList.contains("active")) {
-          document.body.style.overflow = "";
-        }
-      }
-
-      // Trigger Booking from Detail Modal
-      modalConfirmBookBtn.addEventListener("click", () => {
-        closeDetailModal();
-        setTimeout(() => {
-          openBookingModal(activeSelectedServiceId);
-        }, 150);
-      });
-
-      // Regular Page CTA Trigger
-      servicesPageOpenBookingBtn.addEventListener("click", () => {
-        openBookingModal("");
-      });
-
-      closeServicesBookingBtn.addEventListener("click", closeBookingModal);
-
-      // Close modals when clicking outside
-      window.addEventListener("click", (e) => {
-        if (e.target === detailModal) closeDetailModal();
-        if (e.target === bookingModal) closeBookingModal();
-      });
-
-      // ────────────────────────────────────────────────────────
-      // 4. BOOKING FORM REDIRECT TO WHATSAPP
-      // ────────────────────────────────────────────────────────
-      bookingForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        
-        const name = document.getElementById("bookPatientName").value.trim();
-        const phone = document.getElementById("bookPatientPhone").value.trim();
-        const specialty = bookSpeciality.value;
-        const date = document.getElementById("bookBookingDate").value;
-        const timeslot = document.getElementById("bookTimeSlot").value;
-
-        // Generate schedule token
-        const token = "VMR-" + Math.floor(1000 + Math.random() * 9000);
-
-        // Construct message template
-        const message = `Hello Vairam Multi Speciality Hospital, I would like to schedule a specialist medical appointment:
-- Booking Reference: ${token}
-- Patient Name: ${name}
-- Contact Phone: ${phone}
-- Requested Specialty: ${specialty}
-- Scheduled Date: ${date}
-- Preferred Time Slot: ${timeslot}
-
-Please confirm availability. Thank you.`;
-
-        // Direct WhatsApp redirection
-        const encodedMsg = encodeURIComponent(message);
-        const whatsappNumber = "919344644555"; 
-        const url = `https://wa.me/${whatsappNumber}?text=${encodedMsg}`;
-        
-        window.open(url, "_blank");
-        closeBookingModal();
-        bookingForm.reset();
-      });
-
-      // ────────────────────────────────────────────────────────
-      // 5. FAQ ACCORDION TOGGLE
-      // ────────────────────────────────────────────────────────
-      const faqAccordion = document.querySelector(".faq-accordion-wrapper");
-      faqAccordion.addEventListener("click", (e) => {
-        const questionBtn = e.target.closest(".faq-question");
-        if (!questionBtn) return;
-
-        const faqItem = questionBtn.parentElement;
-        const answerPanel = faqItem.querySelector(".faq-answer");
-        const isActive = faqItem.classList.contains("active");
-
-        // Close all other items
-        document.querySelectorAll(".faq-item").forEach(item => {
-          item.classList.remove("active");
-          item.querySelector(".faq-question").setAttribute("aria-expanded", "false");
-          item.querySelector(".faq-answer").style.maxHeight = "0px";
-        });
-
-        // Toggle selected item
-        if (!isActive) {
-          faqItem.classList.add("active");
-          questionBtn.setAttribute("aria-expanded", "true");
-          answerPanel.style.maxHeight = answerPanel.scrollHeight + "px";
-        }
-      });
-
-    });
-  </script>
-
 </Layout>
+
+<style>
+  .sv {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: clamp(2rem, 4vw, 4rem);
+    align-items: start;
+  }
+  .sv > * {
+    min-width: 0;
+  }
+  .sv__aside {
+    position: sticky;
+    top: calc(var(--header-h) + 24px);
+    display: grid;
+    gap: var(--s-4);
+  }
+  .sv__search {
+    position: relative;
+  }
+  .sv__search :global(svg) {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--ink-muted);
+  }
+  .sv__search .input {
+    padding-left: 42px;
+  }
+  .sv__chips {
+    flex-wrap: wrap;
+  }
+  .sv__chips .chip {
+    min-height: 34px;
+    font-size: var(--fs-xs);
+  }
+  .sv__index ul {
+    display: grid;
+    gap: 2px;
+  }
+  .sv__index a {
+    display: flex;
+    align-items: center;
+    gap: var(--s-3);
+    padding: var(--s-3) var(--s-4);
+    border-radius: var(--r-sm);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    color: var(--ink-2);
+    position: relative;
+    transition: color var(--dur) var(--ease), background var(--dur) var(--ease);
+  }
+  .sv__index a :global(svg) {
+    color: var(--ink-muted);
+  }
+  .sv__index a:hover {
+    color: var(--navy-900);
+    background: var(--paper-2);
+  }
+  .sv__index a.is-current {
+    color: var(--blue-600);
+    background: var(--blue-50);
+  }
+  .sv__index a.is-current :global(svg) {
+    color: var(--teal-600);
+  }
+  .sv__index a.is-hidden {
+    display: none;
+  }
+
+  .sv__list {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s-5);
+  }
+  .sv__status {
+    font-size: var(--fs-sm);
+    color: var(--ink-muted);
+  }
+  .sv__item {
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-1);
+    scroll-margin-top: calc(var(--header-h) + 24px);
+  }
+  .sv__item--alert {
+    background: linear-gradient(180deg, var(--alert-50), var(--white) 40%);
+    border-color: rgb(214 52 58 / 0.2);
+  }
+  .sv__head {
+    display: flex;
+    align-items: center;
+    gap: var(--s-4);
+    margin-bottom: var(--s-4);
+  }
+  .sv__icon {
+    width: 60px;
+    height: 60px;
+  }
+  .sv__item--alert .sv__icon {
+    background: var(--alert-600);
+    color: var(--white);
+  }
+  .sv__sub {
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+  .sv__head h2 {
+    font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+  }
+  .sv__title-link:hover {
+    color: var(--blue-600);
+  }
+  .sv__desc {
+    color: var(--ink-muted);
+    max-width: 68ch;
+    margin-bottom: var(--s-6);
+  }
+  .sv__cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s-6);
+    padding: var(--s-6) 0;
+    border-top: 1px solid var(--line);
+  }
+  .sv h3 {
+    font-size: var(--fs-xs);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--navy-900);
+    margin-bottom: var(--s-4);
+  }
+  .sv__cols .check-list {
+    font-size: var(--fs-sm);
+  }
+  .sv__why {
+    padding: var(--s-5);
+    background: var(--paper-2);
+    border-radius: var(--r-sm);
+  }
+  .sv__why ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-2) var(--s-5);
+    font-size: var(--fs-sm);
+    color: var(--ink-2);
+  }
+  .sv__why li::before {
+    content: "—";
+    margin-right: var(--s-2);
+    color: var(--teal-600);
+  }
+  .sv__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s-5);
+    margin-top: var(--s-6);
+  }
+  .sv__empty {
+    padding: var(--s-8);
+    text-align: center;
+    border: 1px dashed var(--line-strong);
+    border-radius: var(--r-md);
+    display: grid;
+    gap: var(--s-3);
+    justify-items: center;
+  }
+  .sv__empty h2 {
+    font-size: 1.75rem;
+  }
+
+  .faq-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    gap: var(--s-8);
+  }
+
+  @media (max-width: 1024px) {
+    .sv {
+      grid-template-columns: 1fr;
+    }
+    .sv__aside {
+      top: var(--header-h);
+      z-index: 5;
+      margin-inline: calc(var(--gutter) * -1);
+      padding: var(--s-3) var(--gutter);
+      background: var(--paper);
+      border-bottom: 1px solid var(--line);
+    }
+    .sv__chips {
+      flex-wrap: nowrap;
+    }
+    .sv__index {
+      display: none;
+    }
+    .faq-wrap {
+      grid-template-columns: 1fr;
+      gap: var(--s-4);
+    }
+  }
+  @media (max-width: 640px) {
+    .sv__cols {
+      grid-template-columns: 1fr;
+    }
+    .sv__actions .btn {
+      width: 100%;
+    }
+  }
+</style>
+
+<script>
+  const items = Array.from(document.querySelectorAll<HTMLElement>(".sv__item"));
+  const chips = Array.from(document.querySelectorAll<HTMLButtonElement>(".sv__chips .chip"));
+  const search = document.getElementById("svSearch") as HTMLInputElement;
+  const status = document.getElementById("svStatus")!;
+  const empty = document.getElementById("svEmpty")!;
+  const indexLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>("[data-index-for]"));
+  let category = "all";
+
+  function apply() {
+    const q = search.value.trim().toLowerCase();
+    let shown = 0;
+    for (const item of items) {
+      const ok = (category === "all" || item.dataset.category === category) && (!q || item.dataset.search!.includes(q));
+      item.hidden = !ok;
+      indexLinks.find((a) => a.dataset.indexFor === item.id)?.classList.toggle("is-hidden", !ok);
+      if (ok) shown++;
+    }
+    empty.hidden = shown > 0;
+    status.hidden = !q;
+    status.textContent = q ? `${shown} ${shown === 1 ? "speciality" : "specialities"} matching “${search.value.trim()}”` : "";
+  }
+
+  chips.forEach((chip) =>
+    chip.addEventListener("click", () => {
+      category = chip.dataset.filter!;
+      chips.forEach((c) => c.setAttribute("aria-pressed", String(c === chip)));
+      apply();
+    }),
+  );
+  search.addEventListener("input", apply);
+  document.getElementById("svReset")?.addEventListener("click", () => {
+    search.value = "";
+    category = "all";
+    chips.forEach((c, i) => c.setAttribute("aria-pressed", String(i === 0)));
+    apply();
+  });
+
+  // Highlight the speciality in view
+  const spy = new IntersectionObserver(
+    (entries) => {
+      for (const e of entries) {
+        if (!e.isIntersecting) continue;
+        indexLinks.forEach((a) => a.classList.toggle("is-current", a.dataset.indexFor === e.target.id));
+      }
+    },
+    { rootMargin: "-30% 0px -60% 0px" },
+  );
+  items.forEach((i) => spy.observe(i));
+</script>

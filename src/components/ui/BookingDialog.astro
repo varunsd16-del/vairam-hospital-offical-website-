@@ -1,0 +1,95 @@
+---
+import Icon from "./Icon.astro";
+import BookingForm from "./BookingForm.astro";
+import { site, telHref } from "../../data/site";
+---
+
+<dialog class="booking-dialog" id="bookingDialog" aria-labelledby="bookingTitle">
+  <div class="booking-dialog__head">
+    <div>
+      <p class="eyebrow">Appointments</p>
+      <h2 id="bookingTitle">Book an appointment</h2>
+    </div>
+    <button type="button" class="booking-dialog__close" data-close-dialog>
+      <Icon name="x" size={22} />
+      <span class="visually-hidden">Close</span>
+    </button>
+  </div>
+  <div class="booking-dialog__body">
+    <BookingForm idPrefix="dlg" />
+  </div>
+  <a href={telHref} class="booking-dialog__er">
+    <Icon name="siren" size={18} /> Medical emergency? Call {site.phoneDisplay} now
+  </a>
+</dialog>
+
+<style>
+  .booking-dialog {
+    width: min(640px, calc(100% - 24px));
+    max-height: calc(100dvh - 24px);
+    margin: auto;
+    padding: 0;
+    border: 0;
+    border-radius: var(--r-lg);
+    background: var(--paper);
+    box-shadow: var(--shadow-2);
+    overflow: auto;
+  }
+  .booking-dialog::backdrop {
+    background: rgb(6 23 51 / 0.55);
+  }
+  .booking-dialog[open] {
+    animation: dlg-in 260ms var(--ease);
+  }
+  @keyframes dlg-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+  }
+  .booking-dialog__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--s-4);
+    padding: var(--s-6) var(--s-6) var(--s-4);
+  }
+  .booking-dialog__head h2 {
+    margin-top: var(--s-2);
+    font-size: 1.875rem;
+  }
+  .booking-dialog__close {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    margin: -8px -8px 0 0;
+    color: var(--navy-900);
+    border-radius: var(--r-sm);
+  }
+  .booking-dialog__close:hover {
+    background: var(--paper-2);
+  }
+  .booking-dialog__body {
+    padding: 0 var(--s-6) var(--s-6);
+  }
+  .booking-dialog__er {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--s-2);
+    padding: var(--s-4);
+    background: var(--alert-50);
+    color: var(--alert-600);
+    font-size: var(--fs-sm);
+    font-weight: 700;
+  }
+  @media (max-width: 560px) {
+    .booking-dialog__head {
+      padding: var(--s-5) var(--s-4) var(--s-3);
+    }
+    .booking-dialog__body {
+      padding: 0 var(--s-4) var(--s-5);
+    }
+  }
+</style>

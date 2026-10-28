@@ -1,0 +1,197 @@
+---
+// Site-wide call-to-action shown above the footer on every page.
+import Icon from "../ui/Icon.astro";
+import { site, telHref, waHref } from "../../data/site";
+
+const trust = [
+  { icon: "siren", text: "24/7 emergency care" },
+  { icon: "stethoscope", text: "Experienced specialists" },
+  { icon: "wallet", text: "Cashless insurance support" },
+] as const;
+---
+
+<section class="cta-band" aria-labelledby="ctaBandTitle">
+  <div class="container">
+    <div class="cta-band__box reveal">
+      <svg class="cta-band__ecg" viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true">
+        <path
+          d="M0 60 H420 L440 60 L455 28 L472 98 L490 18 L506 78 L518 60 H760 L776 60 L788 42 L800 76 L812 60 H1200"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linejoin="round"
+          vector-effect="non-scaling-stroke"></path>
+      </svg>
+
+      <p class="cta-band__eyebrow">Your health partner</p>
+      <h2 id="ctaBandTitle">Let's build a <span>healthier tomorrow</span> together</h2>
+      <p class="cta-band__lede">
+        Experience compassionate and comprehensive healthcare at {site.shortName}. Our team will help you find the right
+        specialist and a time that suits you.
+      </p>
+
+      <div class="cta-band__actions">
+        <button type="button" class="btn btn--alert cta-band__primary" data-book>
+          <Icon name="calendar" /> Book an appointment
+        </button>
+        <a href={telHref} class="btn btn--ghost-light">
+          <Icon name="phone" /> {site.phoneDisplay}
+        </a>
+        <a href={waHref()} target="_blank" rel="noopener" class="btn btn--ghost-light">
+          <Icon name="whatsapp" /> WhatsApp
+        </a>
+      </div>
+
+      <ul role="list" class="cta-band__trust">
+        {
+          trust.map((t) => (
+            <li>
+              <Icon name={t.icon} size={18} />
+              {t.text}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta-band {
+    position: relative;
+    z-index: 2;
+    padding-top: var(--section);
+    margin-bottom: -110px;
+  }
+  .cta-band__box {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    display: grid;
+    justify-items: center;
+    text-align: center;
+    padding: clamp(2.5rem, 6vw, 4.5rem) clamp(1.25rem, 5vw, 4rem);
+    border-radius: var(--r-lg);
+    color: var(--white);
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Cpath d='M22 16h4v6h6v4h-6v6h-4v-6h-6v-4h6z' fill='%23ffffff' fill-opacity='0.045'/%3E%3C/svg%3E"),
+      radial-gradient(60% 120% at 100% 0%, rgb(214 52 58 / 0.22), transparent 60%),
+      radial-gradient(50% 110% at 0% 100%, rgb(20 165 151 / 0.22), transparent 60%),
+      linear-gradient(120deg, var(--navy-950), var(--navy-900) 55%, #0d3266);
+    box-shadow: 0 40px 80px -30px rgb(5 15 36 / 0.55);
+  }
+  .cta-band__box::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--blue-600) 0 40%, var(--teal-500) 40% 80%, var(--alert-600) 80%);
+  }
+
+  /* Heartbeat line drawn across the banner when it scrolls into view */
+  .cta-band__ecg {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    z-index: -1;
+    width: 100%;
+    height: 120px;
+    transform: translateY(-50%);
+    color: rgb(255 255 255 / 0.08);
+    pointer-events: none;
+  }
+  .cta-band__ecg path {
+    stroke-dasharray: 1700;
+    stroke-dashoffset: 1700;
+    transition: stroke-dashoffset 2.6s var(--ease) 0.3s;
+  }
+  .cta-band__box.is-visible .cta-band__ecg path,
+  html:not(.js) .cta-band__ecg path {
+    stroke-dashoffset: 0;
+  }
+
+  .cta-band__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--teal-100);
+  }
+  .cta-band__eyebrow::before {
+    content: "";
+    width: 12px;
+    height: 12px;
+    background:
+      linear-gradient(currentColor, currentColor) center / 4px 12px no-repeat,
+      linear-gradient(currentColor, currentColor) center / 12px 4px no-repeat;
+  }
+  .cta-band h2 {
+    margin: var(--s-4) 0 var(--s-4);
+    max-width: 22ch;
+    color: var(--white);
+    font-size: clamp(1.875rem, 1.3rem + 2.2vw, 3rem);
+  }
+  .cta-band h2 span {
+    color: #ff6b70;
+  }
+  .cta-band__lede {
+    max-width: 58ch;
+    color: rgb(255 255 255 / 0.78);
+    font-size: var(--fs-lg);
+  }
+  .cta-band__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--s-3);
+    margin-top: var(--s-7);
+  }
+  .cta-band__primary {
+    min-height: 54px;
+    padding: 0 var(--s-7);
+  }
+  .cta-band__actions .btn--ghost-light {
+    min-height: 54px;
+  }
+  .cta-band__trust {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--s-3) var(--s-7);
+    margin-top: var(--s-7);
+    padding-top: var(--s-6);
+    border-top: 1px solid rgb(255 255 255 / 0.12);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    color: rgb(255 255 255 / 0.85);
+  }
+  .cta-band__trust li {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+  }
+  .cta-band__trust :global(svg) {
+    color: var(--teal-400);
+  }
+
+  @media (max-width: 640px) {
+    .cta-band {
+      margin-bottom: -80px;
+    }
+    .cta-band__actions {
+      width: 100%;
+    }
+    .cta-band__actions .btn {
+      width: 100%;
+    }
+    .cta-band__trust {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+</style>

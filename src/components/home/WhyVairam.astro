@@ -1,0 +1,173 @@
+---
+import { Image } from "astro:assets";
+import building from "../../assets/images/hero-building.png";
+import Icon from "../ui/Icon.astro";
+import { site } from "../../data/site";
+import { specialities } from "../../data/specialities";
+
+const points = [
+  {
+    title: "Experienced specialists",
+    text: `Senior consultants across ${specialities.length} specialities who take the time to explain your diagnosis and options.`,
+  },
+  {
+    title: "Diagnostics under one roof",
+    text: "Laboratory, digital X-ray and ultrasound in the same building, so results reach your doctor quickly.",
+  },
+  {
+    title: "24/7 critical care",
+    text: "Emergency, ICU and pharmacy run around the clock, with trauma and cardiac teams on call.",
+  },
+  {
+    title: "Transparent, affordable care",
+    text: "Clear estimates before treatment, cashless insurance support and no surprises at discharge.",
+  },
+];
+---
+
+<section class="section" aria-labelledby="whyTitle">
+  <div class="container why">
+    <figure class="why__media reveal">
+      <Image
+        src={building}
+        alt={`${site.name} building on Pattamangala Street, Mayiladuthurai`}
+        widths={[480, 720, 960]}
+        sizes="(max-width: 860px) 100vw, 45vw"
+        loading="lazy"
+      />
+    </figure>
+
+    <div class="why__copy">
+      <div class="section-head">
+        <div class="why__header-top">
+          <p class="eyebrow">Why Vairam</p>
+          <span class="why__since-badge">Since {site.foundingYear}</span>
+        </div>
+        <h2 id="whyTitle">Big-city expertise, with the care of a hospital that knows you.</h2>
+        <p class="why__region-tag">Serving Mayiladuthurai, Sirkazhi, Karaikal & Kumbakonam</p>
+      </div>
+      <ol role="list" class="why__list">
+        {
+          points.map((p, i) => (
+            <li class="reveal">
+              <span class="why__num">{String(i + 1).padStart(2, "0")}</span>
+              <div>
+                <h3>{p.title}</h3>
+                <p>{p.text}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+      <a href="/about" class="link-arrow">More about Vairam <Icon name="arrow-right" /></a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .why {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: clamp(2rem, 5vw, 5rem);
+    align-items: center;
+  }
+
+  .why__header-top {
+    display: flex;
+    align-items: center;
+    gap: var(--s-3);
+    flex-wrap: wrap;
+    margin-bottom: var(--s-2);
+  }
+
+  .why__since-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    background: var(--blue-50);
+    color: var(--blue-700);
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    border: 1px solid var(--blue-100);
+  }
+
+  .why__region-tag {
+    font-size: var(--fs-sm);
+    color: var(--ink-muted);
+    font-weight: 500;
+    margin-top: var(--s-3);
+  }
+
+  .why__media {
+    position: relative;
+    width: 100%;
+    filter: drop-shadow(0 16px 36px rgba(10, 31, 68, 0.14));
+  }
+
+  .why__media :global(img) {
+    width: 100%;
+    height: auto;
+    display: block;
+    clip-path: polygon(
+      24px 0%,
+      calc(100% - 24px) 0%,
+      100% 24px,
+      100% calc(100% - 24px),
+      calc(100% - 24px) 100%,
+      24px 100%,
+      0% calc(100% - 24px),
+      0% 24px
+    );
+  }
+
+  .why__list {
+    display: grid;
+    gap: var(--s-2);
+    margin: var(--s-5) 0 var(--s-6);
+  }
+  .why__list li {
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    gap: var(--s-4);
+    padding: var(--s-4) var(--s-5);
+    border-radius: var(--r-md);
+    border: 1px solid transparent;
+    transition: background 400ms var(--ease), border-color 400ms var(--ease), transform 400ms var(--ease), box-shadow 400ms var(--ease);
+  }
+  .why__list li:hover {
+    background: var(--white);
+    border-color: var(--line);
+    transform: translateX(6px);
+    box-shadow: var(--shadow-1);
+  }
+  .why__num {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: var(--r-md);
+    background: var(--blue-50);
+    color: var(--blue-600);
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  .why__list h3 {
+    font-size: 1.125rem;
+    margin-bottom: var(--s-1);
+  }
+  .why__list p {
+    color: var(--ink-muted);
+    font-size: var(--fs-sm);
+  }
+  @media (max-width: 860px) {
+    .why {
+      grid-template-columns: 1fr;
+    }
+    .why__media {
+      aspect-ratio: 4 / 3;
+    }
+  }
+</style>

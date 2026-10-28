@@ -1,2177 +1,1100 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import { Image } from "astro:assets";
+import Layout from "../layouts/Layout.astro";
+import PageHeader from "../components/PageHeader.astro";
+import sidhuHero from "../assets/images/sidhuhero.webp";
+import drPrabhu from "../assets/images/dr-prabhu.webp";
+import FeatureBand from "../components/ui/FeatureBand.astro";
+import DoctorCard from "../components/ui/DoctorCard.astro";
+import DoctorAvatar from "../components/ui/DoctorAvatar.astro";
+import Icon from "../components/ui/Icon.astro";
+import { doctors, doctorDepartments } from "../data/doctors";
+import { specialities } from "../data/specialities";
+import { site, telHref } from "../data/site";
 
-// Doctors profile dataset for AEO, SEO, and interactive modals
-const doctorsData = [
-  {
-    id: "dr-sarah",
-    name: "Dr. Sarah Johnson",
-    role: "Senior Cardiologist",
-    specialty: "Cardiology",
-    experience: "15 Years Exp",
-    rating: "4.9",
-    reviews: "128 Reviews",
-    education: "MBBS, MD, DM (Cardiology), FACC",
-    image: "/images/consultation.png",
-    availability: "Available Tomorrow",
-    nextDate: "Tomorrow, 09:30 AM",
-    languages: "English, Tamil, Hindi",
-    bio: "Dr. Sarah Johnson is a leading specialist in interventional cardiology and structural heart diseases. Over her 15-year career, she has performed over 2,000+ successful coronary angioplasties and pacemaker surgeries.",
-    certifications: [
-      "Board Certified in Interventional Cardiology",
-      "Fellow of the American College of Cardiology (FACC)",
-      "Lifetime Member of the Cardiological Society of India"
-    ],
-    schedule: {
-      days: "Mon, Wed, Fri",
-      hours: "09:00 AM - 01:00 PM"
-    },
-    keywords: "sarah johnson, cardiologist Mayiladuthurai, heart doctor Sirkazhi, angioplasty, pacemaker"
-  },
-  {
-    id: "dr-michael",
-    name: "Dr. Michael Chen",
-    role: "Senior Neurologist",
-    specialty: "Neurology",
-    experience: "18 Years Exp",
-    rating: "4.85",
-    reviews: "142 Reviews",
-    education: "MBBS, MD (Gen Medicine), DM (Neurology)",
-    image: "/images/consultation.png",
-    availability: "Available Thursday",
-    nextDate: "Thursday, 10:00 AM",
-    languages: "English, Mandarin, Tamil",
-    bio: "Dr. Michael Chen specializes in acute stroke interventions, epilepsy treatments, neuromuscular disorders, and chronic nerve pain rehabilitation. He spent 8 years as a senior specialist researcher at NIMHANS.",
-    certifications: [
-      "Board Certified Neurologist (Indian Board of Psychiatry & Neurology)",
-      "Active Member of the American Academy of Neurology (AAN)",
-      "Stroke Resuscitation Protocol Certified"
-    ],
-    schedule: {
-      days: "Tue, Thu, Sat",
-      hours: "10:00 AM - 02:00 PM"
-    },
-    keywords: "michael chen, neurologist Mayiladuthurai, stroke specialist Sirkazhi, EEG test Karaikal"
-  },
-  {
-    id: "dr-emily",
-    name: "Dr. Emily Rodriguez",
-    role: "Consultant Pediatrician",
-    specialty: "Pediatrics",
-    experience: "12 Years Exp",
-    rating: "4.95",
-    reviews: "198 Reviews",
-    education: "MBBS, MD (Pediatrics), DCH",
-    image: "/images/consultation.png",
-    availability: "Available Today",
-    nextDate: "Today, 03:00 PM",
-    languages: "English, Spanish, Tamil",
-    bio: "Dr. Emily Rodriguez is a highly compassionate pediatrician focusing on newborn screenings, childhood immunizations, development assessments, and pediatric allergy programs.",
-    certifications: [
-      "Board Certified Pediatrician (Indian Academy of Pediatrics)",
-      "Pediatric Advanced Life Support (PALS) Specialist",
-      "Neonatal Intensive Care Unit (NICU) Protocol Director"
-    ],
-    schedule: {
-      days: "Mon to Fri",
-      hours: "02:00 PM - 05:00 PM"
-    },
-    keywords: "emily rodriguez, pediatrician Mayiladuthurai, child doctor Sirkazhi, baby vaccination Karaikal"
-  },
-  {
-    id: "dr-james",
-    name: "Dr. James Wilson",
-    role: "Senior Orthopedic Surgeon",
-    specialty: "Orthopedics",
-    experience: "20 Years Exp",
-    rating: "4.9",
-    reviews: "215 Reviews",
-    education: "MBBS, MS (Orthopedics), M.Ch (Ortho)",
-    image: "/images/consultation.png",
-    availability: "Available Monday",
-    nextDate: "Monday, 09:00 AM",
-    languages: "English, Tamil, German",
-    bio: "Dr. James Wilson is a world-renowned joint replacement expert specializing in minimally invasive total knee and hip replacements, ACL ligament reconstructions, and complex fracture trauma care.",
-    certifications: [
-      "Board Certified Orthopedic Surgeon (IOA)",
-      "Fellowship in Joint Arthroplasty (Munich, Germany)",
-      "Active Member of the International Society of Orthopaedic Surgery"
-    ],
-    schedule: {
-      days: "Mon, Tue, Thu",
-      hours: "09:00 AM - 01:00 PM"
-    },
-    keywords: "james wilson, orthopedic surgeon Mayiladuthurai, knee replacement Sirkazhi, bone doctor Kumbakonam"
-  },
-  {
-    id: "dr-lisa",
-    name: "Dr. Lisa Park",
-    role: "Ophthalmic Surgeon",
-    specialty: "Ophthalmology",
-    experience: "14 Years Exp",
-    rating: "4.8",
-    reviews: "96 Reviews",
-    education: "MBBS, MS (Ophthalmology), DNB, FRCS",
-    image: "/images/consultation.png",
-    availability: "Available Wednesday",
-    nextDate: "Wednesday, 02:30 PM",
-    languages: "English, Korean, Tamil",
-    bio: "Dr. Lisa Park is a veteran eye surgeon specializing in keyhole cataract surgery (phacoemulsification), refractive visual profiling, glaucoma diagnostics, and diabetic retinopathy assessments.",
-    certifications: [
-      "Board Certified Ophthalmologist",
-      "Fellow of the Royal College of Physicians and Surgeons (FRCS Glasgow)",
-      "Cataract & Refractive Surgery Society Member"
-    ],
-    schedule: {
-      days: "Wed, Fri, Sat",
-      hours: "02:00 PM - 06:00 PM"
-    },
-    keywords: "lisa park, eye doctor Mayiladuthurai, cataract surgery Sirkazhi, ophthalmologist Karaikal"
-  },
-  {
-    id: "dr-robert",
-    name: "Dr. Robert Martinez",
-    role: "Consultant Cardiologist",
-    specialty: "Cardiology",
-    experience: "16 Years Exp",
-    rating: "4.85",
-    reviews: "112 Reviews",
-    education: "MBBS, MD, DM (Cardiology)",
-    image: "/images/consultation.png",
-    availability: "Available Tuesday",
-    nextDate: "Tuesday, 09:30 AM",
-    languages: "English, Spanish, Tamil",
-    bio: "Dr. Robert Martinez specializes in non-invasive clinical cardiology, arrhythmia management, coronary artery disease profiles, and cardiac rhythm pacemaker programming.",
-    certifications: [
-      "Certified in Cardiac Electrophysiology (IBHRE)",
-      "Active Member of the Cardiological Society of India (CSI)",
-      "Advanced Cardiac Life Support (ACLS) Instructor"
-    ],
-    schedule: {
-      days: "Tue, Thu, Sat",
-      hours: "09:00 AM - 01:00 PM"
-    },
-    keywords: "robert martinez, cardiologist Mayiladuthurai, cardiac pacing, ECG Kumbakonam"
-  },
-  {
-    id: "dr-amanda",
-    name: "Dr. Amanda Foster",
-    role: "Consulting Neurologist",
-    specialty: "Neurology",
-    experience: "13 Years Exp",
-    rating: "4.9",
-    reviews: "84 Reviews",
-    education: "MBBS, MD (Gen Med), DM (Neurology)",
-    image: "/images/consultation.png",
-    availability: "Available Tomorrow",
-    nextDate: "Tomorrow, 02:00 PM",
-    languages: "English, Tamil, Telugu",
-    bio: "Dr. Amanda Foster specializes in neuro-immunological disorders, multiple sclerosis profiling, chronic migraine therapeutics, and sleep-related neurological disorders.",
-    certifications: [
-      "Board Certified Neurologist (NSI)",
-      "Neuro-Immunology Fellowship Graduate",
-      "Neurological ICU Life Support Certified"
-    ],
-    schedule: {
-      days: "Mon, Wed, Fri",
-      hours: "02:00 PM - 06:00 PM"
-    },
-    keywords: "amanda foster, neurologist Mayiladuthurai, migraine clinic Sirkazhi, EEG test Kumbakonam"
-  },
-  {
-    id: "dr-david",
-    name: "Dr. David Kim",
-    role: "Sports Medicine Specialist",
-    specialty: "Orthopedics",
-    experience: "11 Years Exp",
-    rating: "4.75",
-    reviews: "76 Reviews",
-    education: "MBBS, MS (Orthopedics)",
-    image: "/images/consultation.png",
-    availability: "Available Wednesday",
-    nextDate: "Wednesday, 10:00 AM",
-    languages: "English, Korean, Tamil",
-    bio: "Dr. David Kim is a leading sports orthopedic expert specializing in keyhole arthroscopic repairs of the knee, shoulder, and ankle ligaments, alongside custom athletic injury rehabilitation.",
-    certifications: [
-      "Board Certified Orthopedic Surgeon (IOA)",
-      "Sports Medicine Fellowship (Seoul, South Korea)",
-      "Arthroscopic Association of India Member"
-    ],
-    schedule: {
-      days: "Wed, Thu, Fri",
-      hours: "09:00 AM - 01:00 PM"
-    },
-    keywords: "david kim, sports doctor Mayiladuthurai, ligament tear Sirkazhi, arthroscopy Kumbakonam"
-  }
+// Featured consultant: Dr. R. Chitarth (fellowship-trained, has a photo)
+const featured = doctors.find((d) => d.id === "dr-r-chitarth") ?? doctors[0];
+
+// Department meta (icon + speciality page) for each department that has doctors
+const deptMeta = doctorDepartments.map((name) => {
+  const s = specialities.find((x) => x.short === name);
+  return {
+    name,
+    id: s?.id,
+    icon: s?.icon ?? ("stethoscope" as const),
+    sub: s?.sub ?? "",
+    count: doctors.filter((d) => d.speciality === name).length,
+  };
+});
+
+const heroStats = [
+  { value: `${doctors.length}`, label: "Specialist consultants" },
+  { value: `${doctorDepartments.length}`, label: "Departments" },
+  { value: "Hand", label: "Sports & joint surgery" },
+  { value: "24/7", label: "Emergency doctors" },
 ];
 
-const departments = [
-  { filter: "all", label: "All Doctors" },
-  { filter: "Cardiology", label: "Cardiology" },
-  { filter: "Neurology", label: "Neurology" },
-  { filter: "Orthopedics", label: "Orthopedics" },
-  { filter: "Pediatrics", label: "Pediatrics" },
-  { filter: "Ophthalmology", label: "Ophthalmology" }
+const steps = [
+  { icon: "user-search", title: "Choose your doctor", text: "Search by name or speciality, and check OPD days and timings." },
+  { icon: "calendar", title: "Request a slot", text: "Book online, on WhatsApp or by phone. It takes under a minute." },
+  { icon: "check", title: "Get confirmation", text: "Our desk confirms your appointment time on WhatsApp." },
+  { icon: "stethoscope", title: "Meet your specialist", text: "Arrive 15 minutes early with your ID and previous reports." },
+] as const;
+
+const why = [
+  { icon: "graduation", title: "Highly qualified", text: "Consultants with MD, MS, DM, M.Ch and DNB qualifications and years of hospital experience." },
+  { icon: "users", title: "Team-based care", text: "Specialists, nurses, lab and imaging teams work together on one plan for you." },
+  { icon: "languages", title: "We speak your language", text: "Doctors explain your condition clearly in Tamil and English." },
+  { icon: "clock", title: "Time for every patient", text: "Scheduled OPD slots so your consultation is unhurried and thorough." },
+] as const;
+
+const faqs = [
+  { q: "How do I book an appointment with a specific doctor?", a: "Click “Book” on the doctor's card, or call our helpdesk. We'll confirm your slot on WhatsApp." },
+  { q: "Can I consult a doctor outside OPD hours?", a: "For emergencies, our emergency doctors are available 24/7. For routine consultations, please book within the listed OPD timings." },
+  { q: "What should I bring to my consultation?", a: "A photo ID, previous prescriptions, test and scan reports, and your insurance card if you have one." },
+  { q: "Do doctors offer follow-up or online consultations?", a: "Yes. Follow-ups can be booked in person, and video consultations are available for report reviews and selected cases." },
 ];
+
+const ld = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: `Specialist doctors at ${site.name}`,
+  itemListElement: doctors.map((d, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    item: {
+      "@type": "Physician",
+      name: d.name,
+      medicalSpecialty: d.speciality,
+      telephone: site.phone,
+      address: { "@type": "PostalAddress", addressLocality: site.address.city, addressRegion: site.address.regionCode },
+    },
+  })),
+};
 ---
 
-<Layout title="Specialist Doctors | Vairam Multi Speciality Hospital Mayiladuthurai">
-  
-  <!-- Structured Data JSON-LD for Local Physicians Directory -->
-  <script type="application/ld+json" is:inline>
-    {
-      "@context": "https://schema.org",
-      "@type": "ItemList",
-      "name": "Specialist Doctors Directory at Vairam Hospital",
-      "description": "Directory of specialist doctors including cardiologists, neurologists, and surgeons in Mayiladuthurai.",
-      "numberOfItems": 8,
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "item": {
-            "@type": "Physician",
-            "name": "Dr. Sarah Johnson",
-            "medicalSpecialty": "Cardiology",
-            "telephone": "+919344644555",
-            "address": {
-              "@type": "PostalAddress",
-              "streetAddress": "Pattamangala St",
-              "addressLocality": "Mayiladuthurai",
-              "addressRegion": "TN",
-              "postalCode": "609001",
-              "addressCountry": "IN"
-            }
-          }
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "item": {
-            "@type": "Physician",
-            "name": "Dr. Michael Chen",
-            "medicalSpecialty": "Neurology",
-            "telephone": "+919344644555"
-          }
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "item": {
-            "@type": "Physician",
-            "name": "Dr. James Wilson",
-            "medicalSpecialty": "Orthopedics",
-            "telephone": "+919344644555"
-          }
-        }
-      ]
-    }
-  </script>
+<Layout
+  title="Find a Doctor | Specialist Doctors at Vairam Hospital, Mayiladuthurai"
+  description="Find cardiologists, orthopaedic surgeons, neurologists, paediatricians and eye specialists at Vairam Multi Speciality Hospital, Mayiladuthurai. View timings and book an appointment."
+>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(ld)} />
 
-  <!-- 1. HERO SECTION -->
-  <section class="doctors-hero">
-    <div class="hero-blur-glow" aria-hidden="true"></div>
-    <div class="container hero-grid-wrapper">
-      
-      <!-- Left Column: Content & Statistics -->
-      <div class="hero-left-content reveal reveal-left">
-        <span class="hero-badge">Expert Medical Team</span>
-        <h1 class="hero-title">Meet Our Doctor <br /><span class="highlight-text">Specialists & Surgeons</span></h1>
-        <p class="hero-subtitle">
-          Consult with highly certified clinical practitioners in Mayiladuthurai. Offering board-certified expertise in cardiology, neurology, pediatrics, and modular orthopedics.
-        </p>
+  <PageHeader
+    crumb="Doctors"
+    eyebrow="Find a doctor"
+    title="Best Specialist Doctors in Mayiladuthurai"
+    lede="Consult experienced orthopaedic surgeons, a cardiologist, gynaecologists, a paediatrician, a plastic surgeon, a chest physician, general surgeons and physicians at Vairam Hospital, Mayiladuthurai. Check OPD timings and book an appointment online or on WhatsApp."
+    team={[
+      { src: drPrabhu, alt: "Vairam Hospital consultant", x: 16, h: 92, z: 2 },
+      { src: sidhuHero, alt: "Dr. R. Chitarth, orthopaedic surgeon at Vairam Hospital", x: 45, h: 100, z: 4 },
+    ]}
+    stats={heroStats}
+  />
 
-        <!-- Statistics Cards -->
-        <div class="stats-cards-grid">
-          <div class="stats-card">
-            <div class="stats-num">50+</div>
-            <div class="stats-label">Specialist Doctors</div>
-          </div>
-          <div class="stats-card">
-            <div class="stats-num">15+</div>
-            <div class="stats-label">Years Avg Experience</div>
-          </div>
-          <div class="stats-card">
-            <div class="stats-num">98%</div>
-            <div class="stats-label">Patient Satisfaction</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Right Column: Visual and Floating Tag -->
-      <div class="hero-right-visual reveal reveal-right">
-        <div class="img-wrapper">
-          <img src="/images/hero-building.png" alt="Vairam Hospital Specialist Doctors Team Mayiladuthurai" class="hero-team-img" />
-          <div class="floating-rating-card">
-            <div class="card-icon"><i class="fas fa-award"></i></div>
-            <div class="card-info">
-              <h4>Top Rated Care</h4>
-              <p><i class="fas fa-star text-gold"></i> 4.9 out of 5 stars</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- 2. STICKY FILTER AND SEARCH BAR -->
-  <section class="filter-sticky-section" id="stickyFilterBar">
-    <div class="container filter-flex-container">
-      
-      <!-- Department Tabs -->
-      <div class="dept-tabs">
-        {departments.map((d, i) => (
-          <button 
-            class={`dept-tab-btn ${i === 0 ? 'active' : ''}`} 
-            data-filter={d.filter}
-            role="tab"
-            aria-selected={i === 0 ? "true" : "false"}
-          >
-            {d.label}
-          </button>
-        ))}
-      </div>
-
-      <!-- Search Box -->
-      <div class="search-input-box">
-        <i class="fas fa-search"></i>
-        <input 
-          type="text" 
-          id="doctorsSearchInput" 
-          placeholder="Search doctor name or credentials..." 
-          aria-label="Search doctors by name"
-        />
-        <button id="clearSearchBtn" class="clear-btn" aria-label="Clear search input">
-          <i class="fas fa-times"></i>
-        </button>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- 3. DOCTORS GRID SECTION -->
-  <section class="doctors-grid-section">
+  <!-- Search panel -->
+  <section class="finder-wrap" aria-label="Find a doctor">
     <div class="container">
-      
-      <!-- Live Filter Status Message -->
-      <div class="filter-status-banner" id="doctorsFilterStatus" style="display: none;">
-        <p><i class="fas fa-info-circle"></i> Showing matches for "<span id="searchTextSpan"></span>". <button id="resetSearchLink">Reset filter</button></p>
-      </div>
-
-      <!-- Doctors Card Grid -->
-      <div class="doctors-grid" id="doctorsCardGrid">
-        {doctorsData.map((d, idx) => (
-          <article 
-            class="doctor-card reveal reveal-up" 
-            data-specialty={d.specialty}
-            data-name={d.name.toLowerCase()}
-            data-keywords={d.keywords}
-            id={`doc-${d.id}`}
-            style={`transition-delay: ${(idx % 3) * 0.1}s`}
-          >
-            <div class="card-image-wrapper">
-              <img src={d.image} alt={d.name} class="doc-card-img" />
-              
-              <!-- Availability Pulse Badge -->
-              <div class={`availability-pulse ${d.availability.includes('Today') ? 'pulse-green' : 'pulse-blue'}`}>
-                <span class="pulse-dot"></span>
-                <span class="pulse-txt">{d.availability}</span>
-              </div>
-
-              <!-- Social Media Overlay Link Box -->
-              <div class="social-hover-overlay">
-                <a href="#" aria-label="Facebook Profile"><i class="fab fa-facebook-f"></i></a>
-                <a href="#" aria-label="Twitter Profile"><i class="fab fa-twitter"></i></a>
-                <a href="#" aria-label="LinkedIn Profile"><i class="fab fa-linkedin-in"></i></a>
-              </div>
-            </div>
-
-            <div class="card-body">
-              <span class="specialty-badge">{d.specialty}</span>
-              <div class="star-rating">
-                <i class="fas fa-star"></i>
-                <span class="rating-num">{d.rating}</span>
-                <span class="rating-reviews">({d.reviews})</span>
-              </div>
-              <h3 class="doc-name">{d.name}</h3>
-              <p class="doc-role">{d.role}</p>
-              <p class="doc-edu">{d.education}</p>
-              <p class="doc-bio-excerpt">{d.bio.substring(0, 100)}...</p>
-
-              <div class="doc-meta-divider"></div>
-              
-              <div class="next-avail-box">
-                <i class="far fa-clock"></i>
-                <div class="avail-info">
-                  <span class="avail-label">Next Available:</span>
-                  <span class="avail-time">{d.nextDate}</span>
-                </div>
-              </div>
-
-              <button 
-                class="view-profile-btn" 
-                data-id={d.id}
-                aria-label={`View full profile of ${d.name}`}
-              >
-                View Profile
-              </button>
-            </div>
-          </article>
-        ))}
-      </div>
-
-      <!-- Grid Empty State -->
-      <div class="empty-doctors-state" id="emptyDoctorsState" style="display: none;">
-        <div class="empty-state-icon"><i class="fas fa-user-slash"></i></div>
-        <h3>No Doctors Found</h3>
-        <p>No specialist matches your current filters. Try searching for other credentials or symptoms.</p>
-        <button class="btn-primary" id="resetDoctorsFilterBtn">View All Doctors</button>
-      </div>
-
-      <!-- Load More Placeholder -->
-      <div class="load-more-container text-center reveal reveal-up">
-        <button class="btn-outline-primary" id="loadMoreBtn">
-          <span class="btn-text">Load Additional Specialists</span>
-          <span class="btn-spinner" style="display: none;"><i class="fas fa-spinner fa-spin"></i> Loading...</span>
-        </button>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- 4. WHY CHOOSE OUR DOCTORS -->
-  <section class="why-doctors-section">
-    <div class="container">
-      <div class="section-header text-center reveal reveal-up">
-        <span class="section-badge">Standard of Excellence</span>
-        <h2 class="section-title">Why Consult Our Doctors</h2>
-        <p class="section-desc">We maintain the highest clinical staffing standards to guarantee diagnostic precision and recovery outcomes.</p>
-      </div>
-
-      <div class="features-grid">
-        <!-- Feature 1 -->
-        <div class="feature-card reveal reveal-up" style="transition-delay: 0s;">
-          <div class="feature-icon"><i class="fas fa-certificate"></i></div>
-          <h3>Board Certified</h3>
-          <p>Every physician holds extensive post-graduate credentials (MD, DM, MS, M.Ch, FRCS) and national medical board certifications.</p>
-        </div>
-
-        <!-- Feature 2 -->
-        <div class="feature-card reveal reveal-up" style="transition-delay: 0.1s;">
-          <div class="feature-icon"><i class="fas fa-heart"></i></div>
-          <h3>Patient First</h3>
-          <p>Empathetic diagnostics, customized recovery paths, and transparent billing compliance managed with extreme integrity.</p>
-        </div>
-
-        <!-- Feature 3 -->
-        <div class="feature-card reveal reveal-up" style="transition-delay: 0.2s;">
-          <div class="feature-icon"><i class="fas fa-microchip"></i></div>
-          <h3>Latest Technology</h3>
-          <p>Equipped with flat-panel catheterization labs, micro-incision phaco ocular tools, and digital radiology scanner networks.</p>
-        </div>
-
-        <!-- Feature 4 -->
-        <div class="feature-card reveal reveal-up" style="transition-delay: 0.3s;">
-          <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
-          <h3>Proven Results</h3>
-          <p>Highly verified patient satisfaction score averages of 98% with reliable cardiac, orthopaedic, and stroke success histories.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 5. DOCTOR PROFILE POPUP MODAL (Dynamic Content Injected) -->
-  <div class="profile-modal-overlay" id="doctorProfileModal" aria-hidden="true" role="dialog">
-    <div class="profile-modal-card">
-      <div class="modal-card-header">
-        <h3 id="modalDocTitle"><i class="fas fa-user-md"></i> Doctor Profile Detail</h3>
-        <button class="close-profile-modal-btn" id="closeProfileModalBtn" aria-label="Close profile modal"><i class="fas fa-times"></i></button>
-      </div>
-
-      <div class="modal-scroll-body">
-        <div class="profile-modal-header-grid">
-          <div class="profile-img-container">
-            <img id="modalDocPhoto" src="/images/consultation.png" alt="Doctor photo" />
-            <div class="experience-tag-badge" id="modalDocExp">15 Years Exp</div>
-          </div>
-          
-          <div class="profile-meta-info">
-            <span class="modal-dept-badge" id="modalDocDept">Cardiology</span>
-            <h2 id="modalDocName">Dr. Sarah Johnson</h2>
-            <p class="modal-role-subtitle" id="modalDocRole">Senior Cardiologist</p>
-            <p class="modal-edu-text" id="modalDocEdu">MBBS, MD, DM (Cardiology), FACC</p>
-            
-            <div class="modal-stars-rating">
-              <i class="fas fa-star"></i>
-              <span id="modalDocRatingNum">4.9</span>
-              <span class="reviews-count" id="modalDocReviews">(128 Reviews)</span>
-            </div>
-            
-            <div class="modal-languages-spoken">
-              <strong>Languages:</strong> <span id="modalDocLanguages">English, Tamil, Hindi</span>
-            </div>
+      <form class="finder" id="finder" role="search">
+        <div class="finder__field finder__field--grow">
+          <label for="docSearch">Doctor name or qualification</label>
+          <div class="finder__input">
+            <Icon name="search" size={18} />
+            <input id="docSearch" type="search" placeholder="e.g. Dr. Wilson, DM Cardiology" autocomplete="off" />
           </div>
         </div>
-
-        <div class="profile-modal-details-grid">
-          <div class="profile-biography-col">
-            <h4>Biography</h4>
-            <p id="modalDocBio">Biography contents...</p>
-
-            <h4>Accreditations & Board Certifications</h4>
-            <ul class="modal-certs-list" id="modalDocCerts">
-              <!-- Dynamic JS insertion -->
-            </ul>
-          </div>
-
-          <div class="profile-schedule-col">
-            <div class="consultation-schedule-box">
-              <h4><i class="far fa-calendar-alt"></i> Consultation Schedule</h4>
-              <div class="schedule-table-card">
-                <div class="schedule-row">
-                  <span class="day-label">Consulting Days:</span>
-                  <span class="day-value" id="modalDocSchedDays">Mon, Wed, Fri</span>
-                </div>
-                <div class="schedule-row">
-                  <span class="day-label">Consulting Hours:</span>
-                  <span class="day-value" id="modalDocSchedHours">09:00 AM - 01:00 PM</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="schedule-booking-notes">
-              <p><i class="fas fa-shield-alt"></i> Redirection facilitates instant booking via SMS token to Vairam hospital records desk.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="profile-modal-footer">
-        <button class="btn-outline-secondary" id="modalGoBackBtn">Close Profile</button>
-        <button class="btn-primary" id="modalTriggerBookBtn">Schedule Appointment Now</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- 6. APPOINTMENT BOOKING MODAL -->
-  <div class="booking-modal-overlay" id="doctorBookingModal" aria-hidden="true" role="dialog">
-    <div class="booking-modal-card">
-      <div class="modal-card-header">
-        <h3><i class="far fa-calendar-check"></i> Book Doctor Appointment</h3>
-        <button class="close-modal-btn" id="closeDoctorBookingBtn" aria-label="Close booking modal"><i class="fas fa-times"></i></button>
-      </div>
-      
-      <form class="modal-booking-form" id="doctorsPageBookingForm">
-        <div class="form-group">
-          <label for="bookPatientName">Patient Full Name *</label>
-          <input type="text" id="bookPatientName" required placeholder="e.g. Rajesh Kumar" />
-        </div>
-        
-        <div class="form-group">
-          <label for="bookPatientPhone">Mobile Number *</label>
-          <input type="tel" id="bookPatientPhone" required placeholder="e.g. 93446 44555" pattern="[0-9\s+-]{10,15}" />
-        </div>
-        
-        <div class="form-grid">
-          <div class="form-group">
-            <label for="bookDoctorSelect">Select Specialist Doctor *</label>
-            <select id="bookDoctorSelect" required>
-              <option value="">-- Select Specialist --</option>
-              {doctorsData.map(d => (
-                <option value={d.name} data-dept={d.specialty}>{d.name} ({d.role})</option>
-              ))}
-            </select>
-          </div>
-          
-          <div class="form-group">
-            <label for="bookDeptInput">Department</label>
-            <input type="text" id="bookDeptInput" readonly placeholder="Selected doctor department" />
-          </div>
-        </div>
-
-        <div class="form-grid">
-          <div class="form-group">
-            <label for="bookBookingDate">Appointment Date *</label>
-            <input type="date" id="bookBookingDate" required />
-          </div>
-          
-          <div class="form-group">
-            <label for="bookTimeSlot">Preferred Time Slot *</label>
-            <select id="bookTimeSlot" required>
-              <option value="">-- Choose Slot --</option>
-              <option value="09:00 AM">09:00 AM - 11:00 AM</option>
-              <option value="11:00 AM">11:00 AM - 01:00 PM</option>
-              <option value="02:00 PM">02:00 PM - 04:00 PM</option>
-              <option value="04:00 PM">04:00 PM - 06:00 PM</option>
+        <div class="finder__field">
+          <label for="docDept">Department</label>
+          <div class="finder__input">
+            <Icon name="grid" size={18} />
+            <select id="docDept">
+              <option value="all">All departments</option>
+              {doctorDepartments.map((d) => <option value={d}>{d}</option>)}
             </select>
           </div>
         </div>
-
-        <button type="submit" class="submit-modal-btn">Confirm Appointment via WhatsApp</button>
+        <button type="submit" class="btn finder__btn"><Icon name="search" /> Find doctors</button>
       </form>
     </div>
-  </div>
+  </section>
 
-  <!-- STYLES -->
-  <style>
-    /* CSS Parser Safety */
-    .doctors-init-safety-check {
-      color: inherit;
-    }
+  <!-- Featured -->
+  <section class="section featured-wrap" aria-labelledby="featTitle">
+    <div class="container">
+      <div class="feat reveal">
+        <div class="feat__photo">
+          {featured.photo ? (
+            <Image src={featured.photo} alt={`${featured.name}, ${featured.role}`} widths={[400, 600]} sizes="(max-width: 860px) 100vw, 380px" loading="lazy" />
+          ) : (
+            <DoctorAvatar doctor={featured} />
+          )}
+          {!featured.detailsPending && <span class="feat__badge"><Icon name="award" size={16} /> {featured.experience}</span>}
+        </div>
+        <div class="feat__body">
+          <p class="eyebrow">Featured specialist</p>
+          <h2 id="featTitle">{featured.name}</h2>
+          <p class="feat__role">{featured.role} · {featured.speciality}</p>
+          <p class="feat__bio">{featured.bio}</p>
+          <ul role="list" class="feat__facts">
+            <li><Icon name="graduation" size={18} /><span><small>Qualifications</small>{featured.education}</span></li>
+            <li><Icon name="clock" size={18} /><span><small>OPD timings</small>{featured.days} · {featured.hours}</span></li>
+            <li><Icon name="languages" size={18} /><span><small>Languages</small>{featured.languages}</span></li>
+          </ul>
+          <div class="feat__actions">
+            <button type="button" class="btn" data-book data-dept={featured.speciality} data-doctor={featured.name}>
+              <Icon name="calendar" /> Book appointment
+            </button>
+            <button type="button" class="btn btn--outline" data-profile={featured.id}>View full profile</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    /* UTILITIES */
-    .container {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 0 20px;
-      width: 100%;
-    }
-    .text-center {
-      text-align: center;
-    }
-    .section-header {
-      margin-bottom: 50px;
-      max-width: 700px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .section-badge {
-      display: inline-block;
-      background: rgba(13, 148, 136, 0.08);
-      color: #0d9488;
-      font-size: 0.82rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      padding: 6px 16px;
-      border-radius: 50px;
-      margin-bottom: 15px;
-    }
-    .section-title {
-      font-size: 2.25rem;
-      font-weight: 800;
-      color: #020617;
-      margin-bottom: 15px;
-    }
-    .section-desc {
-      font-size: 1.05rem;
-      color: #475569;
-      line-height: 1.6;
-    }
-    .doctor-card.hidden {
-      display: none !important;
-    }
+  <!-- Directory -->
+  <section class="section section--paper2 dir" id="directory" aria-labelledby="dirTitle">
+    <div class="container">
+      <div class="section-head section-head--split">
+        <div class="section-head" style="margin:0">
+          <p class="eyebrow">Doctor directory</p>
+          <h2 id="dirTitle">Meet our consultants</h2>
+        </div>
+        <p class="dir__status" id="docStatus" role="status">Showing all {doctors.length} doctors</p>
+      </div>
 
-    /* 1. HERO SECTION */
-    .doctors-hero {
-      padding: 120px 5% 90px;
-      background: #020617;
-      background: linear-gradient(135deg, #020617 0%, #0f766e 100%);
-      position: relative;
-      overflow: hidden;
-      color: #ffffff;
-    }
+      <div class="dir__chips chips" role="group" aria-label="Filter by department">
+        <button type="button" class="chip" data-filter="all" aria-pressed="true">All <span>{doctors.length}</span></button>
+        {
+          deptMeta.map((d) => (
+            <button type="button" class="chip" data-filter={d.name} aria-pressed="false">
+              {d.name} <span>{d.count}</span>
+            </button>
+          ))
+        }
+      </div>
 
-    .hero-blur-glow {
-      position: absolute;
-      top: -20%;
-      right: -10%;
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(20, 184, 166, 0.18) 0%, transparent 70%);
-      border-radius: 50%;
-      pointer-events: none;
-    }
+      <ul role="list" class="docs-grid">
+        {doctors.map((d) => <li class="reveal"><DoctorCard doctor={d} profile /></li>)}
+      </ul>
+      <div class="docs-empty" id="docEmpty" hidden>
+        <span class="icon-tile"><Icon name="user-search" size={26} /></span>
+        <h3>No doctors found</h3>
+        <p>Try a different name, or call {site.phoneDisplay} and we'll help you find the right specialist.</p>
+        <button type="button" class="btn btn--outline" id="docReset">Show all doctors</button>
+      </div>
+    </div>
+  </section>
 
-    .hero-grid-wrapper {
-      display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: 60px;
-      align-items: center;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
+  <!-- Departments -->
+  <section class="section section--white" aria-labelledby="deptTitle">
+    <div class="container">
+      <div class="section-head section-head--center">
+        <p class="eyebrow">Browse by department</p>
+        <h2 id="deptTitle">Find the right specialist</h2>
+        <p class="lede">Not sure who to see? Start with the department, or call us and we'll guide you.</p>
+      </div>
+      <ul role="list" class="depts">
+        {
+          deptMeta.map((d) => (
+            <li class="dept lift reveal">
+              <span class="icon-tile"><Icon name={d.icon} size={26} /></span>
+              <div>
+                <h3>{d.name}</h3>
+                <p>{d.sub}</p>
+              </div>
+              <p class="dept__count">
+                <strong>{d.count}</strong> {d.count === 1 ? "doctor" : "doctors"}
+              </p>
+              <div class="dept__actions">
+                <button type="button" class="link-arrow" data-jump={d.name}>View doctors <Icon name="arrow-right" /></button>
+                {d.id && <a href={`/services/${d.id}`} class="dept__more">About {d.name.toLowerCase()}</a>}
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
 
-    .hero-left-content {
-      max-width: 800px;
-    }
+  <!-- OPD schedule -->
+  <section class="section section--paper2" aria-labelledby="opdTitle">
+    <div class="container">
+      <div class="section-head section-head--split">
+        <div class="section-head" style="margin:0">
+          <p class="eyebrow">OPD schedule</p>
+          <h2 id="opdTitle">Weekly consultation timings</h2>
+        </div>
+        <p class="lede">Timings may change on public holidays. Call {site.phoneDisplay} to confirm.</p>
+      </div>
+      <div class="opd reveal">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Doctor</th>
+              <th scope="col">Department</th>
+              <th scope="col">Days</th>
+              <th scope="col">Timings</th>
+              <th scope="col"><span class="visually-hidden">Book</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              doctors.map((d) => (
+                <tr>
+                  <th scope="row">
+                    <span class="opd__doc">
+                      {d.photo ? (
+                        <Image src={d.photo} alt="" width={40} height={40} widths={[80]} loading="lazy" />
+                      ) : (
+                        <span class="opd__avatar"><DoctorAvatar doctor={d} /></span>
+                      )}
+                      <span>
+                        {d.name}
+                        <small>{d.role}</small>
+                      </span>
+                    </span>
+                  </th>
+                  <td data-label="Department"><span class="tag">{d.speciality}</span></td>
+                  <td data-label="Days">{d.days}</td>
+                  <td data-label="Timings">{d.hours}</td>
+                  <td>
+                    <button type="button" class="btn btn--sm" data-book data-dept={d.speciality} data-doctor={d.name}>Book</button>
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
 
-    .hero-badge {
-      display: inline-block;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      color: #14b8a6;
-      font-size: 0.85rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      padding: 8px 20px;
-      border-radius: 50px;
-      margin-bottom: 25px;
-    }
+  <!-- How to book -->
+  <section class="section section--white" aria-labelledby="stepsTitle">
+    <div class="container">
+      <div class="section-head section-head--center">
+        <p class="eyebrow">Appointments</p>
+        <h2 id="stepsTitle">Booking a consultation is simple</h2>
+      </div>
+      <ol role="list" class="steps">
+        {
+          steps.map((s, i) => (
+            <li class="step reveal">
+              <span class="step__num">{i + 1}</span>
+              <span class="icon-tile"><Icon name={s.icon} size={24} /></span>
+              <h3>{s.title}</h3>
+              <p>{s.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
 
-    .hero-title {
-      font-size: clamp(2.4rem, 5vw, 4rem);
-      font-weight: 800;
-      line-height: 1.2;
-      letter-spacing: -0.02em;
-      margin-bottom: 25px;
-      color: #ffffff;
-    }
+  <!-- Why our doctors -->
+  <FeatureBand
+    eyebrow="Why our doctors"
+    title="Expertise you can trust, care you can feel"
+    text="Every Vairam consultant is chosen for clinical skill and for the way they treat patients and families."
+    items={[...why]}
+    cta={{ label: "Book a consultation", action: "book" }}
+  />
 
-    .highlight-text {
-      background: linear-gradient(120deg, #14b8a6 0%, #38bdf8 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
+  <!-- FAQ -->
+  <section class="section section--white" aria-labelledby="dfaqTitle">
+    <div class="container fq">
+      <div>
+        <div class="section-head">
+          <p class="eyebrow">FAQs</p>
+          <h2 id="dfaqTitle">Questions about consultations</h2>
+        </div>
+        <div class="faq">
+          {
+            faqs.map((f) => (
+              <details>
+                <summary>{f.q}</summary>
+                <p>{f.a}</p>
+              </details>
+            ))
+          }
+        </div>
+      </div>
+      <aside class="careers">
+        <span class="icon-tile"><Icon name="stethoscope" size={24} /></span>
+        <h3>Are you a doctor?</h3>
+        <p>We're always looking for skilled, compassionate consultants to join our growing team in Mayiladuthurai.</p>
+        <a href={`mailto:${site.email}?subject=Consultant%20opportunity%20at%20Vairam`} class="btn btn--outline btn--block">
+          <Icon name="mail" /> Send your CV
+        </a>
+        <a href={telHref} class="careers__call"><Icon name="phone" size={16} /> {site.phoneDisplay}</a>
+      </aside>
+    </div>
+  </section>
 
-    .hero-subtitle {
-      font-size: clamp(1.05rem, 2vw, 1.25rem);
-      line-height: 1.7;
-      color: rgba(255, 255, 255, 0.85);
-      font-weight: 400;
-      margin-bottom: 45px;
-    }
+  <!-- Profile dialogs (rendered statically so profiles are indexable) -->
+  {
+    doctors.map((d) => (
+      <dialog class="profile" id={`profile-${d.id}`} aria-labelledby={`pname-${d.id}`}>
+        <button type="button" class="profile__close" data-close-dialog>
+          <Icon name="x" size={22} />
+          <span class="visually-hidden">Close</span>
+        </button>
+        <div class="profile__grid">
+          <div class="profile__photo">
+            {d.photo ? (
+              <Image src={d.photo} alt={d.name} widths={[360, 540]} sizes="(max-width: 700px) 100vw, 300px" loading="lazy" />
+            ) : (
+              <DoctorAvatar doctor={d} />
+            )}
+          </div>
+          <div class="profile__body">
+            <p class="eyebrow">{d.speciality}</p>
+            <h2 id={`pname-${d.id}`}>{d.name}</h2>
+            <p class="profile__role">{d.role} · {d.experience}</p>
+            <p>{d.bio}</p>
+            <dl class="profile__facts">
+              <div>
+                <dt><Icon name="graduation" size={16} /> Qualifications</dt>
+                <dd>{d.education}</dd>
+              </div>
+              <div>
+                <dt><Icon name="clock" size={16} /> OPD timings</dt>
+                <dd>{d.days} · {d.hours}</dd>
+              </div>
+              <div>
+                <dt><Icon name="languages" size={16} /> Languages</dt>
+                <dd>{d.languages}</dd>
+              </div>
+            </dl>
+            {d.certifications.length > 0 && (
+              <>
+                <h3>Training & credentials</h3>
+                <ul class="check-list">{d.certifications.map((c) => <li>{c}</li>)}</ul>
+              </>
+            )}
+            <button type="button" class="btn" data-book data-dept={d.speciality} data-doctor={d.name}>
+              <Icon name="calendar" /> Book with {d.name}
+            </button>
+          </div>
+        </div>
+      </dialog>
+    ))
+  }
+</Layout>
 
-    /* Stats cards grid */
-    .stats-cards-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-      margin-top: 20px;
-    }
+<style>
+  .eyebrow--light {
+    color: var(--teal-100);
+  }
 
-    .stats-card {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 20px;
-      border-radius: 16px;
-      text-align: center;
-      backdrop-filter: blur(4px);
-    }
+  /* Finder */
+  .finder-wrap {
+    position: relative;
+    z-index: 5;
+    margin-top: -48px;
+  }
+  .finder {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr auto;
+    align-items: end;
+    gap: var(--s-4);
+    padding: var(--s-5) var(--s-6);
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-3);
+  }
+  .finder__field {
+    display: grid;
+    gap: 6px;
+  }
+  .finder__field label {
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+  .finder__input {
+    position: relative;
+  }
+  .finder__input :global(svg) {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--blue-600);
+    pointer-events: none;
+  }
+  .finder__input input,
+  .finder__input select {
+    width: 100%;
+    min-height: 52px;
+    padding: 0 14px 0 44px;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--r-sm);
+    background: var(--paper-2);
+    font-size: 1rem;
+    transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+  }
+  .finder__input input:focus,
+  .finder__input select:focus {
+    outline: none;
+    background: var(--white);
+    border-color: var(--blue-600);
+    box-shadow: 0 0 0 3px rgb(27 88 184 / 0.15);
+  }
+  .finder__btn {
+    min-height: 52px;
+  }
 
-    .stats-card .stats-num {
-      font-size: 2.2rem;
-      font-weight: 800;
-      color: #14b8a6;
-      line-height: 1.1;
-      margin-bottom: 6px;
-    }
+  /* Featured */
+  .featured-wrap {
+    padding-top: var(--s-9);
+  }
+  .feat {
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+    padding: var(--s-5);
+    background: linear-gradient(120deg, var(--blue-50), var(--white) 60%);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+  }
+  .feat__photo {
+    position: relative;
+    aspect-ratio: 4 / 4.6;
+    border-radius: var(--r-md);
+    overflow: hidden;
+    background: var(--paper-2);
+  }
+  .feat__photo :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 15%;
+  }
+  .feat__badge {
+    position: absolute;
+    left: var(--s-4);
+    bottom: var(--s-4);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: var(--r-sm);
+    background: var(--navy-900);
+    color: var(--white);
+    font-size: var(--fs-xs);
+    font-weight: 700;
+  }
+  .feat__body {
+    padding-right: var(--s-5);
+  }
+  .feat__body h2 {
+    margin: var(--s-3) 0 var(--s-1);
+  }
+  .feat__role {
+    font-weight: 700;
+    color: var(--blue-600);
+  }
+  .feat__bio {
+    margin: var(--s-4) 0 var(--s-5);
+    color: var(--ink-2);
+    max-width: 60ch;
+  }
+  .feat__facts {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--s-4);
+    padding: var(--s-5) 0;
+    border-block: 1px solid var(--line);
+  }
+  .feat__facts li {
+    display: flex;
+    gap: var(--s-3);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    color: var(--navy-900);
+  }
+  .feat__facts :global(svg) {
+    flex: none;
+    margin-top: 2px;
+    color: var(--blue-600);
+  }
+  .feat__facts small {
+    display: block;
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    color: var(--ink-muted);
+  }
+  .feat__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-3);
+    margin-top: var(--s-6);
+  }
 
-    .stats-card .stats-label {
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: rgba(255, 255, 255, 0.8);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
+  /* Directory */
+  .dir {
+    scroll-margin-top: var(--header-h);
+  }
+  .dir__status {
+    font-weight: 600;
+    color: var(--ink-muted);
+  }
+  .dir__chips {
+    position: sticky;
+    top: var(--header-h);
+    z-index: 10;
+    margin: 0 calc(var(--gutter) * -1) var(--s-6);
+    padding: var(--s-3) var(--gutter);
+    background: var(--paper-2);
+  }
+  .dir__chips .chip span {
+    display: inline-grid;
+    place-items: center;
+    min-width: 22px;
+    height: 22px;
+    margin-left: 6px;
+    padding: 0 6px;
+    border-radius: var(--r-sm);
+    background: var(--paper-2);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--ink-muted);
+  }
+  .dir__chips .chip[aria-pressed="true"] span {
+    background: rgb(255 255 255 / 0.2);
+    color: var(--white);
+  }
+  .docs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: var(--s-5);
+  }
+  .docs-empty {
+    display: grid;
+    justify-items: center;
+    gap: var(--s-3);
+    padding: var(--s-9) var(--s-5);
+    text-align: center;
+    background: var(--white);
+    border: 1px dashed var(--line-strong);
+    border-radius: var(--r-lg);
+  }
+  .docs-empty p {
+    color: var(--ink-muted);
+    max-width: 46ch;
+  }
 
-    /* Hero right visuals */
-    .hero-right-visual .img-wrapper {
-      position: relative;
-      max-width: 440px;
-      margin: 0 auto;
-    }
+  /* Departments */
+  .depts {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: var(--s-5);
+  }
+  .dept {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-4);
+    padding: var(--s-6);
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+  }
+  .dept h3 {
+    font-size: 1.25rem;
+  }
+  .dept p {
+    font-size: var(--fs-sm);
+    color: var(--ink-muted);
+  }
+  .dept__count {
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--line);
+  }
+  .dept__count strong {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    color: var(--navy-900);
+  }
+  .dept__actions {
+    display: grid;
+    gap: var(--s-2);
+    margin-top: auto;
+  }
+  .dept__actions .link-arrow {
+    justify-self: start;
+    padding: 0;
+  }
+  .dept__more {
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    color: var(--ink-muted);
+  }
+  .dept__more:hover {
+    color: var(--blue-600);
+  }
 
-    .hero-team-img {
-      width: 100%;
-      border-radius: 30px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-      border: 6px solid rgba(255, 255, 255, 0.05);
-      display: block;
-    }
+  /* OPD table */
+  .opd {
+    overflow: hidden;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-1);
+  }
+  .opd table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--fs-sm);
+  }
+  .opd thead th {
+    padding: var(--s-4) var(--s-5);
+    background: var(--navy-900);
+    color: var(--white);
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-align: left;
+  }
+  .opd tbody th,
+  .opd td {
+    padding: var(--s-3) var(--s-5);
+    border-top: 1px solid var(--line);
+    text-align: left;
+    color: var(--ink-2);
+  }
+  .opd tbody tr {
+    transition: background var(--dur) var(--ease);
+  }
+  .opd tbody tr:hover {
+    background: var(--blue-50);
+  }
+  .opd td:last-child {
+    text-align: right;
+  }
+  .opd__doc {
+    display: flex;
+    align-items: center;
+    gap: var(--s-3);
+    font-weight: 700;
+    color: var(--navy-900);
+  }
+  .opd__avatar {
+    flex: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+  .opd__doc :global(img) {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center 15%;
+    flex: none;
+  }
+  .opd__doc small {
+    display: block;
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    color: var(--ink-muted);
+  }
 
-    .floating-rating-card {
-      position: absolute;
-      bottom: -20px;
-      left: -20px;
-      background: #ffffff;
-      padding: 16px 24px;
-      border-radius: 20px;
-      box-shadow: 0 20px 40px -15px rgba(2, 6, 23, 0.4);
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      border: 1px solid rgba(13, 148, 136, 0.15);
-      animation: floatEffect 4s ease-in-out infinite;
-    }
+  /* Steps */
+  .steps {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--s-5);
+  }
+  .step {
+    position: relative;
+    display: grid;
+    gap: var(--s-3);
+    padding: var(--s-6);
+    background: var(--paper-2);
+    border-radius: var(--r-lg);
+    transition: background 400ms var(--ease), box-shadow 400ms var(--ease), transform 400ms var(--ease);
+  }
+  .step:hover {
+    background: var(--white);
+    box-shadow: var(--shadow-2);
+    transform: translateY(-4px);
+  }
+  .step__num {
+    position: absolute;
+    top: var(--s-5);
+    right: var(--s-5);
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--blue-600);
+    color: var(--white);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--fs-sm);
+  }
+  .step h3 {
+    font-size: 1.125rem;
+    margin-top: var(--s-2);
+  }
+  .step p {
+    font-size: var(--fs-sm);
+    color: var(--ink-muted);
+  }
 
-    @keyframes floatEffect {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
+  /* FAQ + careers */
+  .fq {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: start;
+  }
+  .careers {
+    position: sticky;
+    top: calc(var(--header-h) + 24px);
+    display: grid;
+    gap: var(--s-3);
+    padding: var(--s-6);
+    background: linear-gradient(145deg, #ffffff 0%, #f4f8fb 100%);
+    border-radius: var(--r-lg);
+    border: 1px solid var(--line-strong);
+    box-shadow: 0 12px 32px -10px rgba(10, 31, 68, 0.08), 0 2px 8px -2px rgba(20, 165, 151, 0.04);
+    overflow: hidden;
+  }
+  .careers::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 140px;
+    height: 140px;
+    background: radial-gradient(circle at top right, rgba(20, 165, 151, 0.14), transparent 70%);
+    pointer-events: none;
+  }
+  .careers h3 {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--navy-900);
+    margin-top: var(--s-1);
+    letter-spacing: -0.01em;
+  }
+  .careers p {
+    font-size: var(--fs-sm);
+    color: var(--ink-muted);
+    margin-bottom: var(--s-2);
+    line-height: 1.55;
+  }
+  .careers__call {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--s-2);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    color: var(--ink-muted);
+    transition: color 200ms var(--ease);
+  }
+  .careers__call:hover {
+    color: var(--blue-600);
+  }
 
-    .floating-rating-card .card-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: #f0fdfa;
-      color: #0d9488;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.25rem;
+  /* Profile dialog */
+  .profile {
+    width: min(880px, calc(100% - 24px));
+    max-height: calc(100dvh - 24px);
+    margin: auto;
+    padding: 0;
+    border: 0;
+    border-radius: var(--r-lg);
+    background: var(--white);
+    box-shadow: var(--shadow-2);
+    overflow: auto;
+  }
+  .profile::backdrop {
+    background: rgb(6 23 51 / 0.55);
+  }
+  .profile[open] {
+    animation: prof-in 260ms var(--ease);
+  }
+  @keyframes prof-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
     }
+  }
+  .profile__close {
+    position: absolute;
+    top: var(--s-3);
+    right: var(--s-3);
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--white);
+    color: var(--navy-900);
+    box-shadow: var(--shadow-1);
+  }
+  .profile__grid {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+  }
+  .profile__photo {
+    background: var(--paper-2);
+  }
+  .profile__photo :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 15%;
+  }
+  .profile__body {
+    display: grid;
+    align-content: start;
+    gap: var(--s-4);
+    padding: var(--s-7) var(--s-6);
+    color: var(--ink-2);
+  }
+  .profile__body h2 {
+    font-size: 2rem;
+  }
+  .profile__role {
+    margin-top: calc(var(--s-3) * -1);
+    font-weight: 700;
+    color: var(--blue-600);
+  }
+  .profile__facts {
+    display: grid;
+    gap: var(--s-3);
+    padding: var(--s-4) 0;
+    border-block: 1px solid var(--line);
+  }
+  .profile__facts div {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: var(--s-3);
+    font-size: var(--fs-sm);
+  }
+  .profile__facts dt {
+    display: flex;
+    align-items: center;
+    gap: var(--s-2);
+    font-weight: 700;
+    color: var(--navy-900);
+  }
+  .profile__body h3 {
+    font-size: var(--fs-xs);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .profile__body .check-list {
+    font-size: var(--fs-sm);
+    margin-bottom: var(--s-2);
+  }
+  .profile__body .btn {
+    justify-self: start;
+  }
 
-    .floating-rating-card .card-info h4 {
-      font-size: 0.9rem;
-      font-weight: 800;
-      color: #020617;
-      margin: 0 0 2px;
+  /* Responsive */
+  @media (max-width: 1100px) {
+    .steps {
+      grid-template-columns: 1fr 1fr;
     }
-
-    .floating-rating-card .card-info p {
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: #64748b;
-      margin: 0;
+    .feat__facts {
+      grid-template-columns: 1fr;
     }
-
-    .text-gold {
-      color: #f59e0b;
+  }
+  @media (max-width: 960px) {
+    .finder {
+      grid-template-columns: 1fr 1fr;
     }
-
-    /* 2. STICKY FILTER BAR */
-    .filter-sticky-section {
-      background: #ffffff;
-      border-bottom: 1px solid #e2e8f0;
-      padding: 18px 5%;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: 0 4px 20px -6px rgba(0, 0, 0, 0.05);
+    .finder__field--grow {
+      grid-column: 1 / -1;
     }
-
-    .filter-flex-container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 30px;
-      max-width: 1400px;
-      margin: 0 auto;
+    .feat,
+    .fq {
+      grid-template-columns: 1fr;
     }
-
-    .dept-tabs {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
+    .feat__photo {
+      aspect-ratio: 4 / 3;
     }
-
-    .dept-tab-btn {
-      padding: 10px 20px;
-      background: #f1f5f9;
-      color: #475569;
-      border: 1.5px solid transparent;
-      border-radius: 50px;
-      font-weight: 700;
-      font-size: 0.88rem;
-      cursor: pointer;
-      transition: all 0.3s;
-      font-family: inherit;
+    .feat__body {
+      padding: 0 var(--s-2) var(--s-3);
     }
-
-    .dept-tab-btn:hover {
-      background: #e2e8f0;
-      color: #020617;
+    .careers {
+      position: static;
     }
-
-    .dept-tab-btn.active {
-      background: #0d9488;
-      color: #ffffff;
-    }
-
-    /* Search Input Box */
-    .search-input-box {
-      width: 100%;
-      max-width: 380px;
-      position: relative;
-    }
-
-    .search-input-box i {
-      position: absolute;
-      left: 18px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #94a3b8;
-      pointer-events: none;
-    }
-
-    .search-input-box input {
-      width: 100%;
-      padding: 12px 45px 12px 48px;
-      border-radius: 12px;
-      border: 1.5px solid #cbd5e1;
-      outline: none;
-      font-family: inherit;
-      font-size: 0.95rem;
-      transition: border 0.3s, background 0.3s;
-      background: #f8fafc;
-      color: #0f172a;
-    }
-
-    .search-input-box input:focus {
-      border-color: #0d9488;
-      background: #ffffff;
-    }
-
-    .clear-btn {
-      position: absolute;
-      right: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      color: #94a3b8;
-      font-size: 0.95rem;
-      cursor: pointer;
-      padding: 3px;
+    /* OPD table → stacked cards */
+    .opd thead {
       display: none;
     }
-
-    .clear-btn:hover {
-      color: #0f172a;
+    .opd table,
+    .opd tbody,
+    .opd tr,
+    .opd tbody th,
+    .opd td {
+      display: block;
     }
-
-    /* 3. DOCTORS CARD GRID */
-    .doctors-grid-section {
-      padding: 60px 5% 100px;
-      background: #ffffff;
+    .opd tbody tr {
+      padding: var(--s-4) var(--s-5);
+      border-top: 1px solid var(--line);
     }
-
-    .filter-status-banner {
-      max-width: 1400px;
-      margin: -20px auto 45px;
-      padding: 14px 24px;
-      background: #f0fdfa;
-      border: 1px solid rgba(13, 148, 136, 0.15);
-      border-radius: 12px;
+    .opd tbody tr:first-child {
+      border-top: 0;
     }
-
-    .filter-status-banner p {
-      margin: 0;
-      font-size: 0.95rem;
-      color: #0f766e;
+    .opd tbody th,
+    .opd td {
+      padding: 4px 0;
+      border: 0;
     }
-
-    .filter-status-banner button {
-      background: none;
-      border: none;
-      text-decoration: underline;
-      color: #0d9488;
-      font-weight: 700;
-      cursor: pointer;
-      font-family: inherit;
-      margin-left: 5px;
-    }
-
-    .doctors-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(285px, 1fr));
-      gap: 35px;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    .doctor-card {
-      background: #ffffff;
-      border-radius: 24px;
-      border: 1px solid rgba(13, 148, 136, 0.08);
-      box-shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.04);
-      overflow: hidden;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .doctor-card:hover {
-      transform: translateY(-8px);
-      border-color: rgba(13, 148, 136, 0.25);
-      box-shadow: var(--shadow-premium);
-    }
-
-    .card-image-wrapper {
-      height: 260px;
-      position: relative;
-      overflow: hidden;
-      background: #f0f7f7;
-    }
-
-    .doc-card-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .doctor-card:hover .doc-card-img {
-      transform: scale(1.05);
-    }
-
-    /* Availability pulse badges */
-    .availability-pulse {
-      position: absolute;
-      top: 15px;
-      left: 15px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 14px;
-      border-radius: 50px;
-      font-size: 0.72rem;
-      font-weight: 800;
-      backdrop-filter: blur(4px);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-    }
-
-    .pulse-green {
-      background: rgba(255, 255, 255, 0.95);
-      color: #15803d;
-      border: 1px solid rgba(34, 197, 94, 0.2);
-    }
-
-    .pulse-blue {
-      background: rgba(255, 255, 255, 0.95);
-      color: #0f766e;
-      border: 1px solid rgba(13, 148, 136, 0.2);
-    }
-
-    .pulse-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      position: relative;
-      display: inline-block;
-    }
-
-    .pulse-green .pulse-dot {
-      background: #22c55e;
-    }
-    .pulse-blue .pulse-dot {
-      background: #0d9488;
-    }
-
-    .pulse-dot::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      animation: pulseEffect 1.5s infinite;
-    }
-
-    .pulse-green .pulse-dot::after {
-      background: #22c55e;
-    }
-    .pulse-blue .pulse-dot::after {
-      background: #0d9488;
-    }
-
-    @keyframes pulseEffect {
-      0% { transform: scale(1); opacity: 1; }
-      100% { transform: scale(2.4); opacity: 0; }
-    }
-
-    /* Social hover overlay list */
-    .social-hover-overlay {
-      position: absolute;
-      bottom: -50px;
-      left: 0;
-      right: 0;
-      background: linear-gradient(180deg, transparent 0%, rgba(2, 6, 23, 0.75) 100%);
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      transition: bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .doctor-card:hover .social-hover-overlay {
-      bottom: 0;
-    }
-
-    .social-hover-overlay a {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.95);
-      color: #0f766e;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.92rem;
-      text-decoration: none;
-      transition: all 0.3s;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
-
-    .social-hover-overlay a:hover {
-      background: #0d9488;
-      color: #ffffff;
-      transform: translateY(-2px);
-    }
-
-    .card-body {
-      padding: 25px;
-      display: flex;
-      flex-direction: column;
-      flex-grow: 1;
-    }
-
-    .specialty-badge {
-      display: inline-block;
-      align-self: flex-start;
-      background: rgba(13, 148, 136, 0.08);
-      color: #0f766e;
-      padding: 4px 12px;
-      border-radius: 50px;
-      font-size: 0.75rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 12px;
-    }
-
-    .star-rating {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      margin-bottom: 8px;
-    }
-
-    .star-rating i {
-      color: #f59e0b;
-      font-size: 0.85rem;
-    }
-
-    .rating-num {
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: #0f172a;
-    }
-
-    .rating-reviews {
-      font-size: 0.8rem;
-      color: #64748b;
-    }
-
-    .doc-name {
-      font-size: 1.25rem;
-      font-weight: 800;
-      color: #020617;
-      margin-bottom: 4px;
-    }
-
-    .doc-role {
-      font-size: 0.88rem;
-      font-weight: 700;
-      color: #0d9488;
-      margin-bottom: 6px;
-    }
-
-    .doc-edu {
-      font-size: 0.8rem;
+    .opd td[data-label]::before {
+      content: attr(data-label) ": ";
       font-weight: 600;
-      color: #64748b;
-      margin-bottom: 12px;
+      color: var(--ink-muted);
     }
-
-    .doc-bio-excerpt {
-      font-size: 0.88rem;
-      line-height: 1.5;
-      color: #475569;
-      margin-bottom: 20px;
+    .opd td:last-child {
+      text-align: left;
+      padding-top: var(--s-3);
     }
-
-    .doc-meta-divider {
-      height: 1px;
-      background: #f1f5f9;
-      margin-bottom: 15px;
-      margin-top: auto;
+  }
+  @media (max-width: 640px) {
+    .finder-wrap {
+      margin-top: -32px;
     }
-
-    .next-avail-box {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 20px;
+    .finder {
+      grid-template-columns: 1fr;
+      padding: var(--s-4);
     }
-
-    .next-avail-box i {
-      color: #0d9488;
-      font-size: 1rem;
+    .steps {
+      grid-template-columns: 1fr;
     }
-
-    .avail-info {
-      display: flex;
-      flex-direction: column;
+    .feat {
+      padding: var(--s-3);
     }
-
-    .avail-label {
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: #64748b;
-      line-height: 1.2;
-    }
-
-    .avail-time {
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: #020617;
-    }
-
-    .view-profile-btn {
+    .feat__actions .btn {
       width: 100%;
-      background: #f8fafc;
-      color: #0f766e;
-      border: 1.5px solid rgba(13, 148, 136, 0.1);
-      padding: 12px;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 0.92rem;
-      cursor: pointer;
-      transition: all 0.3s;
-      font-family: inherit;
     }
-
-    .doctor-card:hover .view-profile-btn {
-      background: #0d9488;
-      color: #ffffff;
-      border-color: #0d9488;
-      box-shadow: 0 8px 16px -4px rgba(13, 148, 136, 0.3);
+  }
+  @media (max-width: 700px) {
+    .profile__grid {
+      grid-template-columns: 1fr;
     }
-
-    /* Grid Empty State */
-    .empty-doctors-state {
-      text-align: center;
-      padding: 80px 20px;
-      max-width: 500px;
-      margin: 0 auto;
+    .profile__photo {
+      aspect-ratio: 1;
     }
-
-    .empty-doctors-state .empty-state-icon {
-      font-size: 4rem;
-      color: #cbd5e1;
-      margin-bottom: 20px;
+    .profile__body {
+      padding: var(--s-5) var(--s-4);
     }
-
-    .empty-doctors-state h3 {
-      font-size: 1.5rem;
-      color: #0f172a;
-      margin-bottom: 10px;
-    }
-
-    .empty-doctors-state p {
-      color: #64748b;
-      margin-bottom: 25px;
-      line-height: 1.6;
-    }
-
-    /* Load More Placeholder */
-    .load-more-container {
-      margin-top: 50px;
-    }
-
-    .btn-outline-primary {
-      background: transparent;
-      color: #0d9488;
-      border: 2px solid #0d9488;
-      padding: 14px 32px;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 0.95rem;
-      cursor: pointer;
-      transition: all 0.3s;
-      font-family: inherit;
-    }
-
-    .btn-outline-primary:hover {
-      background: #0d9488;
-      color: #ffffff;
-      box-shadow: 0 8px 20px -6px rgba(13, 148, 136, 0.3);
-    }
-
-    /* 4. WHY CHOOSE OUR DOCTORS */
-    .why-doctors-section {
-      padding: 100px 5%;
-      background: #f8fafc;
-      border-top: 1px solid #e2e8f0;
-      border-bottom: 1px solid #e2e8f0;
-    }
-
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 30px;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    .feature-card {
-      background: #ffffff;
-      border: 1px solid rgba(13, 148, 136, 0.05);
-      padding: 40px 30px;
-      border-radius: 24px;
-      box-shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.03);
-      transition: all 0.3s;
-    }
-
-    .feature-card:hover {
-      transform: translateY(-6px);
-      border-color: rgba(13, 148, 136, 0.2);
-      box-shadow: var(--shadow-premium);
-    }
-
-    .feature-icon {
-      width: 56px;
-      height: 56px;
-      border-radius: 16px;
-      background: rgba(13, 148, 136, 0.08);
-      color: #0d9488;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      margin-bottom: 25px;
-      transition: all 0.3s;
-    }
-
-    .feature-card:hover .feature-icon {
-      background: #0d9488;
-      color: #ffffff;
-    }
-
-    .feature-card h3 {
-      font-size: 1.2rem;
-      font-weight: 800;
-      color: #020617;
-      margin-bottom: 12px;
-    }
-
-    .feature-card p {
-      font-size: 0.9rem;
-      line-height: 1.6;
-      color: #475569;
-    }
-
-    /* 5. DOCTOR PROFILE POPUP MODAL */
-    .profile-modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(2, 6, 23, 0.6);
-      backdrop-filter: blur(8px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 10000;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      padding: 20px;
-    }
-
-    .profile-modal-overlay.active {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .profile-modal-card {
-      background: #ffffff;
-      width: 100%;
-      max-width: 850px;
-      height: 90%;
-      max-height: 750px;
-      border-radius: 28px;
-      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.2);
-      border: 1px solid rgba(13, 148, 136, 0.1);
-      overflow: hidden;
-      transform: translateY(40px) scale(0.95);
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .profile-modal-overlay.active .profile-modal-card {
-      transform: translateY(0) scale(1);
-    }
-
-    .modal-card-header {
-      background: linear-gradient(135deg, #020617 0%, #0f766e 100%);
-      padding: 25px 35px;
-      color: #ffffff;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-shrink: 0;
-    }
-
-    .modal-card-header h3 {
-      font-size: 1.25rem;
-      font-weight: 800;
-      margin: 0;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .close-profile-modal-btn {
-      background: none;
-      border: none;
-      color: rgba(255, 255, 255, 0.85);
-      font-size: 1.25rem;
-      cursor: pointer;
-      padding: 5px;
-      transition: all 0.3s;
-    }
-
-    .close-profile-modal-btn:hover {
-      color: #ffffff;
-      transform: rotate(90deg);
-    }
-
-    .modal-scroll-body {
-      padding: 35px;
-      overflow-y: auto;
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 30px;
-    }
-
-    /* Modal header grid */
-    .profile-modal-header-grid {
-      display: grid;
-      grid-template-columns: 200px 1fr;
-      gap: 35px;
-      align-items: center;
-      border-bottom: 1px dashed #cbd5e1;
-      padding-bottom: 30px;
-    }
-
-    .profile-img-container {
-      position: relative;
-      height: 200px;
-      border-radius: 20px;
-      overflow: hidden;
-      background: #f1faf9;
-      border: 1px solid #cbd5e1;
-    }
-
-    .profile-img-container img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .experience-tag-badge {
-      position: absolute;
-      bottom: 12px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #0d9488;
-      color: #ffffff;
-      padding: 4px 12px;
-      border-radius: 50px;
-      font-size: 0.72rem;
-      font-weight: 800;
-      white-space: nowrap;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-
-    .modal-dept-badge {
-      display: inline-block;
-      background: rgba(13, 148, 136, 0.08);
-      color: #0f766e;
-      padding: 4px 12px;
-      border-radius: 50px;
-      font-size: 0.72rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 8px;
-    }
-
-    #modalDocName {
-      font-size: 1.8rem;
-      font-weight: 800;
-      color: #020617;
-      margin-bottom: 4px;
-    }
-
-    .modal-role-subtitle {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: #0d9488;
-      margin-bottom: 6px;
-    }
-
-    .modal-edu-text {
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: #64748b;
-      margin-bottom: 12px;
-    }
-
-    .modal-stars-rating {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: #0f172a;
-      margin-bottom: 12px;
-    }
-
-    .modal-stars-rating i {
-      color: #f59e0b;
-    }
-
-    .modal-stars-rating .reviews-count {
-      color: #64748b;
-      font-weight: 600;
-    }
-
-    .modal-languages-spoken {
-      font-size: 0.9rem;
-      color: #334155;
-    }
-
-    /* Modal details grid */
-    .profile-modal-details-grid {
-      display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: 35px;
-    }
-
-    .profile-biography-col h4,
-    .profile-schedule-col h4 {
-      font-size: 1.1rem;
-      font-weight: 800;
-      color: #020617;
-      margin-bottom: 12px;
-    }
-
-    .profile-biography-col p {
-      font-size: 0.95rem;
-      line-height: 1.6;
-      color: #475569;
-      margin-bottom: 25px;
-    }
-
-    .modal-certs-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .modal-certs-list li {
-      position: relative;
-      padding-left: 20px;
-      font-size: 0.9rem;
-      color: #334155;
-    }
-
-    .modal-certs-list li::before {
-      content: "✓";
-      position: absolute;
-      left: 0;
-      top: 0;
-      color: #0d9488;
-      font-weight: 800;
-    }
-
-    .consultation-schedule-box {
-      background: #f0fdfa;
-      border: 1px solid rgba(13, 148, 136, 0.15);
-      border-radius: 20px;
-      padding: 24px;
-    }
-
-    .consultation-schedule-box h4 {
-      color: #0f766e;
-      margin-bottom: 18px;
-    }
-
-    .schedule-table-card {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .schedule-row {
-      display: flex;
-      flex-direction: column;
+    .profile__facts div {
+      grid-template-columns: 1fr;
       gap: 2px;
-      font-size: 0.88rem;
     }
-
-    .day-label {
-      font-weight: 700;
-      color: #0f766e;
+    .profile__body .btn {
+      justify-self: stretch;
     }
-
-    .day-value {
-      font-weight: 600;
-      color: #020617;
+  }
+  @media (max-width: 560px) {
+    .docs-grid {
+      gap: var(--s-3);
     }
-
-    .schedule-booking-notes {
-      margin-top: 20px;
-      padding: 16px;
-      background: #f8fafc;
-      border-radius: 12px;
-      border-left: 3px solid #cbd5e1;
-    }
-
-    .schedule-booking-notes p {
-      margin: 0;
-      font-size: 0.8rem;
-      line-height: 1.4;
-      color: #64748b;
-    }
-
-    .profile-modal-footer {
-      padding: 20px 35px;
-      background: #f8fafc;
-      border-top: 1px solid #e2e8f0;
-      display: flex;
-      justify-content: flex-end;
-      gap: 15px;
-      flex-shrink: 0;
-    }
-
-    .btn-outline-secondary {
-      background: transparent;
-      color: #475569;
-      border: 1.5px solid #cbd5e1;
-      padding: 12px 24px;
-      border-radius: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      font-family: inherit;
-      transition: all 0.3s;
-    }
-
-    .btn-outline-secondary:hover {
-      background: #f1f5f9;
-      border-color: #94a3b8;
-    }
-
-    .btn-primary {
-      background: #0d9488;
-      color: #ffffff;
-      border: none;
-      padding: 12px 28px;
-      border-radius: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      font-family: inherit;
-      transition: all 0.3s;
-    }
-
-    .btn-primary:hover {
-      background: #0f766e;
-    }
-
-    /* 6. APPOINTMENT BOOKING MODAL */
-    .booking-modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(2, 6, 23, 0.6);
-      backdrop-filter: blur(8px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 11000;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      padding: 20px;
-    }
-
-    .booking-modal-overlay.active {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .booking-modal-card {
-      background: #ffffff;
-      width: 100%;
-      max-width: 550px;
-      border-radius: 28px;
-      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.2);
-      border: 1px solid rgba(13, 148, 136, 0.1);
-      overflow: hidden;
-      transform: translateY(40px) scale(0.95);
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .booking-modal-overlay.active .booking-modal-card {
-      transform: translateY(0) scale(1);
-    }
-
-    .modal-booking-form {
-      padding: 35px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .form-group label {
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: #020617;
-    }
-
-    .form-group input,
-    .form-group select {
-      padding: 12px 16px;
-      border: 1.5px solid #e2e8f0;
-      border-radius: 12px;
-      font-family: inherit;
-      font-size: 0.95rem;
-      outline: none;
-      transition: border 0.3s;
-      background: #f8fafc;
-      color: #0f172a;
-    }
-
-    .form-group input:focus,
-    .form-group select:focus {
-      border-color: #0d9488;
-      background: #ffffff;
-    }
-
-    .form-grid {
+    .docs-grid :global(.doc) {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
+      grid-template-columns: 116px 1fr;
     }
-
-    .submit-modal-btn {
-      background: #0d9488;
-      color: #ffffff;
-      border: none;
-      padding: 14px;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: all 0.3s;
-      margin-top: 10px;
-      box-shadow: 0 8px 16px -4px rgba(13, 148, 136, 0.3);
-      font-family: inherit;
+    .docs-grid :global(.doc__photo) {
+      grid-row: span 2;
+      aspect-ratio: auto;
+      min-height: 100%;
     }
-
-    .submit-modal-btn:hover {
-      background: #0f766e;
-      box-shadow: 0 12px 24px -6px rgba(13, 148, 136, 0.4);
+    .docs-grid :global(.doc__dept),
+    .docs-grid :global(.doc__exp) {
+      display: none;
     }
-
-    /* Responsive Adjustments */
-    @media (max-width: 1024px) {
-      .hero-grid-wrapper {
-        grid-template-columns: 1fr;
-        gap: 50px;
-      }
-      .hero-right-visual {
-        order: -1;
-      }
-      .filter-flex-container {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 15px;
-      }
-      .search-input-box {
-        max-width: 100%;
-      }
+    .docs-grid :global(.doc__body) {
+      padding: var(--s-4) var(--s-4) var(--s-2);
     }
+    .docs-grid :global(.doc__body h3) {
+      font-size: 1.1875rem;
+    }
+    .docs-grid :global(.doc__actions) {
+      padding: 0 var(--s-4) var(--s-4);
+    }
+    .docs-grid :global(.doc__actions .btn) {
+      padding: 0 var(--s-2);
+    }
+  }
+</style>
 
-    @media (max-width: 768px) {
-      .stats-cards-grid {
-        grid-template-columns: 1fr;
-        gap: 15px;
-      }
-      .dept-tabs {
-        justify-content: center;
-        gap: 8px;
-      }
-      .dept-tab-btn {
-        padding: 8px 16px;
-        font-size: 0.8rem;
-      }
-      .doctors-hero {
-        padding: 100px 5% 70px;
-      }
-      .doctors-grid-section,
-      .why-doctors-section {
-        padding: 70px 5%;
-      }
-      .profile-modal-header-grid {
-        grid-template-columns: 1fr;
-        text-align: center;
-        gap: 20px;
-      }
-      .profile-img-container {
-        width: 180px;
-        height: 180px;
-        margin: 0 auto;
-      }
-      .modal-stars-rating {
-        justify-content: center;
-      }
-      .profile-modal-details-grid {
-        grid-template-columns: 1fr;
-        gap: 30px;
-      }
-      .profile-modal-card {
-        height: 95%;
-      }
-      .form-grid {
-        grid-template-columns: 1fr;
+<script>
+  const cards = Array.from(document.querySelectorAll<HTMLElement>(".docs-grid > li"));
+  const chips = Array.from(document.querySelectorAll<HTMLButtonElement>(".dir__chips .chip"));
+  const search = document.getElementById("docSearch") as HTMLInputElement;
+  const select = document.getElementById("docDept") as HTMLSelectElement;
+  const status = document.getElementById("docStatus")!;
+  const empty = document.getElementById("docEmpty")!;
+  const directory = document.getElementById("directory")!;
+  let dept = "all";
+
+  function apply() {
+    const q = search.value.trim().toLowerCase();
+    let shown = 0;
+    for (const li of cards) {
+      const card = li.querySelector<HTMLElement>(".doc")!;
+      const ok = (dept === "all" || card.dataset.dept === dept) && (!q || card.dataset.search!.includes(q));
+      li.hidden = !ok;
+      if (ok) {
+        li.classList.add("is-visible"); // don't wait for the scroll reveal on filtered results
+        shown++;
       }
     }
-  </style>
+    empty.hidden = shown > 0;
+    status.textContent =
+      shown === cards.length ? `Showing all ${shown} doctors` : `Showing ${shown} ${shown === 1 ? "doctor" : "doctors"}${dept !== "all" ? ` in ${dept}` : ""}`;
+  }
 
-  <!-- INTERACTIVE VANILLA JAVASCRIPT -->
-  <script is:inline define:vars={{ doctorsData }}>
-    document.addEventListener("DOMContentLoaded", () => {
+  function setDept(value: string) {
+    dept = value;
+    select.value = value;
+    chips.forEach((c) => c.setAttribute("aria-pressed", String(c.dataset.filter === value)));
+    apply();
+  }
 
-      // Cache DOM Elements
-      const searchInput = document.getElementById("doctorsSearchInput");
-      const clearSearchBtn = document.getElementById("clearSearchBtn");
-      const deptTabButtons = document.querySelectorAll(".dept-tab-btn");
-      const doctorCards = document.querySelectorAll(".doctor-card");
-      const emptyState = document.getElementById("emptyDoctorsState");
-      const filterStatus = document.getElementById("doctorsFilterStatus");
-      const searchTextSpan = document.getElementById("searchTextSpan");
-      const resetSearchLink = document.getElementById("resetSearchLink");
-      const resetDoctorsFilterBtn = document.getElementById("resetDoctorsFilterBtn");
-      const cardGrid = document.getElementById("doctorsCardGrid");
+  chips.forEach((chip) => chip.addEventListener("click", () => setDept(chip.dataset.filter!)));
+  select.addEventListener("change", () => setDept(select.value));
+  search.addEventListener("input", apply);
+  document.getElementById("finder")?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    apply();
+    directory.scrollIntoView({ behavior: "smooth" });
+  });
+  document.querySelectorAll<HTMLElement>("[data-jump]").forEach((b) =>
+    b.addEventListener("click", () => {
+      search.value = "";
+      setDept(b.dataset.jump!);
+      directory.scrollIntoView({ behavior: "smooth" });
+    }),
+  );
+  document.getElementById("docReset")?.addEventListener("click", () => {
+    search.value = "";
+    setDept("all");
+  });
 
-      // Profile Modal Cache
-      const profileModal = document.getElementById("doctorProfileModal");
-      const closeProfileModalBtn = document.getElementById("closeProfileModalBtn");
-      const modalGoBackBtn = document.getElementById("modalGoBackBtn");
-      const modalTriggerBookBtn = document.getElementById("modalTriggerBookBtn");
-
-      const modalDocName = document.getElementById("modalDocName");
-      const modalDocPhoto = document.getElementById("modalDocPhoto");
-      const modalDocExp = document.getElementById("modalDocExp");
-      const modalDocDept = document.getElementById("modalDocDept");
-      const modalDocRole = document.getElementById("modalDocRole");
-      const modalDocEdu = document.getElementById("modalDocEdu");
-      const modalDocRatingNum = document.getElementById("modalDocRatingNum");
-      const modalDocReviews = document.getElementById("modalDocReviews");
-      const modalDocLanguages = document.getElementById("modalDocLanguages");
-      const modalDocBio = document.getElementById("modalDocBio");
-      const modalDocCerts = document.getElementById("modalDocCerts");
-      const modalDocSchedDays = document.getElementById("modalDocSchedDays");
-      const modalDocSchedHours = document.getElementById("modalDocSchedHours");
-
-      // Booking Modal Cache
-      const bookingModal = document.getElementById("doctorBookingModal");
-      const closeDoctorBookingBtn = document.getElementById("closeDoctorBookingBtn");
-      const bookingForm = document.getElementById("doctorsPageBookingForm");
-      const bookDoctorSelect = document.getElementById("bookDoctorSelect");
-      const bookDeptInput = document.getElementById("bookDeptInput");
-
-      // Load More Button
-      const loadMoreBtn = document.getElementById("loadMoreBtn");
-
-      // State Variables
-      let activeSpecialtyFilter = "all";
-      let activeQuery = "";
-      let activeSelectedDoctorName = "";
-
-      // ────────────────────────────────────────────────────────
-      // 1. FILTERING & SEARCH LOGIC
-      // ────────────────────────────────────────────────────────
-
-      function runFilters() {
-        let visibleCount = 0;
-        const query = activeQuery.trim().toLowerCase();
-
-        doctorCards.forEach(card => {
-          const cardSpecialty = card.getAttribute("data-specialty");
-          const cardName = card.getAttribute("data-name");
-          const cardKeywords = card.getAttribute("data-keywords").toLowerCase();
-
-          // Specialty filter match
-          const specialtyMatch = (activeSpecialtyFilter === "all" || cardSpecialty === activeSpecialtyFilter);
-          
-          // Search query match (name or keywords)
-          const searchMatch = (
-            query === "" ||
-            cardName.includes(query) ||
-            cardKeywords.includes(query)
-          );
-
-          if (specialtyMatch && searchMatch) {
-            card.classList.remove("hidden");
-            visibleCount++;
-          } else {
-            card.classList.add("hidden");
-          }
-        });
-
-        // Toggle Empty State
-        if (visibleCount === 0) {
-          cardGrid.style.display = "none";
-          emptyState.style.display = "block";
-        } else {
-          cardGrid.style.display = "grid";
-          emptyState.style.display = "none";
-        }
-
-        // Toggle search info banner
-        if (query !== "") {
-          filterStatus.style.display = "block";
-          searchTextSpan.textContent = activeQuery;
-          clearSearchBtn.style.display = "block";
-        } else {
-          filterStatus.style.display = "none";
-          clearSearchBtn.style.display = "none";
-        }
-      }
-
-      function resetAllFilters() {
-        activeSpecialtyFilter = "all";
-        activeQuery = "";
-        searchInput.value = "";
-        
-        deptTabButtons.forEach(btn => {
-          if (btn.getAttribute("data-filter") === "all") {
-            btn.classList.add("active");
-            btn.setAttribute("aria-selected", "true");
-          } else {
-            btn.classList.remove("active");
-            btn.setAttribute("aria-selected", "false");
-          }
-        });
-
-        runFilters();
-      }
-
-      // Input trigger
-      searchInput.addEventListener("input", (e) => {
-        activeQuery = e.target.value;
-        runFilters();
-      });
-
-      // Clear search
-      clearSearchBtn.addEventListener("click", () => {
-        searchInput.value = "";
-        activeQuery = "";
-        runFilters();
-      });
-
-      // Tab Buttons trigger
-      deptTabButtons.forEach(button => {
-        button.addEventListener("click", () => {
-          deptTabButtons.forEach(b => {
-            b.classList.remove("active");
-            b.setAttribute("aria-selected", "false");
-          });
-          button.classList.add("active");
-          button.setAttribute("aria-selected", "true");
-          
-          activeSpecialtyFilter = button.getAttribute("data-filter");
-          runFilters();
-        });
-      });
-
-      resetSearchLink.addEventListener("click", resetAllFilters);
-      resetDoctorsFilterBtn.addEventListener("click", resetAllFilters);
-
-      // ────────────────────────────────────────────────────────
-      // 2. DOCTOR DETAIL MODAL BINDINGS
-      // ────────────────────────────────────────────────────────
-
-      function openProfileModal(doctorId) {
-        const data = doctorsData.find(d => d.id === doctorId);
-        if (!data) return;
-
-        activeSelectedDoctorName = data.name;
-
-        // Inject content fields
-        modalDocPhoto.src = data.image;
-        modalDocPhoto.alt = data.name;
-        modalDocExp.textContent = data.experience;
-        
-        modalDocDept.textContent = data.specialty;
-        modalDocName.textContent = data.name;
-        modalDocRole.textContent = data.role;
-        modalDocEdu.textContent = data.education;
-        modalDocRatingNum.textContent = data.rating;
-        modalDocReviews.textContent = `(${data.reviews})`;
-        modalDocLanguages.textContent = data.languages;
-        modalDocBio.textContent = data.bio;
-
-        modalDocSchedDays.textContent = data.schedule.days;
-        modalDocSchedHours.textContent = data.schedule.hours;
-
-        // Accreditations list
-        modalDocCerts.innerHTML = "";
-        data.certifications.forEach(cert => {
-          const li = document.createElement("li");
-          li.textContent = cert;
-          modalDocCerts.appendChild(li);
-        });
-
-        profileModal.classList.add("active");
-        profileModal.setAttribute("aria-hidden", "false");
-        document.body.style.overflow = "hidden";
-      }
-
-      function closeProfileModal() {
-        profileModal.classList.remove("active");
-        profileModal.setAttribute("aria-hidden", "true");
-        if (!bookingModal.classList.contains("active")) {
-          document.body.style.overflow = "";
-        }
-      }
-
-      cardGrid.addEventListener("click", (e) => {
-        const btn = e.target.closest(".view-profile-btn");
-        if (btn) {
-          const id = btn.getAttribute("data-id");
-          openProfileModal(id);
-        }
-      });
-
-      closeProfileModalBtn.addEventListener("click", closeProfileModal);
-      modalGoBackBtn.addEventListener("click", closeProfileModal);
-
-      // ────────────────────────────────────────────────────────
-      // 3. APPOINTMENT BOOKING MODAL ACTIONS
-      // ────────────────────────────────────────────────────────
-
-      function openBookingModal(preselectedDoctor = "") {
-        if (preselectedDoctor) {
-          bookDoctorSelect.value = preselectedDoctor;
-          // Trigger change handler to set department
-          bookDoctorSelect.dispatchEvent(new Event("change"));
-        } else {
-          bookDoctorSelect.value = "";
-          bookDeptInput.value = "";
-        }
-
-        bookingModal.classList.add("active");
-        bookingModal.setAttribute("aria-hidden", "false");
-        document.body.style.overflow = "hidden";
-      }
-
-      function closeBookingModal() {
-        bookingModal.classList.remove("active");
-        bookingModal.setAttribute("aria-hidden", "true");
-        if (!profileModal.classList.contains("active")) {
-          document.body.style.overflow = "";
-        }
-      }
-
-      // Handle selector dropdown change
-      bookDoctorSelect.addEventListener("change", (e) => {
-        const selectedOption = e.target.options[e.target.selectedIndex];
-        if (selectedOption && selectedOption.value) {
-          const dept = selectedOption.getAttribute("data-dept");
-          bookDeptInput.value = dept;
-        } else {
-          bookDeptInput.value = "";
-        }
-      });
-
-      // Trigger from Profile Modal
-      modalTriggerBookBtn.addEventListener("click", () => {
-        closeProfileModal();
-        setTimeout(() => {
-          openBookingModal(activeSelectedDoctorName);
-        }, 150);
-      });
-
-      closeDoctorBookingBtn.addEventListener("click", closeBookingModal);
-
-      // Close modal on background clicks
-      window.addEventListener("click", (e) => {
-        if (e.target === profileModal) closeProfileModal();
-        if (e.target === bookingModal) closeBookingModal();
-      });
-
-      // ────────────────────────────────────────────────────────
-      // 4. BOOKING FORM REDIRECT TO WHATSAPP
-      // ────────────────────────────────────────────────────────
-      bookingForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        
-        const name = document.getElementById("bookPatientName").value.trim();
-        const phone = document.getElementById("bookPatientPhone").value.trim();
-        const doctor = bookDoctorSelect.value;
-        const dept = bookDeptInput.value;
-        const date = document.getElementById("bookBookingDate").value;
-        const timeslot = document.getElementById("bookTimeSlot").value;
-
-        // Generate token
-        const token = "VMD-" + Math.floor(1000 + Math.random() * 9000);
-
-        // Construct message
-        const message = `Hello Vairam Multi Speciality Hospital, I would like to schedule a specialist doctor consultation:
-- Booking Reference: ${token}
-- Patient Name: ${name}
-- Contact Phone: ${phone}
-- Consulting Doctor: ${doctor} (${dept})
-- Consultation Date: ${date}
-- Preferred Time Slot: ${timeslot}
-
-Please confirm availability. Thank you.`;
-
-        // Redirect
-        const encodedMsg = encodeURIComponent(message);
-        const whatsappNumber = "919344644555"; 
-        const url = `https://wa.me/${whatsappNumber}?text=${encodedMsg}`;
-        
-        window.open(url, "_blank");
-        closeBookingModal();
-        bookingForm.reset();
-      });
-
-      // ────────────────────────────────────────────────────────
-      // 5. LOAD MORE PLACEHOLDER
-      // ────────────────────────────────────────────────────────
-      loadMoreBtn.addEventListener("click", () => {
-        const textSpan = loadMoreBtn.querySelector(".btn-text");
-        const spinnerSpan = loadMoreBtn.querySelector(".btn-spinner");
-
-        textSpan.style.display = "none";
-        spinnerSpan.style.display = "inline-block";
-
-        setTimeout(() => {
-          textSpan.style.display = "inline-block";
-          textSpan.textContent = "All Clinical Specialists Loaded";
-          spinnerSpan.style.display = "none";
-          loadMoreBtn.disabled = true;
-          loadMoreBtn.style.opacity = "0.7";
-          loadMoreBtn.style.cursor = "default";
-        }, 1200);
-      });
-
-    });
-  </script>
-
-</Layout>
+  // Profiles
+  const openProfile = (id: string) => (document.getElementById(`profile-${id}`) as HTMLDialogElement | null)?.showModal();
+  document.addEventListener("click", (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLElement>("[data-profile]");
+    if (btn) openProfile(btn.dataset.profile!);
+  });
+  // Deep link from the home page: /doctors#dr-sarah
+  if (location.hash.length > 1) openProfile(decodeURIComponent(location.hash.slice(1)));
+</script>

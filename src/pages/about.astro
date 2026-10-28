@@ -1,1420 +1,1064 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import { Image } from "astro:assets";
+import Layout from "../layouts/Layout.astro";
+import PageHeader from "../components/PageHeader.astro";
+import sidhuHero from "../assets/images/sidhuhero.webp";
+import FeatureBand from "../components/ui/FeatureBand.astro";
+import Icon from "../components/ui/Icon.astro";
+import { site } from "../data/site";
+import { specialities } from "../data/specialities";
+import building from "../assets/images/hero-building.png";
+import exterior from "../assets/images/building-exterior.png";
+import consultation from "../assets/images/consultation.png";
+import missionBg from "../assets/images/missionvisionbg.webp";
 
-// AEO/GEO/SEO high-intent regional keywords:
-// "best multi speciality hospital in Mayiladuthurai", "top doctor specialists in Mayiladuthurai",
-// "cardiologist in Mayiladuthurai", "orthopedic doctor Sirkazhi", "best gynecologist Karaikal", "Chidambaram health clinic"
+const years = new Date().getFullYear() - site.foundingYear;
+
+const highlights = [
+  { icon: "stethoscope", text: `Senior consultants across ${specialities.length} specialities` },
+  { icon: "siren", text: "24/7 emergency, ICU & pharmacy" },
+  { icon: "microscope", text: "Lab & imaging in the same building" },
+] as const;
+
+const pillars = [
+  {
+    icon: "eye",
+    title: "Our vision",
+    text: "To be the most trusted hospital in Tamil Nadu for clinical excellence, ethics and patient outcomes.",
+  },
+  {
+    icon: "heart",
+    title: "Our mission",
+    text: "To deliver advanced diagnosis, treatment and emergency care with warmth, honesty and integrity, close to home.",
+    featured: true,
+  },
+  {
+    icon: "shield",
+    title: "Our promise",
+    text: "Clear explanations, transparent estimates and a care team that treats you like family.",
+  },
+] as const;
+
+const values = [
+  { icon: "heart", title: "Compassion", text: "Every patient is treated with dignity and patience, and every family is kept informed." },
+  { icon: "award", title: "Excellence", text: "Evidence-based protocols and continuous training for doctors, nurses and staff." },
+  { icon: "activity", title: "Innovation", text: "Steady investment in modern theatres, diagnostics and critical-care equipment." },
+  { icon: "shield", title: "Integrity", text: "Honest advice, transparent billing and clear communication at every step." },
+] as const;
+
+const differentiators = [
+  { icon: "users", title: "One coordinated team", text: "Your consultant, nurses, lab and imaging teams work together on a single plan, so nothing falls through the gaps." },
+  { icon: "clock", title: "Shorter waits", text: "Scheduled OPD slots, same-day lab reports for most tests and a dedicated emergency triage desk." },
+  { icon: "wallet", title: "Transparent costs", text: "A written estimate before planned procedures, and help with cashless insurance approvals." },
+  { icon: "languages", title: "Care in your language", text: "Doctors and staff who speak Tamil and English, and explain things in plain words." },
+  { icon: "bed", title: "Comfortable recovery", text: "Clean, calm rooms with space for a family attendant, and dietitian-planned meals." },
+  { icon: "file-text", title: "Continuity after discharge", text: "Clear discharge summaries, follow-up reminders and reports shared on WhatsApp." },
+] as const;
+
+const milestones = [
+  { year: "2010", title: "Foundation", text: "Vairam opens in Mayiladuthurai with general medicine and a diagnostic laboratory." },
+  { year: "2015", title: "Emergency, ICU & cardiology", text: "A 24/7 emergency and ICU unit opens alongside dedicated cardiology services." },
+  { year: "2020", title: "Modular theatres", text: "Surgical infrastructure upgraded to modular standards, adding arthroscopy and neuro critical care." },
+  { year: "2026", title: "Digital care", text: "Online appointments, digital reports and wellness programmes for the wider region." },
+];
+
+// TODO(content): confirm leadership names, titles, photos and the founder's message.
+const leaders = [
+  { name: "Dr. R. Vairamohan", title: "Founder & Chief Executive Officer", text: "Surgeon with over 25 years of experience, guiding Vairam's clinical standards and community outreach." },
+  { name: "Dr. A. Rajesh", title: "Chief Medical Officer", text: "Oversees medical operations, clinical quality and ethics across all departments." },
+  { name: "Mrs. V. Meenakshi", title: "Chief Operating Officer", text: "Leads insurance partnerships, patient experience and hospital operations." },
+];
+const founder = leaders[0];
+
+const quality = [
+  { icon: "shield", title: "Infection control", text: "Hand-hygiene audits, sterilisation logs and HEPA-filtered theatre air." },
+  { icon: "check", title: "Patient safety", text: "Positive patient ID, medication double-checks and fall-prevention protocols." },
+  { icon: "file-text", title: "Clinical audits", text: "Regular case reviews and outcome tracking by our quality committee." },
+  { icon: "droplet", title: "Biomedical waste", text: "Daily segregation and disposal through authorised agencies." },
+] as const;
+
+const payments = [
+  { icon: "wallet", title: "Cashless insurance", text: "Support with pre-authorisation from major insurers and TPAs." },
+  { icon: "building", title: "Government schemes", text: "Treatment under eligible state and central health schemes." },
+  { icon: "users", title: "Corporate tie-ups", text: "Employee health check-ups and treatment for partner organisations." },
+  { icon: "file-text", title: "Clear estimates", text: "Written cost estimates before planned procedures." },
+] as const;
+
+const initials = (n: string) =>
+  n
+    .replace(/^(Dr|Mrs|Mr|Ms)\.\s*/, "")
+    .split(/[\s.]+/)
+    .filter(Boolean)
+    .slice(-2)
+    .map((w) => w[0])
+    .join("");
 ---
 
-<Layout title="About Us | Vairam Multi Speciality Hospital Mayiladuthurai">
+<Layout
+  title="About Us | Vairam Multi Speciality Hospital, Mayiladuthurai"
+  description={`Since ${site.foundingYear}, Vairam Multi Speciality Hospital has delivered specialist, emergency and diagnostic care to families in Mayiladuthurai, Sirkazhi, Karaikal and Kumbakonam.`}
+>
+  <PageHeader
+    crumb="About"
+    eyebrow={`About Vairam · Since ${site.foundingYear}`}
+    title="Trusted Multi Speciality Hospital in Mayiladuthurai"
+    lede={`Founded in ${site.foundingYear} on Pattamangala Street, Vairam Multi Speciality Hospital has given families in Mayiladuthurai, Sirkazhi, Karaikal and Kumbakonam ${years}+ years of specialist care, in-house diagnostics and a 24/7 emergency and ICU team.`}
+    figure={{ src: sidhuHero, alt: "Vairam Hospital specialist doctor" }}
+    stats={[
+      { value: `${years}+`, label: "Years of trusted care" },
+      { value: `${specialities.length}`, label: "Specialities under one roof" },
+      { value: "4", label: "Towns served across the delta" },
+      { value: "24/7", label: "Emergency & ICU" },
+    ]}
+  />
 
-  <!-- Structured schema metadata for local search indexing & answer engine optimization -->
-  <script type="application/ld+json" is:inline>
-    {
-      "@context": "https://schema.org",
-      "@type": "MedicalBusiness",
-      "@id": "https://vairamhospital.com/about#hospital",
-      "name": "Vairam Multi Speciality Hospital",
-      "description": "Vairam Multi Speciality Hospital in Mayiladuthurai offers advanced 24/7 emergency care, cardiology, orthopaedics, and multi-speciality medical services.",
-      "url": "https://vairamhospital.com/about",
-      "logo": "https://vairamhospital.com/images/Logo.png",
-      "foundingDate": "2010",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "Pattamangala St",
-        "addressLocality": "Mayiladuthurai",
-        "addressRegion": "TN",
-        "postalCode": "609001",
-        "addressCountry": "IN"
-      },
-      "areaServed": [
-        {
-          "@type": "AdministrativeArea",
-          "name": "Mayiladuthurai"
-        },
-        {
-          "@type": "AdministrativeArea",
-          "name": "Sirkazhi"
-        },
-        {
-          "@type": "AdministrativeArea",
-          "name": "Karaikal"
-        },
-        {
-          "@type": "AdministrativeArea",
-          "name": "Kumbakonam"
-        },
-        {
-          "@type": "AdministrativeArea",
-          "name": "Chidambaram"
-        }
-      ],
-      "knowsAbout": [
-        "Cardiology",
-        "Orthopedics",
-        "Neurology",
-        "Pediatrics",
-        "General Medicine",
-        "Emergency Care"
-      ]
-    }
-  </script>
-
-  <!-- 1. PAGE HEADER / HERO SECTION -->
-  <section class="about-hero">
-    <div class="hero-glow" aria-hidden="true"></div>
-    <div class="container hero-container text-center reveal reveal-up">
-      <span class="hero-badge">Clinical Excellence Standards</span>
-      <h1 class="hero-title">About Vairam Hospital <br /><span class="text-primary">MediCare Plus Care Standards</span></h1>
-      <p class="hero-subtitle">
-        Pioneering advanced diagnostic treatments, state-of-the-art modular surgeries, and compassionate healthcare in Mayiladuthurai and surrounding regions since 2010.
-      </p>
-    </div>
-  </section>
-
-  <!-- 2. MISSION & VISION / OUR STORY -->
-  <section class="story-section">
-    <div class="container story-grid">
-      <!-- Left Column: Hospital visual -->
-      <div class="story-visual reveal reveal-left">
-        <div class="img-wrapper">
-          <img src="/images/building-exterior.png" alt="Vairam Multi Speciality Hospital Building in Mayiladuthurai" class="story-img" />
-          <div class="visual-tag-badge">
-            <span class="badge-num">15+</span>
-            <span class="badge-lbl">Years of Trusted Care</span>
-          </div>
-        </div>
+  <!-- 1. Story -->
+  <section class="section" aria-labelledby="storyTitle">
+    <div class="container story">
+      <div class="story__visual reveal">
+        <figure class="story__main clip8">
+          <Image src={building} alt={`${site.name} building on Pattamangala Street`} widths={[480, 720, 960]} sizes="(max-width: 960px) 100vw, 45vw" loading="lazy" />
+        </figure>
       </div>
-      
-      <!-- Right Column: Content -->
-      <div class="story-content reveal reveal-right">
-        <span class="section-badge">Our Journey & Foundation</span>
-        <h2 class="section-title">Your Trusted Healthcare Partner in Mayiladuthurai</h2>
-        <p class="section-desc">
-          Vairam Multi Speciality Hospital was established in 2010 to fill the gap for world-class, affordable clinical treatments in Mayiladuthurai, Sirkazhi, Karaikal, and Kumbakonam. Our facility houses advanced diagnostic labs and modern cleanroom operation theatres managed by the best doctor specialists.
+
+      <div class="story__copy">
+        <div class="section-head">
+          <p class="eyebrow">Our story</p>
+          <h2 id="storyTitle">Your trusted healthcare partner in Mayiladuthurai</h2>
+        </div>
+        <p class="story__lead">
+          Vairam Multi Speciality Hospital was founded in {site.foundingYear} to close a simple gap: families in
+          Mayiladuthurai, Sirkazhi, Karaikal and Kumbakonam should not have to travel to a big city for quality specialist care.
         </p>
-        <p class="section-desc">
-          We combine cutting-edge medical technologies with personalized attention to ensure every patient experiences a warm, recovery-focused journey.
+        <p>
+          Today we bring together experienced consultants, a modern laboratory and imaging, modular operation theatres and a
+          24-hour emergency and ICU team, with the warmth of a hospital that knows its community.
         </p>
-
-        <!-- Mission & Vision cards nested inside story -->
-        <div class="mv-cards-wrapper">
-          <div class="mv-card">
-            <div class="mv-icon"><i class="fas fa-eye"></i></div>
-            <div class="mv-info">
-              <h3>Our Vision</h3>
-              <p>To be the leading, most trusted clinical provider in Tamil Nadu known for clinical excellence, ethics, and patient success rates.</p>
-            </div>
-          </div>
-          <div class="mv-card">
-            <div class="mv-icon"><i class="fas fa-bullseye"></i></div>
-            <div class="mv-info">
-              <h3>Our Mission</h3>
-              <p>To deliver advanced diagnostic treatment and emergency medical services using state-of-the-art technologies with warmth, honesty, and integrity.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 3. STATS COUNTER -->
-  <section class="stats-section">
-    <div class="container stats-grid">
-      <div class="stat-item reveal reveal-up" style="transition-delay: 0s;">
-        <div class="stat-icon"><i class="fas fa-hospital-user"></i></div>
-        <span class="stat-num reveal" data-target="15">15+</span>
-        <span class="stat-label">Years of Excellence</span>
-      </div>
-      <div class="stat-item reveal reveal-up" style="transition-delay: 0.1s;">
-        <div class="stat-icon"><i class="fas fa-user-md"></i></div>
-        <span class="stat-num reveal" data-target="50">50+</span>
-        <span class="stat-label">Expert Doctors & Specialists</span>
-      </div>
-      <div class="stat-item reveal reveal-up" style="transition-delay: 0.2s;">
-        <div class="stat-icon"><i class="fas fa-heartbeat"></i></div>
-        <span class="stat-num reveal" data-target="10000">10000+</span>
-        <span class="stat-label">Happy Patient Recoveries</span>
-      </div>
-      <div class="stat-item reveal reveal-up" style="transition-delay: 0.3s;">
-        <div class="stat-icon"><i class="fas fa-award"></i></div>
-        <span class="stat-num reveal" data-target="25">25+</span>
-        <span class="stat-label">Clinical & Quality Awards</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- 4. CORE VALUES -->
-  <section class="values-section">
-    <div class="container">
-      <div class="section-header text-center reveal reveal-up">
-        <span class="section-badge">Core Pillars</span>
-        <h2 class="section-title">The Values That Drive Us</h2>
-        <p class="section-desc">Our commitment to patient-centric treatment is built upon four fundamental principles.</p>
-      </div>
-
-      <div class="values-grid">
-        <!-- Value 1: Compassion -->
-        <div class="value-card reveal reveal-up" style="transition-delay: 0s;">
-          <div class="value-icon"><i class="fas fa-hand-holding-heart"></i></div>
-          <h3>Compassion</h3>
-          <p>Treating every patient with dignity, warmth, and active empathy. We ensure a stress-free environment for families and patients.</p>
-          <div class="card-line"></div>
-        </div>
-        <!-- Value 2: Excellence -->
-        <div class="value-card reveal reveal-up" style="transition-delay: 0.1s;">
-          <div class="value-icon"><i class="fas fa-medal"></i></div>
-          <h3>Excellence</h3>
-          <p>Adhering to strict international clinical protocols, high success rates, and continuous training programs for our staff.</p>
-          <div class="card-line"></div>
-        </div>
-        <!-- Value 3: Innovation -->
-        <div class="value-card reveal reveal-up" style="transition-delay: 0.2s;">
-          <div class="value-icon"><i class="fas fa-lightbulb"></i></div>
-          <h3>Innovation</h3>
-          <p>Equipping our operation theaters, trauma labs, and cardiology departments with state-of-the-art modern tools and methods.</p>
-          <div class="card-line"></div>
-        </div>
-        <!-- Value 4: Integrity -->
-        <div class="value-card reveal reveal-up" style="transition-delay: 0.3s;">
-          <div class="value-icon"><i class="fas fa-shield-alt"></i></div>
-          <h3>Integrity</h3>
-          <p>Maintaining absolute transparency in billing, diagnostics, medical ethics, and cashless corporate policy administration.</p>
-          <div class="card-line"></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 5. TIMELINE / MILESTONES -->
-  <section class="timeline-section">
-    <div class="container">
-      <div class="section-header text-center reveal reveal-up">
-        <span class="section-badge">Our Milestones</span>
-        <h2 class="section-title">Historical Journey & Growth</h2>
-        <p class="section-desc">From our humble beginnings to a leading multi-speciality medical centre in Tamil Nadu.</p>
-      </div>
-
-      <div class="timeline-wrapper">
-        <!-- Line background -->
-        <div class="timeline-line"></div>
-
-        <!-- Milestone 1 -->
-        <div class="timeline-item reveal reveal-left">
-          <div class="timeline-dot"></div>
-          <div class="timeline-content">
-            <span class="timeline-year">2010</span>
-            <h3>Foundation & Launch</h3>
-            <p>Vairam Hospital opens its doors in Mayiladuthurai with comprehensive general medicine and diagnostic laboratory capacities.</p>
-          </div>
-        </div>
-
-        <!-- Milestone 2 -->
-        <div class="timeline-item reveal reveal-right">
-          <div class="timeline-dot"></div>
-          <div class="timeline-content">
-            <span class="timeline-year">2015</span>
-            <h3>Cardiology & Trauma Care Additions</h3>
-            <p>Inaugurated the 24/7 Emergency & ICU Trauma unit, alongside custom senior cardiologist consulting lines for cardiac recovery.</p>
-          </div>
-        </div>
-
-        <!-- Milestone 3 -->
-        <div class="timeline-item reveal reveal-left">
-          <div class="timeline-dot"></div>
-          <div class="timeline-content">
-            <span class="timeline-year">2020</span>
-            <h3>Advanced Modular Operation Theatres</h3>
-            <p>Upgraded surgical infrastructure to modular cleanroom standards, adding arthroscopic orthopedic surgery suites and neurology critical care blocks.</p>
-          </div>
-        </div>
-
-        <!-- Milestone 4 -->
-        <div class="timeline-item reveal reveal-right">
-          <div class="timeline-dot"></div>
-          <div class="timeline-content">
-            <span class="timeline-year">2026</span>
-            <h3>Digital Health Integration</h3>
-            <p>Launched digital health checkups, corporate wellness integrations, and our online patient booking engine to serve Kumbakonam, Sirkazhi, and Karaikal.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 6. LEADERSHIP TEAM -->
-  <section class="leadership-section">
-    <div class="container">
-      <div class="section-header text-center reveal reveal-up">
-        <span class="section-badge">Leadership</span>
-        <h2 class="section-title">Board of Directors & Management</h2>
-        <p class="section-desc">Our hospital operations are guided by experienced clinical administrators and healthcare pioneers.</p>
-      </div>
-
-      <div class="leadership-grid">
-        <!-- CEO -->
-        <article class="leader-card reveal reveal-up" style="transition-delay: 0s;">
-          <div class="leader-image">
-            <img src="/images/consultation.png" alt="Dr. R. Vairamohan, CEO of Vairam Multi Speciality Hospital" />
-            <div class="leader-overlay-role">CEO</div>
-          </div>
-          <div class="leader-info text-center">
-            <h3>Dr. R. Vairamohan</h3>
-            <span class="leader-title">Founder & Chief Executive Officer</span>
-            <p class="leader-desc">Visionary surgeon with over 25 years of experience, steering Vairam Hospital's clinical standards and community outreach projects.</p>
-          </div>
-        </article>
-
-        <!-- CMO -->
-        <article class="leader-card reveal reveal-up" style="transition-delay: 0.15s;">
-          <div class="leader-image">
-            <img src="/images/consultation.png" alt="Dr. A. Rajesh, Chief Medical Officer at Vairam Hospital" />
-            <div class="leader-overlay-role">CMO</div>
-          </div>
-          <div class="leader-info text-center">
-            <h3>Dr. A. Rajesh</h3>
-            <span class="leader-title">Chief Medical Officer & Senior Cardiologist</span>
-            <p class="leader-desc">Oversees medical operations, diagnostic ethics, physician quality compliance, and interventional cardiac treatments.</p>
-          </div>
-        </article>
-
-        <!-- COO -->
-        <article class="leader-card reveal reveal-up" style="transition-delay: 0.3s;">
-          <div class="leader-image">
-            <img src="/images/consultation.png" alt="Mrs. V. Meenakshi, Chief Operating Officer at Vairam Hospital" />
-            <div class="leader-overlay-role">COO</div>
-          </div>
-          <div class="leader-info text-center">
-            <h3>Mrs. V. Meenakshi</h3>
-            <span class="leader-title">Chief Operating Officer</span>
-            <p class="leader-desc">Directs cashless corporate partnerships, public health insurance networks, patient hospitality, and facility operations.</p>
-          </div>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- 7. ACCREDITATIONS & PARTNERSHIPS -->
-  <section class="accreditations-section">
-    <div class="container">
-      <div class="section-header text-center reveal reveal-up">
-        <span class="section-badge">Certifications</span>
-        <h2 class="section-title">Accreditations & Partnerships</h2>
-        <p class="section-desc">We align with strict quality standards to ensure safe, ethical, and high-quality medical operations.</p>
-      </div>
-
-      <div class="accreditations-grid">
-        <div class="accred-item reveal reveal-up" style="transition-delay: 0s;">
-          <div class="accred-icon"><i class="fas fa-shield-alt"></i></div>
-          <h4>JCI Standards</h4>
-          <p>Joint Commission International aligned clinical safety protocols.</p>
-        </div>
-        <div class="accred-item reveal reveal-up" style="transition-delay: 0.1s;">
-          <div class="accred-icon"><i class="fas fa-check-double"></i></div>
-          <h4>ISO 9001:2015</h4>
-          <p>Certified medical facility management quality standards.</p>
-        </div>
-        <div class="accred-item reveal reveal-up" style="transition-delay: 0.2s;">
-          <div class="accred-icon"><i class="fas fa-hand-holding-heart"></i></div>
-          <h4>AHA Partner</h4>
-          <p>American Heart Association compliant training and guidelines.</p>
-        </div>
-        <div class="accred-item reveal reveal-up" style="transition-delay: 0.3s;">
-          <div class="accred-icon"><i class="fas fa-heartbeat"></i></div>
-          <h4>CMS Quality</h4>
-          <p>Adhering to national clinical safety and hospital metrics.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 8. CTA SECTION -->
-  <section class="cta-section">
-    <div class="cta-glow" aria-hidden="true"></div>
-    <div class="container cta-container text-center reveal reveal-up">
-      <h2 class="cta-title">Prioritize Your Health with Mayiladuthurai's Best Doctors</h2>
-      <p class="cta-desc">
-        Connect with our specialist teams today. We provide 24/7 trauma response, cashless corporate treatments, and executive medical checks.
-      </p>
-      <div class="cta-actions">
-        <button id="openBookingBtn" class="btn-primary-blue-large">
-          <i class="far fa-calendar-check"></i> Book Appointment Now
-        </button>
-        <a href="/contact" class="btn-outline-white-large">
-          Contact Support <i class="fas fa-phone-alt"></i>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- 9. APPOINTMENT BOOKING MODAL -->
-  <div class="booking-modal-overlay" id="appointmentModal" aria-hidden="true" role="dialog">
-    <div class="booking-modal-card">
-      <header class="modal-card-header">
-        <h3><i class="far fa-calendar-check"></i> Book Medical Appointment</h3>
-        <button class="close-modal-btn" id="closeBookingBtn" aria-label="Close booking modal"><i class="fas fa-times"></i></button>
-      </header>
-      
-      <form class="modal-booking-form" id="aboutPageBookingForm">
-        <div class="form-group">
-          <label for="modalPatientName">Patient Full Name *</label>
-          <input type="text" id="modalPatientName" required placeholder="e.g. Rajesh Kumar" />
-        </div>
-        
-        <div class="form-group">
-          <label for="modalPatientPhone">Mobile Number *</label>
-          <input type="tel" id="modalPatientPhone" required placeholder="e.g. 93446 44555" pattern="[0-9\s+-]{10,15}" />
-        </div>
-        
-        <div class="form-grid">
-          <div class="form-group">
-            <label for="modalSpeciality">Select Specialty *</label>
-            <select id="modalSpeciality" required>
-              <option value="">-- Choose Department --</option>
-              <option value="Cardiology">Cardiology</option>
-              <option value="Orthopaedics">Orthopaedics</option>
-              <option value="Neurology">Neurology</option>
-              <option value="Paediatrics">Paediatrics</option>
-              <option value="General Medicine">General Medicine</option>
-            </select>
-          </div>
-          
-          <div class="form-group">
-            <label for="modalBookingDate">Appointment Date *</label>
-            <input type="date" id="modalBookingDate" required />
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="modalTimeSlot">Preferred Time Slot *</label>
-          <select id="modalTimeSlot" required>
-            <option value="">-- Select Time Slot --</option>
-            <option value="09:00 AM">09:00 AM - 11:00 AM</option>
-            <option value="11:00 AM">11:00 AM - 01:00 PM</option>
-            <option value="02:00 PM">02:00 PM - 04:00 PM</option>
-            <option value="04:00 PM">04:00 PM - 06:00 PM</option>
-          </select>
-        </div>
-
-        <button type="submit" class="submit-modal-btn">Confirm Schedule Booking</button>
-      </form>
-    </div>
-  </div>
-
-  <style>
-    /* CSS Parser Safety */
-    .styles-init-safety-check {
-      color: inherit;
-    }
-
-    /* Hero styling */
-    .about-hero {
-      padding: 120px 5% 100px;
-      background: #020617; /* Solid color fallback */
-      background: linear-gradient(135deg, #020617 0%, #0f766e 100%);
-      position: relative;
-      overflow: hidden;
-      color: #ffffff;
-    }
-
-    .hero-glow {
-      position: absolute;
-      top: -20%;
-      right: -10%;
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(20, 184, 166, 0.15) 0%, transparent 70%);
-      border-radius: 50%;
-      pointer-events: none;
-    }
-
-    .hero-container {
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    .hero-badge {
-      display: inline-block;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      color: #14b8a6; /* explicit primary-light hex */
-      font-size: 0.85rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      padding: 8px 20px;
-      border-radius: 50px;
-      margin-bottom: 25px;
-    }
-
-    .hero-title {
-      font-size: clamp(2.4rem, 5vw, 4rem);
-      font-weight: 800;
-      line-height: 1.2;
-      letter-spacing: -0.02em;
-      margin-bottom: 25px;
-      color: #ffffff; /* explicit white heading */
-    }
-
-    .hero-title .text-primary {
-      background: linear-gradient(120deg, #14b8a6 0%, #38bdf8 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .hero-subtitle {
-      font-size: clamp(1.05rem, 2vw, 1.3rem);
-      line-height: 1.7;
-      color: rgba(255, 255, 255, 0.85); /* explicit white subtitle */
-      font-weight: 400;
-    }
-
-    /* Story Section */
-    .story-section {
-      padding: 100px 5%;
-      background: var(--white);
-    }
-
-    .story-grid {
-      display: grid;
-      grid-template-columns: 1fr 1.15fr;
-      gap: 80px;
-      align-items: center;
-    }
-
-    .story-visual {
-      position: relative;
-    }
-
-    .story-visual .img-wrapper {
-      position: relative;
-      padding: 20px;
-      max-width: 500px;
-      margin: 0 auto;
-    }
-
-    .story-img {
-      width: 100%;
-      border-radius: 32px;
-      box-shadow: var(--shadow-premium);
-      border: 6px solid white;
-      display: block;
-    }
-
-    .visual-tag-badge {
-      position: absolute;
-      bottom: -15px;
-      right: 0px;
-      background: var(--primary);
-      color: white;
-      padding: 25px 30px;
-      border-radius: 24px;
-      box-shadow: 0 20px 40px -10px rgba(13, 148, 136, 0.4);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      animation: float 4s ease-in-out infinite;
-      z-index: 5;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
-
-    .badge-num {
-      font-size: 2.2rem;
-      font-weight: 800;
-      line-height: 1;
-    }
-
-    .badge-lbl {
-      font-size: 0.8rem;
-      font-weight: 600;
-      opacity: 0.95;
-      text-align: center;
-      margin-top: 4px;
-    }
-
-    .section-badge {
-      color: var(--primary-dark);
-      font-size: 0.9rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      margin-bottom: 18px;
-      display: inline-block;
-      position: relative;
-      padding-left: 24px;
-    }
-
-    .section-badge::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 14px;
-      height: 3px;
-      background: var(--primary);
-      border-radius: 2px;
-    }
-
-    .section-title {
-      font-size: clamp(2rem, 3.5vw, 2.75rem);
-      font-weight: 800;
-      line-height: 1.2;
-      color: var(--secondary);
-      margin-bottom: 25px;
-      letter-spacing: -0.02em;
-    }
-
-    .section-desc {
-      font-size: 1.05rem;
-      line-height: 1.8;
-      color: var(--text-muted);
-      margin-bottom: 25px;
-    }
-
-    /* Mission Vision cards nested styling */
-    .mv-cards-wrapper {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      margin-top: 35px;
-    }
-
-    .mv-card {
-      display: flex;
-      gap: 20px;
-      background: #f4fbfc;
-      border: 1px solid rgba(13, 148, 136, 0.06);
-      padding: 24px;
-      border-radius: 20px;
-      transition: var(--transition);
-    }
-
-    .mv-card:hover {
-      background: white;
-      border-color: rgba(13, 148, 136, 0.2);
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-premium);
-    }
-
-    .mv-icon {
-      width: 50px;
-      height: 50px;
-      border-radius: 14px;
-      background: rgba(13, 148, 136, 0.08);
-      color: var(--primary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-      flex-shrink: 0;
-      transition: var(--transition);
-    }
-
-    .mv-card:hover .mv-icon {
-      background: var(--primary);
-      color: white;
-    }
-
-    .mv-info h3 {
-      font-size: 1.15rem;
-      font-weight: 800;
-      color: var(--secondary);
-      margin-bottom: 8px;
-    }
-
-    .mv-info p {
-      font-size: 0.95rem;
-      line-height: 1.6;
-      color: var(--text-muted);
-      margin-bottom: 0;
-    }
-
-    /* 3. STATS SECTION */
-    .stats-section {
-      padding: 80px 5%;
-      background: linear-gradient(180deg, #f0fbfc 0%, var(--white) 100%);
-      position: relative;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 40px;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    .stat-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      background: white;
-      padding: 40px 30px;
-      border-radius: 24px;
-      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.03);
-      border: 1px solid rgba(13, 148, 136, 0.05);
-      transition: var(--transition);
-    }
-
-    .stat-item:hover {
-      transform: translateY(-8px);
-      box-shadow: var(--shadow-premium);
-      border-color: rgba(13, 148, 136, 0.2);
-    }
-
-    .stat-icon {
-      width: 60px;
-      height: 60px;
-      border-radius: 18px;
-      background: rgba(13, 148, 136, 0.08);
-      color: var(--primary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.6rem;
-      margin-bottom: 20px;
-      transition: var(--transition);
-    }
-
-    .stat-item:hover .stat-icon {
-      background: var(--primary);
-      color: white;
-      transform: scale(1.05);
-    }
-
-    .stat-num {
-      font-size: 2.2rem;
-      font-weight: 800;
-      color: var(--secondary);
-      line-height: 1.1;
-      margin-bottom: 8px;
-    }
-
-    .stat-num.reveal {
-      opacity: 0;
-      transition: opacity 0.5s ease;
-    }
-
-    .stat-num.reveal.active {
-      opacity: 1;
-    }
-
-    .stat-label {
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: var(--text-muted);
-    }
-
-    /* 4. CORE VALUES SECTION */
-    .values-section {
-      padding: 100px 5% 80px;
-      background: var(--white);
-    }
-
-    .section-header {
-      max-width: 800px;
-      margin: 0 auto 60px;
-      text-align: center;
-    }
-
-    .values-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 30px;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    .value-card {
-      background: var(--white);
-      border: 1px solid rgba(13, 148, 136, 0.06);
-      padding: 40px 30px;
-      border-radius: 28px;
-      box-shadow: 0 15px 35px -15px rgba(0, 0, 0, 0.03);
-      position: relative;
-      overflow: hidden;
-      transition: var(--transition);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .value-card:hover {
-      transform: translateY(-8px);
-      border-color: rgba(13, 148, 136, 0.25);
-      box-shadow: 0 25px 50px -20px rgba(13, 148, 136, 0.1);
-    }
-
-    .value-icon {
-      width: 60px;
-      height: 60px;
-      border-radius: 18px;
-      background: rgba(13, 148, 136, 0.08);
-      color: var(--primary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.6rem;
-      margin-bottom: 25px;
-      transition: var(--transition);
-    }
-
-    .value-card:hover .value-icon {
-      background: var(--primary);
-      color: white;
-      transform: scale(1.05) rotate(5deg);
-    }
-
-    .value-card h3 {
-      font-size: 1.25rem;
-      font-weight: 800;
-      color: var(--secondary);
-      margin-bottom: 15px;
-    }
-
-    .value-card p {
-      font-size: 0.92rem;
-      line-height: 1.6;
-      color: var(--text-muted);
-    }
-
-    .card-line {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 0;
-      height: 4px;
-      background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
-      transition: var(--transition);
-    }
-
-    .value-card:hover .card-line {
-      width: 100%;
-    }
-
-    /* 5. TIMELINE / MILESTONES */
-    .timeline-section {
-      padding: 100px 5%;
-      background: linear-gradient(180deg, var(--white) 0%, #f0fbfc 100%);
-    }
-
-    .timeline-wrapper {
-      max-width: 900px;
-      margin: 60px auto 0;
-      position: relative;
-      padding: 20px 0;
-    }
-
-    .timeline-line {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 4px;
-      background: rgba(13, 148, 136, 0.15);
-      border-radius: 2px;
-    }
-
-    .timeline-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: 100%;
-      margin-bottom: 50px;
-      position: relative;
-    }
-
-    .timeline-item:last-child {
-      margin-bottom: 0;
-    }
-
-    .timeline-dot {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: var(--primary);
-      border: 4px solid white;
-      box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.2);
-      z-index: 5;
-      transition: var(--transition);
-    }
-
-    .timeline-item:hover .timeline-dot {
-      background: var(--secondary);
-      box-shadow: 0 0 0 6px rgba(2, 6, 23, 0.15);
-    }
-
-    .timeline-content {
-      width: 45%;
-      background: white;
-      border: 1px solid rgba(13, 148, 136, 0.06);
-      padding: 30px;
-      border-radius: 24px;
-      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.02);
-      transition: var(--transition);
-      position: relative;
-    }
-
-    .timeline-item:hover .timeline-content {
-      border-color: rgba(13, 148, 136, 0.2);
-      box-shadow: var(--shadow-premium);
-      transform: translateY(-3px);
-    }
-
-    .timeline-year {
-      display: inline-block;
-      background: rgba(13, 148, 136, 0.08);
-      color: var(--primary-dark);
-      font-size: 0.85rem;
-      font-weight: 800;
-      padding: 4px 14px;
-      border-radius: 50px;
-      margin-bottom: 12px;
-    }
-
-    .timeline-content h3 {
-      font-size: 1.2rem;
-      font-weight: 800;
-      color: var(--secondary);
-      margin-bottom: 10px;
-    }
-
-    .timeline-content p {
-      font-size: 0.9rem;
-      line-height: 1.6;
-      color: var(--text-muted);
-      margin-bottom: 0;
-    }
-
-    /* Float timeline contents left and right alternately */
-    .timeline-item:nth-child(even) {
-      flex-direction: row-reverse;
-    }
-
-    /* 6. LEADERSHIP SECTION */
-    .leadership-section {
-      padding: 100px 5%;
-      background: var(--white);
-    }
-
-    .leadership-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 40px;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    .leader-card {
-      background: var(--white);
-      border: 1px solid rgba(13, 148, 136, 0.08);
-      border-radius: 28px;
-      box-shadow: 0 15px 35px -15px rgba(0, 0, 0, 0.03);
-      overflow: hidden;
-      transition: var(--transition);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .leader-card:hover {
-      transform: translateY(-8px);
-      border-color: rgba(13, 148, 136, 0.25);
-      box-shadow: 0 25px 50px -20px rgba(13, 148, 136, 0.12);
-    }
-
-    .leader-image {
-      height: 300px;
-      position: relative;
-      overflow: hidden;
-      background: #f0f7f7;
-    }
-
-    .leader-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .leader-card:hover .leader-image img {
-      transform: scale(1.05);
-    }
-
-    .leader-overlay-role {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(4px);
-      padding: 6px 16px;
-      border-radius: 50px;
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: var(--primary-dark);
-      border: 1px solid rgba(13, 148, 136, 0.1);
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
-    }
-
-    .leader-info {
-      padding: 30px;
-    }
-
-    .leader-info h3 {
-      font-size: 1.3rem;
-      font-weight: 800;
-      color: var(--secondary);
-      margin-bottom: 6px;
-    }
-
-    .leader-title {
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: var(--primary);
-      display: block;
-      margin-bottom: 15px;
-    }
-
-    .leader-desc {
-      font-size: 0.9rem;
-      line-height: 1.6;
-      color: var(--text-muted);
-      margin-bottom: 0;
-    }
-
-    /* 7. ACCREDITATIONS & PARTNERSHIPS */
-    .accreditations-section {
-      padding: 100px 5% 80px;
-      background: linear-gradient(180deg, var(--white) 0%, #f0fbfc 100%);
-    }
-
-    .accreditations-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 30px;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    .accred-item {
-      background: white;
-      padding: 40px 30px;
-      border-radius: 24px;
-      text-align: center;
-      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.03);
-      border: 1px solid rgba(13, 148, 136, 0.05);
-      transition: var(--transition);
-    }
-
-    .accred-item:hover {
-      transform: translateY(-5px);
-      box-shadow: var(--shadow-premium);
-      border-color: rgba(13, 148, 136, 0.2);
-    }
-
-    .accred-icon {
-      width: 50px;
-      height: 50px;
-      border-radius: 14px;
-      background: rgba(13, 148, 136, 0.08);
-      color: var(--primary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.3rem;
-      margin: 0 auto 20px;
-      transition: var(--transition);
-    }
-
-    .accred-item:hover .accred-icon {
-      background: var(--primary);
-      color: white;
-      transform: scale(1.05);
-    }
-
-    .accred-item h4 {
-      font-size: 1.1rem;
-      font-weight: 800;
-      color: var(--secondary);
-      margin-bottom: 10px;
-    }
-
-    .accred-item p {
-      font-size: 0.85rem;
-      line-height: 1.6;
-      color: var(--text-muted);
-      margin-bottom: 0;
-    }
-
-    /* 8. CTA SECTION */
-    .cta-section {
-      padding: 100px 5%;
-      background: linear-gradient(135deg, var(--secondary) 0%, var(--primary-dark) 100%);
-      position: relative;
-      overflow: hidden;
-      color: white;
-    }
-
-    .cta-glow {
-      position: absolute;
-      bottom: -20%;
-      left: -10%;
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, rgba(20, 184, 166, 0.15) 0%, transparent 70%);
-      border-radius: 50%;
-      pointer-events: none;
-    }
-
-    .cta-container {
-      max-width: 900px;
-      margin: 0 auto;
-      position: relative;
-      z-index: 2;
-    }
-
-    .cta-title {
-      font-size: clamp(1.8rem, 3vw, 2.5rem);
-      font-weight: 800;
-      line-height: 1.3;
-      margin-bottom: 20px;
-    }
-
-    .cta-desc {
-      font-size: 1.1rem;
-      line-height: 1.7;
-      color: rgba(255, 255, 255, 0.8);
-      margin-bottom: 40px;
-    }
-
-    .cta-actions {
-      display: flex;
-      gap: 20px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .btn-primary-blue-large {
-      background: var(--primary);
-      color: white;
-      border: none;
-      padding: 16px 36px;
-      border-radius: 16px;
-      font-weight: 700;
-      font-size: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      cursor: pointer;
-      box-shadow: 0 10px 20px -10px rgba(13, 148, 136, 0.5);
-      transition: var(--transition);
-    }
-
-    .btn-primary-blue-large:hover {
-      background: var(--primary-dark);
-      transform: translateY(-2px);
-      box-shadow: 0 15px 30px -12px rgba(13, 148, 136, 0.6);
-    }
-
-    .btn-outline-white-large {
-      background: transparent;
-      color: white;
-      border: 1.5px solid rgba(255, 255, 255, 0.25);
-      padding: 16px 36px;
-      border-radius: 16px;
-      font-weight: 700;
-      font-size: 1rem;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      transition: var(--transition);
-    }
-
-    .btn-outline-white-large:hover {
-      background: rgba(255, 255, 255, 0.05);
-      border-color: white;
-      transform: translateY(-2px);
-    }
-
-    /* 9. APPOINTMENT BOOKING MODAL */
-    .booking-modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(2, 6, 23, 0.5);
-      backdrop-filter: blur(8px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 10000;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .booking-modal-overlay.active {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .booking-modal-card {
-      background: white;
-      width: 100%;
-      max-width: 550px;
-      border-radius: 28px;
-      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.15);
-      border: 1px solid rgba(13, 148, 136, 0.1);
-      overflow: hidden;
-      transform: translateY(30px) scale(0.95);
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .booking-modal-overlay.active .booking-modal-card {
-      transform: translateY(0) scale(1);
-    }
-
-    .modal-card-header {
-      background: linear-gradient(135deg, var(--secondary) 0%, var(--primary-dark) 100%);
-      padding: 25px 30px;
-      color: white;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .modal-card-header h3 {
-      font-size: 1.2rem;
-      font-weight: 800;
-      margin: 0;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .close-modal-btn {
-      background: none;
-      border: none;
-      color: rgba(255, 255, 255, 0.8);
-      font-size: 1.2rem;
-      cursor: pointer;
-      padding: 5px;
-      transition: var(--transition);
-    }
-
-    .close-modal-btn:hover {
-      color: white;
-      transform: rotate(90deg);
-    }
-
-    .modal-booking-form {
-      padding: 30px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .form-group label {
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--secondary);
-    }
-
-    .form-group input, .form-group select {
-      padding: 12px 16px;
-      border: 1.5px solid #e2e8f0;
-      border-radius: 12px;
-      font-family: inherit;
-      font-size: 0.95rem;
-      outline: none;
-      transition: border 0.3s;
-      background: #f8fafc;
-    }
-
-    .form-group input:focus, .form-group select:focus {
-      border-color: var(--primary);
-      background: white;
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-
-    .submit-modal-btn {
-      background: var(--primary);
-      color: white;
-      border: none;
-      padding: 14px;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: var(--transition);
-      margin-top: 10px;
-      box-shadow: 0 8px 16px -4px rgba(13, 148, 136, 0.3);
-    }
-
-    .submit-modal-btn:hover {
-      background: var(--primary-dark);
-      box-shadow: 0 12px 24px -6px rgba(13, 148, 136, 0.4);
-    }
-
-    /* Responsive layouts */
-    @media (max-width: 1024px) {
-      .story-grid {
-        gap: 40px;
-      }
-    }
-
-    @media (max-width: 991px) {
-      .about-hero {
-        padding: 100px 5% 80px;
-      }
-      .story-section, .values-section, .timeline-section, .leadership-section, .accreditations-section, .cta-section {
-        padding: 80px 5%;
-      }
-      .story-grid {
-        grid-template-columns: 1fr;
-        gap: 50px;
-      }
-      .story-visual .img-wrapper {
-        max-width: 440px;
-      }
-      .timeline-line {
-        left: 20px;
-      }
-      .timeline-dot {
-        left: 20px;
-      }
-      .timeline-item {
-        flex-direction: row !important;
-        margin-bottom: 40px;
-      }
-      .timeline-content {
-        width: calc(100% - 60px);
-        margin-left: 50px;
-      }
-    }
-
-    @media (max-width: 576px) {
-      .form-grid {
-        grid-template-columns: 1fr;
-        gap: 15px;
-      }
-      .cta-actions {
-        flex-direction: column;
-        width: 100%;
-      }
-      .btn-primary-blue-large, .btn-outline-white-large {
-        width: 100%;
-        justify-content: center;
-      }
-      .booking-modal-card {
-        max-width: 90%;
-      }
-      .modal-booking-form {
-        padding: 20px;
-        gap: 15px;
-      }
-    }
-  </style>
-
-  <!-- Interactive script for modal handles & booking submissions -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const openModalBtn = document.getElementById("openBookingBtn");
-      const closeModalBtn = document.getElementById("closeBookingBtn");
-      const modalOverlay = document.getElementById("appointmentModal");
-      const form = document.getElementById("aboutPageBookingForm");
-
-      // Open Modal
-      openModalBtn?.addEventListener("click", () => {
-        if (modalOverlay) {
-          modalOverlay.classList.add("active");
-          modalOverlay.setAttribute("aria-hidden", "false");
-          
-          // Disable background scroll
-          document.body.style.overflow = "hidden";
-          
-          // Setup default date to tomorrow
-          const dateInput = document.getElementById("modalBookingDate") as HTMLInputElement | null;
-          if (dateInput) {
-            const tomorrow = new Date();
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            dateInput.min = new Date().toISOString().split("T")[0];
-            dateInput.value = tomorrow.toISOString().split("T")[0];
+        <ul role="list" class="story__highlights">
+          {
+            highlights.map((h) => (
+              <li>
+                <span class="story__hl-icon"><Icon name={h.icon} size={20} /></span>
+                {h.text}
+              </li>
+            ))
           }
+        </ul>
+        <div class="story__actions">
+          <a href="/services" class="btn">Explore specialities <Icon name="arrow-right" /></a>
+          <a href="/doctors" class="btn btn--outline">Meet our doctors</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- 3. Vision / Mission / Promise -->
+  <section class="section pillars-section" aria-labelledby="pillarsTitle" style={`background-image: url("${missionBg.src}")`}>
+    <div class="container">
+      <div class="section-head section-head--center">
+        <p class="eyebrow">Purpose</p>
+        <h2 id="pillarsTitle">What drives us every day</h2>
+      </div>
+      <ul role="list" class="pillars">
+        {
+          pillars.map((p) => (
+            <li class:list={["pillar lift reveal", { "pillar--featured": "featured" in p && p.featured }]}>
+              <span class="icon-tile pillar__icon"><Icon name={p.icon} size={26} /></span>
+              <h3>{p.title}</h3>
+              <p>{p.text}</p>
+            </li>
+          ))
         }
-      });
+      </ul>
+    </div>
+  </section>
 
-      // Close Modal Function
-      const closeModal = () => {
-        if (modalOverlay) {
-          modalOverlay.classList.remove("active");
-          modalOverlay.setAttribute("aria-hidden", "true");
-          document.body.style.overflow = "";
+  <!-- 4. Founder's message -->
+  <section class="section" aria-labelledby="msgTitle">
+    <div class="container">
+      <div class="msg reveal">
+        <div class="msg__side">
+          <span class="msg__avatar" aria-hidden="true">{initials(founder.name)}</span>
+          <p class="msg__name">{founder.name}</p>
+          <p class="msg__role">{founder.title}</p>
+        </div>
+        <div class="msg__body">
+          <p class="eyebrow eyebrow--light" id="msgTitle">A message from our founder</p>
+          <Icon name="quote" size={40} class="msg__mark" />
+          <blockquote>
+            <p>
+              When we opened our doors in {site.foundingYear}, we made one promise: no family in the delta should have to
+              leave home to get good specialist care. Every doctor, nurse and staff member at Vairam carries that promise
+              forward. We listen first, explain clearly, and treat every patient the way we would want our own parents treated.
+            </p>
+          </blockquote>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Values -->
+  <section class="section section--white" aria-labelledby="valTitle">
+    <div class="container">
+      <div class="section-head section-head--split">
+        <div class="section-head" style="margin:0">
+          <p class="eyebrow">What we stand for</p>
+          <h2 id="valTitle">The values that guide us</h2>
+        </div>
+        <p class="lede">Four principles shape every decision, from how we design a ward to how we speak with a worried family.</p>
+      </div>
+      <ol role="list" class="values">
+        {
+          values.map((v, i) => (
+            <li class="value lift reveal">
+              <div class="value__top">
+                <span class="icon-tile"><Icon name={v.icon} size={24} /></span>
+                <span class="value__num">{String(i + 1).padStart(2, "0")}</span>
+              </div>
+              <h3>{v.title}</h3>
+              <p>{v.text}</p>
+            </li>
+          ))
         }
-      };
+      </ol>
+    </div>
+  </section>
 
-      closeModalBtn?.addEventListener("click", closeModal);
-      
-      // Close on clicking overlay background
-      modalOverlay?.addEventListener("click", (e) => {
-        if (e.target === modalOverlay) {
-          closeModal();
+  <!-- 6. What sets us apart -->
+  <section class="section section--paper2" aria-labelledby="diffTitle">
+    <div class="container diff">
+      <div class="diff__intro">
+        <div class="section-head">
+          <p class="eyebrow">The Vairam difference</p>
+          <h2 id="diffTitle">Why families choose us</h2>
+          <p class="lede">Good medicine is only part of it. We work just as hard on how it feels to be cared for.</p>
+        </div>
+        <figure class="diff__img clip8">
+          <Image src={consultation} alt="Doctor explaining a treatment plan to a patient" widths={[480, 720]} sizes="(max-width: 960px) 100vw, 35vw" loading="lazy" />
+        </figure>
+      </div>
+      <ul role="list" class="diff__grid">
+        {
+          differentiators.map((d) => (
+            <li class="diff__item reveal">
+              <span class="icon-tile"><Icon name={d.icon} size={22} /></span>
+              <div>
+                <h3>{d.title}</h3>
+                <p>{d.text}</p>
+              </div>
+            </li>
+          ))
         }
-      });
+      </ul>
+    </div>
+  </section>
 
-      // Close on Escape key
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && modalOverlay?.classList.contains("active")) {
-          closeModal();
+  <!-- 7. Milestones -->
+  <section class="section section--white" aria-labelledby="tlTitle">
+    <div class="container">
+      <div class="section-head section-head--center">
+        <p class="eyebrow">Milestones</p>
+        <h2 id="tlTitle">How we have grown</h2>
+      </div>
+      <ol role="list" class="tl">
+        {
+          milestones.map((m) => (
+            <li class="tl__item reveal">
+              <span class="tl__year">{m.year}</span>
+              <span class="tl__dot" aria-hidden="true" />
+              <div class="tl__card">
+                <h3>{m.title}</h3>
+                <p>{m.text}</p>
+              </div>
+            </li>
+          ))
         }
-      });
+      </ol>
+    </div>
+  </section>
 
-      // Form Submit trigger to WhatsApp
-      form?.addEventListener("submit", (e) => {
-        e.preventDefault();
-        
-        const name = (document.getElementById("modalPatientName") as HTMLInputElement | null)?.value || "";
-        const phone = (document.getElementById("modalPatientPhone") as HTMLInputElement | null)?.value || "";
-        const dept = (document.getElementById("modalSpeciality") as HTMLSelectElement | null)?.value || "";
-        const date = (document.getElementById("modalBookingDate") as HTMLInputElement | null)?.value || "";
-        const slot = (document.getElementById("modalTimeSlot") as HTMLSelectElement | null)?.value || "";
+  <!-- Commitment band -->
+  <FeatureBand
+    eyebrow="Our commitment"
+    title="Healthcare built on trust, ethics and community"
+    text="For more than a decade, families across the delta have trusted Vairam. These are the promises we keep to every one of them."
+    items={[
+      { icon: "shield", title: "Ethical medicine", text: "Only the tests and treatments you need, explained honestly before we begin." },
+      { icon: "award", title: "Safety first", text: "Strict infection control, medication checks and regular clinical audits." },
+      { icon: "wallet", title: "Affordable excellence", text: "Specialist care at fair, transparent prices, with insurance support." },
+      { icon: "users", title: "Rooted in community", text: "A hospital for local families, staffed by people who share your language." },
+    ]}
+    cta={{ label: "Meet our doctors", href: "/doctors" }}
+  />
 
-        if (!name || !phone || !dept || !date || !slot) {
-          alert("Please fill in all required fields.");
-          return;
+  <!-- 8. Specialities overview -->
+  <section class="section section--tint" aria-labelledby="deptTitle">
+    <div class="container depts">
+      <div class="section-head" style="margin:0">
+        <p class="eyebrow">Departments</p>
+        <h2 id="deptTitle">{specialities.length} specialities, one roof</h2>
+        <p class="lede">From a first consultation to surgery and rehabilitation, everything you need is a short walk away.</p>
+        <a href="/services" class="link-arrow">View all specialities <Icon name="arrow-right" /></a>
+      </div>
+      <ul role="list" class="depts__list">
+        {
+          specialities.map((s) => (
+            <li class="reveal">
+              <a href={`/services/${s.id}`} class:list={["dept", { "dept--alert": s.id === "emergency" }]}>
+                <span class="dept__icon"><Icon name={s.icon} size={22} /></span>
+                <span>
+                  <strong>{s.short}</strong>
+                  <small>{s.sub}</small>
+                </span>
+              </a>
+            </li>
+          ))
         }
+      </ul>
+    </div>
+  </section>
 
-        const token = "VAH-AB-" + Math.floor(1000 + Math.random() * 9000);
-        const whatsappMsg = `*Appointment Request - Vairam Hospital*\n\n*Token:* ${token}\n*Patient:* ${name}\n*Dept:* ${dept}\n*Schedule:* ${date} at ${slot}\n*Phone:* ${phone}\n*Origin:* About Page Modal`;
-        const encodedMsg = encodeURIComponent(whatsappMsg);
-        const whatsappLink = `https://wa.me/919344644555?text=${encodedMsg}`;
+  <!-- 9. Leadership -->
+  <section class="section section--white" aria-labelledby="leadTitle">
+    <div class="container">
+      <div class="section-head section-head--center">
+        <p class="eyebrow">Leadership</p>
+        <h2 id="leadTitle">The people behind Vairam</h2>
+        <p class="lede">Experienced clinicians and administrators who keep patient care at the centre of every decision.</p>
+      </div>
+      <ul role="list" class="leaders">
+        {
+          leaders.map((l) => (
+            <li class="leader lift reveal">
+              <div class="leader__head">
+                <span class="leader__avatar" aria-hidden="true">{initials(l.name)}</span>
+              </div>
+              <div class="leader__body">
+                <h3>{l.name}</h3>
+                <p class="leader__title">{l.title}</p>
+                <p>{l.text}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
 
-        // Close modal & open WhatsApp link
-        closeModal();
-        alert(`Booking request generated! Token: ${token}. Redirecting to WhatsApp for final confirmation.`);
-        window.open(whatsappLink, "_blank");
-      });
-    });
-  </script>
+  <!-- 10. Quality & safety -->
+  <section class="section section--paper2" aria-labelledby="qTitle">
+    <div class="container quality">
+      <div>
+        <div class="section-head">
+          <p class="eyebrow">Quality & safety</p>
+          <h2 id="qTitle">Safe care is not optional</h2>
+          <p class="lede">
+            Our quality committee reviews protocols, audits and patient feedback regularly, so standards keep rising year after year.
+          </p>
+        </div>
+        <figure class="quality__img clip8">
+          <Image src={exterior} alt="Vairam hospital entrance" widths={[480, 720]} sizes="(max-width: 960px) 100vw, 40vw" loading="lazy" />
+        </figure>
+      </div>
+      <ul role="list" class="quality__grid">
+        {
+          quality.map((q) => (
+            <li class="quality__item lift reveal">
+              <span class="icon-tile"><Icon name={q.icon} size={22} /></span>
+              <h3>{q.title}</h3>
+              <p>{q.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- 11. Insurance & payments -->
+  <section class="section section--white" aria-labelledby="payTitle">
+    <div class="container">
+      <div class="section-head section-head--center">
+        <p class="eyebrow">Insurance & payments</p>
+        <h2 id="payTitle">Quality care, without financial stress</h2>
+      </div>
+      <ul role="list" class="pay">
+        {
+          payments.map((p) => (
+            <li class="pay__item reveal">
+              <span class="icon-tile"><Icon name={p.icon} size={22} /></span>
+              <h3>{p.title}</h3>
+              <p>{p.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
 </Layout>
+
+<style>
+  /* Shared 8-corner clip for photos */
+  .clip8 {
+    --c: 24px;
+    position: relative;
+    margin: 0;
+    filter: drop-shadow(0 16px 36px rgb(10 31 68 / 0.14));
+  }
+  .clip8 :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    clip-path: polygon(
+      var(--c) 0,
+      calc(100% - var(--c)) 0,
+      100% var(--c),
+      100% calc(100% - var(--c)),
+      calc(100% - var(--c)) 100%,
+      var(--c) 100%,
+      0 calc(100% - var(--c)),
+      0 var(--c)
+    );
+  }
+  .eyebrow--light {
+    color: var(--teal-100);
+  }
+
+  /* 1. Story */
+  .story {
+    display: grid;
+    grid-template-columns: 1fr 1.05fr;
+    gap: clamp(2.5rem, 6vw, 5.5rem);
+    align-items: center;
+  }
+  .story__visual {
+    position: relative;
+    padding: 0;
+  }
+  .story__main {
+    aspect-ratio: 4 / 3.4;
+  }
+  .story__copy > p {
+    color: var(--ink-2);
+    margin-bottom: var(--s-4);
+    max-width: 62ch;
+  }
+  .story__lead {
+    font-size: var(--fs-lg);
+    color: var(--navy-900) !important;
+    font-weight: 500;
+  }
+  .story__highlights {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    gap: var(--s-2);
+    margin: var(--s-6) 0;
+    padding: var(--s-3);
+    border-radius: 20px;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.98) 0%, rgba(243, 247, 254, 0.9) 100%);
+    border: 1px solid rgba(14, 31, 68, 0.08);
+    box-shadow: 
+      0 12px 32px -8px rgba(10, 31, 68, 0.07),
+      0 4px 12px rgba(20, 165, 151, 0.05);
+  }
+  .story__highlights li {
+    display: flex;
+    align-items: center;
+    gap: var(--s-4);
+    padding: 10px 14px;
+    border-radius: 14px;
+    font-weight: 600;
+    font-size: 0.96875rem;
+    color: var(--navy-900);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                background 0.35s ease,
+                box-shadow 0.35s ease;
+  }
+  .story__highlights li:hover {
+    transform: translateX(6px);
+    background: var(--white);
+    box-shadow: 
+      0 8px 24px -6px rgba(10, 31, 68, 0.08),
+      0 0 0 1px rgba(20, 165, 151, 0.15);
+  }
+  .story__hl-icon {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    flex: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(20, 165, 151, 0.12) 0%, rgba(27, 88, 184, 0.08) 100%);
+    color: var(--teal-600);
+    border: 1px solid rgba(20, 165, 151, 0.2);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+                background 0.35s ease,
+                color 0.35s ease,
+                box-shadow 0.35s ease;
+  }
+  .story__highlights li:hover .story__hl-icon {
+    transform: scale(1.1) rotate(3deg);
+    background: linear-gradient(135deg, var(--teal-500) 0%, var(--blue-600) 100%);
+    color: var(--white);
+    border-color: transparent;
+    box-shadow: 0 6px 16px -3px rgba(20, 165, 151, 0.4);
+  }
+  .story__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-3);
+  }
+
+  /* 3. Pillars */
+  .pillars-section {
+    background-color: var(--blue-50);
+    background-position: right center;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--s-5);
+  }
+  .pillar {
+    display: grid;
+    align-content: start;
+    gap: var(--s-3);
+    padding: var(--s-7) var(--s-6);
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+  }
+  .pillar__icon {
+    margin-bottom: var(--s-2);
+  }
+  .pillar h3 {
+    font-size: 1.375rem;
+  }
+  .pillar p {
+    color: var(--ink-muted);
+  }
+  .pillar--featured {
+    background: var(--navy-900);
+    border-color: var(--navy-900);
+    transform: translateY(-12px);
+  }
+  .pillar--featured h3 {
+    color: var(--white);
+  }
+  .pillar--featured p {
+    color: rgb(255 255 255 / 0.78);
+  }
+  .pillar--featured .icon-tile {
+    background: var(--teal-500);
+    color: var(--white);
+  }
+  .pillar--featured:hover {
+    transform: translateY(-16px);
+  }
+
+  /* 4. Founder message */
+  .msg {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    border-radius: var(--r-lg);
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Cpath d='M22 16h4v6h6v4h-6v6h-4v-6h-6v-4h6z' fill='%23ffffff' fill-opacity='0.04'/%3E%3C/svg%3E"),
+      linear-gradient(120deg, var(--navy-950), var(--navy-900) 60%, #0d3266);
+    color: var(--white);
+    box-shadow: var(--shadow-3);
+  }
+  .msg__side {
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    gap: var(--s-2);
+    padding: var(--s-8) var(--s-6);
+    text-align: center;
+    background: rgb(255 255 255 / 0.04);
+    border-right: 1px solid rgb(255 255 255 / 0.1);
+  }
+  .msg__avatar {
+    display: grid;
+    place-items: center;
+    width: 112px;
+    height: 112px;
+    margin-bottom: var(--s-3);
+    border-radius: 50%;
+    background: var(--blue-600);
+    border: 4px solid rgb(255 255 255 / 0.15);
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 600;
+  }
+  .msg__name {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+  .msg__role {
+    font-size: var(--fs-sm);
+    color: var(--teal-100);
+  }
+  .msg__body {
+    padding: clamp(2rem, 5vw, 4rem);
+  }
+  .msg__body :global(.msg__mark) {
+    margin: var(--s-5) 0 var(--s-3);
+    color: var(--teal-400);
+  }
+  .msg blockquote p {
+    font-size: clamp(1.125rem, 1rem + 0.6vw, 1.375rem);
+    line-height: 1.7;
+    color: rgb(255 255 255 / 0.92);
+    max-width: 62ch;
+  }
+
+  /* 5. Values */
+  .values {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--s-5);
+  }
+  .value {
+    position: relative;
+    padding: var(--s-6);
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+  }
+  .value::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 3px;
+    background: var(--blue-600);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 500ms var(--ease);
+  }
+  .value:hover::after {
+    transform: scaleX(1);
+  }
+  .value__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--s-5);
+  }
+  .value__num {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--line-strong);
+  }
+  .value h3 {
+    font-size: 1.25rem;
+    margin-bottom: var(--s-2);
+  }
+  .value p {
+    font-size: var(--fs-sm);
+    color: var(--ink-muted);
+  }
+
+  /* 6. Differentiators */
+  .diff {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: start;
+  }
+  .diff__intro {
+    position: sticky;
+    top: calc(var(--header-h) + 32px);
+  }
+  .diff__img {
+    aspect-ratio: 4 / 3;
+  }
+  .diff__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s-4);
+  }
+  .diff__item {
+    display: grid;
+    gap: var(--s-4);
+    padding: var(--s-6);
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    transition: border-color 400ms var(--ease), box-shadow 400ms var(--ease);
+  }
+  .diff__item:hover {
+    border-color: var(--blue-100);
+    box-shadow: var(--shadow-2);
+  }
+  .diff__item:hover .icon-tile {
+    background: var(--blue-600);
+    color: var(--white);
+  }
+  .diff__item h3 {
+    font-size: 1.125rem;
+    margin-bottom: var(--s-2);
+  }
+  .diff__item p {
+    font-size: var(--fs-sm);
+    color: var(--ink-muted);
+  }
+
+  /* 7. Timeline (horizontal on desktop) */
+  .tl {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--s-5);
+  }
+  .tl::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 58px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--blue-100), var(--blue-600), var(--teal-500));
+  }
+  .tl__item {
+    display: grid;
+    justify-items: center;
+    text-align: center;
+  }
+  .tl__year {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--navy-900);
+  }
+  .tl__dot {
+    position: relative;
+    z-index: 1;
+    width: 22px;
+    height: 22px;
+    margin: var(--s-2) 0 var(--s-5);
+    border-radius: 50%;
+    background: var(--white);
+    border: 5px solid var(--blue-600);
+    box-shadow: 0 0 0 6px var(--blue-50);
+  }
+  .tl__card {
+    width: 100%;
+    padding: var(--s-5);
+    background: var(--paper-2);
+    border-radius: var(--r-lg);
+    transition: background 400ms var(--ease), box-shadow 400ms var(--ease), transform 400ms var(--ease);
+  }
+  .tl__item:hover .tl__card {
+    background: var(--white);
+    box-shadow: var(--shadow-2);
+    transform: translateY(-4px);
+  }
+  .tl__card h3 {
+    font-size: 1.125rem;
+    margin-bottom: var(--s-2);
+  }
+  .tl__card p {
+    font-size: var(--fs-sm);
+    color: var(--ink-muted);
+  }
+
+  /* 8. Departments */
+  .depts {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+  }
+  .depts .section-head .link-arrow {
+    margin-top: var(--s-2);
+  }
+  .depts__list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--s-3);
+  }
+  .dept {
+    display: flex;
+    align-items: center;
+    gap: var(--s-3);
+    height: 100%;
+    padding: var(--s-4);
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease), transform var(--dur) var(--ease);
+  }
+  .dept:hover {
+    border-color: var(--blue-100);
+    box-shadow: var(--shadow-1);
+    transform: translateY(-2px);
+  }
+  .dept__icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 42px;
+    height: 42px;
+    border-radius: var(--r-sm);
+    background: var(--blue-50);
+    color: var(--blue-600);
+    transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+  }
+  .dept:hover .dept__icon {
+    background: var(--blue-600);
+    color: var(--white);
+  }
+  .dept--alert .dept__icon,
+  .dept--alert:hover .dept__icon {
+    background: var(--alert-600);
+    color: var(--white);
+  }
+  .dept strong {
+    display: block;
+    font-size: var(--fs-sm);
+    color: var(--navy-900);
+  }
+  .dept small {
+    font-size: var(--fs-xs);
+    color: var(--ink-muted);
+  }
+
+  /* 9. Leadership */
+  .leaders {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--s-5);
+  }
+  .leader {
+    overflow: hidden;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+  }
+  .leader__head {
+    display: grid;
+    place-items: center;
+    padding: var(--s-7) 0 0;
+    height: 150px;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cpath d='M18 13h4v5h5v4h-5v5h-4v-5h-5v-4h5z' fill='%231b58b8' fill-opacity='0.06'/%3E%3C/svg%3E"),
+      var(--blue-50);
+  }
+  .leader__avatar {
+    display: grid;
+    place-items: center;
+    width: 104px;
+    height: 104px;
+    margin-bottom: -52px;
+    border-radius: 50%;
+    background: var(--navy-900);
+    border: 5px solid var(--white);
+    box-shadow: var(--shadow-1);
+    color: var(--white);
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 600;
+  }
+  .leader__body {
+    padding: 72px var(--s-6) var(--s-6);
+    text-align: center;
+  }
+  .leader h3 {
+    font-size: 1.25rem;
+  }
+  .leader__title {
+    margin: var(--s-1) 0 var(--s-3);
+    font-weight: 700;
+    font-size: var(--fs-sm);
+    color: var(--blue-600);
+  }
+  .leader__body > p:last-child {
+    font-size: var(--fs-sm);
+    color: var(--ink-muted);
+  }
+
+  /* 10. Quality */
+  .quality {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: center;
+  }
+  .quality__img {
+    aspect-ratio: 16 / 10;
+  }
+  .quality__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s-4);
+  }
+  .quality__item {
+    display: grid;
+    gap: var(--s-3);
+    padding: var(--s-6);
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+  }
+  .quality__item:nth-child(even) {
+    transform: translateY(24px);
+  }
+  .quality__item:nth-child(even):hover {
+    transform: translateY(20px);
+  }
+  .quality__item h3 {
+    font-size: 1.125rem;
+  }
+  .quality__item p {
+    font-size: var(--fs-sm);
+    color: var(--ink-muted);
+  }
+
+  /* 11. Payments */
+  .pay {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+  }
+  .pay__item {
+    display: grid;
+    justify-items: center;
+    gap: var(--s-3);
+    padding: var(--s-7) var(--s-5);
+    text-align: center;
+    transition: background 400ms var(--ease);
+  }
+  .pay__item + .pay__item {
+    border-left: 1px solid var(--line);
+  }
+  .pay__item:hover {
+    background: var(--paper-2);
+  }
+  .pay__item h3 {
+    font-size: 1.125rem;
+  }
+  .pay__item p {
+    font-size: var(--fs-sm);
+    color: var(--ink-muted);
+    max-width: 26ch;
+  }
+
+  /* Responsive */
+  @media (max-width: 1100px) {
+    .values {
+      grid-template-columns: 1fr 1fr;
+    }
+    .depts__list {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (max-width: 960px) {
+    .story,
+    .diff,
+    .depts,
+    .quality {
+      grid-template-columns: 1fr;
+    }
+    .diff__intro {
+      position: static;
+    }
+    .pillars,
+    .leaders {
+      grid-template-columns: 1fr;
+    }
+    .pillar--featured,
+    .pillar--featured:hover {
+      transform: none;
+    }
+    .msg {
+      grid-template-columns: 1fr;
+    }
+    .msg__side {
+      border-right: 0;
+      border-bottom: 1px solid rgb(255 255 255 / 0.1);
+      padding: var(--s-7) var(--s-5);
+    }
+    .tl {
+      grid-template-columns: 1fr;
+      gap: 0;
+      padding-left: 36px;
+    }
+    .tl::before {
+      left: 10px;
+      right: auto;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      height: auto;
+      background: linear-gradient(180deg, var(--blue-100), var(--blue-600), var(--teal-500));
+    }
+    .tl__item {
+      position: relative;
+      justify-items: start;
+      text-align: left;
+      padding-bottom: var(--s-5);
+    }
+    .tl__dot {
+      position: absolute;
+      left: -36px;
+      top: 8px;
+      margin: 0;
+    }
+    .tl__year {
+      margin-bottom: var(--s-2);
+    }
+    .quality__item:nth-child(even),
+    .quality__item:nth-child(even):hover {
+      transform: none;
+    }
+    .pay {
+      grid-template-columns: 1fr 1fr;
+    }
+    .pay__item:nth-child(3) {
+      border-left: 0;
+    }
+    .pay__item:nth-child(n + 3) {
+      border-top: 1px solid var(--line);
+    }
+  }
+  @media (max-width: 600px) {
+    .story__visual {
+      padding: 0 32px 40px 0;
+    }
+    .story__badge {
+      top: 16px;
+      right: 8px;
+      padding: var(--s-3) var(--s-4);
+    }
+    .story__badge strong {
+      font-size: 1.75rem;
+    }
+    .values,
+    .diff__grid,
+    .depts__list,
+    .quality__grid,
+    .pay {
+      grid-template-columns: 1fr;
+    }
+    .pay__item + .pay__item {
+      border-left: 0;
+      border-top: 1px solid var(--line);
+    }
+  }
+</style>

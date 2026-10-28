@@ -1,0 +1,100 @@
+---
+// Appointment request form. Submits by opening WhatsApp with a pre-filled message.
+// Behaviour is wired once in Layout via [data-booking-form]; can be rendered inline or in the dialog.
+import Icon from "./Icon.astro";
+import { doctors } from "../../data/doctors";
+import { specialities } from "../../data/specialities";
+import { timeSlots } from "../../data/site";
+
+interface Props {
+  idPrefix: string;
+}
+const { idPrefix: p } = Astro.props;
+const doctorOptions = doctors.map((d) => ({ name: d.name, role: d.role, dept: d.speciality }));
+---
+
+<form class="booking-form" data-booking-form novalidate>
+  <div class="field-row">
+    <div class="field">
+      <label for={`${p}-name`}>Patient name</label>
+      <input id={`${p}-name`} name="name" type="text" autocomplete="name" required placeholder="Full name" />
+    </div>
+    <div class="field">
+      <label for={`${p}-phone`}>Mobile number</label>
+      <input
+        id={`${p}-phone`}
+        name="phone"
+        type="tel"
+        inputmode="tel"
+        autocomplete="tel"
+        required
+        pattern="[0-9+\s\-]{10,15}"
+        placeholder="10-digit mobile"
+      />
+    </div>
+  </div>
+  <div class="field-row">
+    <div class="field">
+      <label for={`${p}-dept`}>Speciality</label>
+      <select id={`${p}-dept`} name="dept" required>
+        <option value="">Choose a speciality</option>
+        {specialities.map((s) => <option value={s.short}>{s.short}</option>)}
+        <option value="General Medicine">General Medicine</option>
+        <option value="Not sure">Not sure, please advise</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for={`${p}-doctor`}>Doctor <span class="opt">(optional)</span></label>
+      <select id={`${p}-doctor`} name="doctor">
+        <option value="">Any available doctor</option>
+        {doctorOptions.map((d) => <option value={d.name} data-dept={d.dept}>{d.name} · {d.role}</option>)}
+      </select>
+    </div>
+  </div>
+  <div class="field-row">
+    <div class="field">
+      <label for={`${p}-date`}>Preferred date</label>
+      <input id={`${p}-date`} name="date" type="date" required />
+    </div>
+    <div class="field">
+      <label for={`${p}-slot`}>Preferred time</label>
+      <select id={`${p}-slot`} name="slot" required>
+        <option value="">Choose a time</option>
+        {timeSlots.map((t) => <option value={t}>{t}</option>)}
+      </select>
+    </div>
+  </div>
+  <div class="field">
+    <label for={`${p}-note`}>Symptoms or message <span class="opt">(optional)</span></label>
+    <textarea id={`${p}-note`} name="note" rows="3" placeholder="Briefly describe your concern"></textarea>
+  </div>
+  <p class="booking-form__error" role="alert" hidden>Please fill in the highlighted fields.</p>
+  <button type="submit" class="btn btn--block">
+    <Icon name="whatsapp" /> Send request on WhatsApp
+  </button>
+  <p class="booking-form__note">Our desk confirms your slot on WhatsApp or by phone. For emergencies, call us directly.</p>
+</form>
+
+<style>
+  .booking-form {
+    display: grid;
+    gap: var(--s-4);
+  }
+  .opt {
+    font-weight: 400;
+    color: var(--ink-muted);
+  }
+  .booking-form__error {
+    color: var(--alert-600);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+  }
+  .booking-form__note {
+    font-size: var(--fs-xs);
+    color: var(--ink-muted);
+    text-align: center;
+  }
+  .booking-form :global(.is-invalid) {
+    border-color: var(--alert-600) !important;
+  }
+</style>

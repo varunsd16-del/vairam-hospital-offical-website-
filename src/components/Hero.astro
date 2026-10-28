@@ -1,472 +1,432 @@
 ---
-// Hero Component - Vairam Multi Speciality Hospital
+import { Image, Picture } from "astro:assets";
+import Icon from "./ui/Icon.astro";
+import { site } from "../data/site";
+import doctor from "../assets/images/sidhuhero.webp";
+import building from "../assets/images/hero-building.png";
+
+// "15+" → animate 0→15 and keep the "+"; values like "24/7" render as-is.
+const stats = site.stats.map((s) => {
+  const m = s.value.match(/^(\d+)(\D*)$/);
+  return { ...s, n: m ? Number(m[1]) : null, suffix: m ? m[2] : "" };
+});
 ---
 
-<!-- HERO -->
-<section class="hero">
-  <!-- Decorative background shapes -->
-  <div class="hero-bg-circle"></div>
-  <div class="hero-bg-gradient"></div>
-
-  <!-- Floating background doodles -->
-  <div class="hero-doodles">
-    <i class="fas fa-bone doodle doodle-1" aria-hidden="true"></i>
-    <i class="fas fa-heartbeat doodle doodle-2" aria-hidden="true"></i>
-    <i class="fas fa-stethoscope doodle doodle-3" aria-hidden="true"></i>
-    <i class="fas fa-star-of-life doodle doodle-4" aria-hidden="true"></i>
-    <i class="fas fa-pills doodle doodle-5" aria-hidden="true"></i>
-    <i class="fas fa-briefcase-medical doodle doodle-6" aria-hidden="true"></i>
+<section class="hero" aria-labelledby="heroTitle">
+  <!-- Building photo, softly blended under the navy design -->
+  <div class="hero__bg" aria-hidden="true">
+    <Picture
+      src={building}
+      formats={["avif", "webp"]}
+      fallbackFormat="jpg"
+      widths={[768, 1280, 1920]}
+      sizes="100vw"
+      alt=""
+      loading="eager"
+      fetchpriority="high"
+      class="hero__bg-img"
+    />
   </div>
+  <div class="container hero__inner">
+    <div class="hero__content">
+      <p class="hero__eyebrow rise" style="--d:0">Trusted Multi Speciality Hospital · Since {site.foundingYear}</p>
 
-  <div class="container hero-container">
-    <div class="hero-content reveal reveal-left">
-      <span class="hero-category">TRUSTED MULTI SPECIALITY HOSPITAL</span>
-      
-      <h1 class="hero-title">
-        Your Health,<br>
-        <span class="text-navy">Our Responsibility.</span>
+      <h1 id="heroTitle">
+        <span class="line"><span class="rise" style="--d:1">Best Hospital in</span></span>
+        <span class="line"><span class="rise" style="--d:1.5">Mayiladuthurai</span></span>
+        <span class="line"><span class="rise hero__accent" style="--d:2">for Specialist &amp; 24/7 Care.</span></span>
       </h1>
-      
-      <p class="hero-subtitle">
-        Advanced care. Latest technology.<br>
-        Compassionate doctors.
+
+      <p class="hero__lede rise" style="--d:3">
+        Vairam Multi Speciality Hospital on Pattamangala Street brings experienced specialists in orthopaedics,
+        cardiology, gynaecology, paediatrics and surgery, in-house lab and scans, and a 24/7 emergency and ICU team under one
+        roof, serving families across Mayiladuthurai, Sirkazhi, Karaikal and Kumbakonam.
       </p>
 
-      <div class="hero-btns">
-        <a href="/contact" class="btn-primary-blue">
-          <i class="far fa-calendar-check"></i>
-          <span>Book Appointment</span>
-        </a>
-        <a href="/services" class="btn-outline-blue">
-          <span>Explore Departments</span>
-          <i class="fas fa-arrow-right"></i>
+      <div class="hero__actions rise" style="--d:4">
+        <button type="button" class="btn hero__btn" data-book>
+          <Icon name="calendar" size={20} />
+          Book an appointment
+          <Icon name="arrow-right" size={18} class="hero__btn-arrow" />
+        </button>
+        <a href="/doctors" class="btn btn--ghost-light hero__btn">
+          <Icon name="user-search" size={20} />
+          Find a doctor
         </a>
       </div>
 
-      <!-- Bottom Info Row inside Hero -->
-      <div class="hero-info-row">
-        <div class="info-item">
-          <div class="info-icon phone-icon">
-            <i class="fas fa-phone-alt"></i>
-          </div>
-          <div class="info-details">
-            <span class="info-label">Emergency 24/7</span>
-            <a href="tel:+919344644555" class="info-val">+91 93446 44555</a>
-          </div>
-        </div>
-        
-        <div class="info-item">
-          <div class="info-icon location-icon">
-            <i class="fas fa-map-marker-alt"></i>
-          </div>
-          <div class="info-details">
-            <span class="info-label">Location</span>
-            <span class="info-val">Mayiladuthurai, Tamil Nadu</span>
-          </div>
-        </div>
-        
-        <div class="info-item">
-          <div class="info-icon clock-icon">
-            <i class="fas fa-clock"></i>
-          </div>
-          <div class="info-details">
-            <span class="info-label">Timings</span>
-            <span class="info-val">24/7 Open</span>
-          </div>
-        </div>
-      </div>
+      <dl class="hero__stats rise" style="--d:5">
+        {
+          stats.map((s) => (
+            <div>
+              <dt>{s.label}</dt>
+              <dd>
+                {s.n !== null ? (
+                  <span data-count={s.n} data-suffix={s.suffix}>
+                    {s.value}
+                  </span>
+                ) : (
+                  s.value
+                )}
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
     </div>
 
-    <div class="hero-visual reveal reveal-right">
-      <div class="image-wrapper">
-        <img src="/images/hero-building.png" alt="Vairam Multi Speciality Hospital Building" class="main-building-img" />
-      </div>
+    <div class="hero__figure" aria-hidden="true">
+      <span class="hero__ring"></span>
+      <Image src={doctor} alt="" widths={[420, 640, 860]} sizes="(max-width: 1100px) 78vw, 470px" loading="eager" fetchpriority="high" class="hero__cutout" />
     </div>
-  </div>
-
-  <!-- Curved Section Divider matching the image -->
-  <div class="hero-curve-divider" aria-hidden="true">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 220" preserveAspectRatio="none">
-      <path d="M0,140 C400,180 800,170 1100,120 C1300,80 1400,40 1440,0 L1440,220 L0,220 Z" fill="var(--bg-main)" />
-    </svg>
   </div>
 </section>
 
 <style>
-  /* ─── HERO LIGHT THEME ─── */
   .hero {
     position: relative;
-    min-height: calc(100vh - 110px);
+    isolation: isolate;
+    overflow: hidden;
     display: flex;
     align-items: center;
-    padding: 100px 5% 120px;
-    background: #ffffff;
-    overflow: hidden;
+    min-height: max(560px, calc(100svh - var(--utility-h) - var(--header-h)));
+    padding: clamp(2rem, 5vh, 4rem) 0 calc(clamp(2rem, 5vh, 3.5rem) + 72px);
+    color: var(--white);
+    background: var(--navy-950);
   }
-
-  /* ─── Background Decorations ─── */
-  .hero-bg-circle {
+  /* Photo layer: slow zoom, slightly desaturated so it reads as atmosphere, not a busy picture */
+  .hero__bg {
     position: absolute;
-    width: 650px;
-    height: 650px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, rgba(13, 148, 136, 0.35) 0%, rgba(13, 148, 136, 0.1) 100%);
-    right: -5%;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 1;
-    pointer-events: none;
+    inset: 0;
+    z-index: -2;
+    animation: bg-in 2.2s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
-
-  .hero-bg-gradient {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle at 10% 20%, rgba(224, 242, 254, 0.3) 0%, transparent 60%);
-    z-index: 0;
-    pointer-events: none;
-  }
-
-  /* ─── Decorative Background Doodles ─── */
-  :global(.hero-doodles) {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    pointer-events: none;
-    z-index: 1;
-  }
-
-  :global(.doodle) {
-    position: absolute;
-    color: rgba(13, 148, 136, 0.15) !important; /* Soft signature emerald teal */
-    pointer-events: none;
-  }
-
-  /* Float animations */
-  @keyframes float-slow {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-10px) rotate(8deg); }
-  }
-
-  @keyframes float-medium {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-15px) rotate(-10deg); }
-  }
-
-  @keyframes float-fast {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-8px) rotate(5deg); }
-  }
-
-  :global(.doodle-1) {
-    font-size: 3.5rem;
-    top: 15%;
-    left: 8%;
-    transform: rotate(25deg);
-    animation: float-slow 6s ease-in-out infinite;
-  }
-
-  :global(.doodle-2) {
-    font-size: 4rem;
-    top: 45%;
-    left: 3%;
-    transform: rotate(-15deg);
-    animation: float-medium 7s ease-in-out infinite 1s;
-  }
-
-  :global(.doodle-3) {
-    font-size: 3rem;
-    top: 75%;
-    left: 12%;
-    transform: rotate(45deg);
-    animation: float-fast 5s ease-in-out infinite;
-  }
-
-  :global(.doodle-4) {
-    font-size: 4.5rem;
-    top: 20%;
-    right: 42%;
-    transform: rotate(-30deg);
-    animation: float-slow 8s ease-in-out infinite 2s;
-  }
-
-  :global(.doodle-5) {
-    font-size: 2.8rem;
-    top: 70%;
-    right: 48%;
-    transform: rotate(15deg);
-    animation: float-medium 6s ease-in-out infinite 0.5s;
-  }
-
-  :global(.doodle-6) {
-    font-size: 3.2rem;
-    top: 12%;
-    right: 15%;
-    transform: rotate(-20deg);
-    animation: float-fast 6.5s ease-in-out infinite 1.5s;
-  }
-
-  /* ─── Layout Grid ─── */
-  .hero-container {
-    display: grid;
-    grid-template-columns: 1.15fr 0.85fr;
-    gap: 40px;
-    align-items: center;
-    position: relative;
-    z-index: 10;
-    max-width: 1400px;
-    margin: 0 auto;
-    width: 100%;
-  }
-
-  /* ─── Category Badge ─── */
-  .hero-category {
+  .hero__bg :global(picture),
+  .hero__bg :global(img) {
     display: block;
-    color: #2563eb;
-    font-size: 0.9rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 20px;
-  }
-
-  /* ─── Title ─── */
-  .hero-title {
-    font-size: clamp(2.8rem, 5vw, 4.4rem);
-    font-weight: 800;
-    line-height: 1.15;
-    margin-bottom: 20px;
-    color: #0f172a;
-    letter-spacing: -0.02em;
-  }
-
-  .text-navy {
-    color: #0f294a;
-  }
-
-  /* ─── Subtitle ─── */
-  .hero-subtitle {
-    font-size: 1.25rem;
-    color: #475569;
-    margin-bottom: 40px;
-    line-height: 1.6;
-    font-weight: 500;
-  }
-
-  /* ─── Buttons ─── */
-  .hero-btns {
-    display: flex;
-    gap: 16px;
-    margin-bottom: 60px;
-    flex-wrap: wrap;
-  }
-
-  .btn-primary-blue {
-    background: #0f4bb4;
-    color: #ffffff;
-    padding: 16px 32px;
-    border-radius: 12px;
-    text-decoration: none;
-    font-weight: 700;
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 14px rgba(15, 75, 180, 0.25);
-    border: none;
-  }
-
-  .btn-primary-blue:hover {
-    background: #0d3d94;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(15, 75, 180, 0.35);
-  }
-
-  .btn-outline-blue {
-    background: #ffffff;
-    color: #0f4bb4;
-    padding: 16px 32px;
-    border-radius: 12px;
-    text-decoration: none;
-    font-weight: 700;
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    border: 1.5px solid #0f4bb4;
-    transition: all 0.3s ease;
-  }
-
-  .btn-outline-blue:hover {
-    background: rgba(15, 75, 180, 0.04);
-    transform: translateY(-2px);
-  }
-
-  /* ─── Bottom Info Row ─── */
-  .hero-info-row {
-    display: flex;
-    gap: 40px;
-    flex-wrap: wrap;
-  }
-
-  .info-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .info-icon {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.1rem;
-  }
-
-  .phone-icon {
-    background: #fef2f2;
-    color: #ef4444;
-  }
-
-  .location-icon {
-    background: #eff6ff;
-    color: #3b82f6;
-  }
-
-  .clock-icon {
-    background: #f0fdfa;
-    color: #0d9488;
-  }
-
-  .info-details {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .info-label {
-    font-size: 0.8rem;
-    color: #64748b;
-    font-weight: 600;
-  }
-
-  .info-val {
-    font-size: 0.95rem;
-    color: #0f172a;
-    font-weight: 700;
-    text-decoration: none;
-  }
-
-  /* ─── Hero Visual (Right Side) ─── */
-  .hero-visual {
-    position: relative;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    z-index: 2;
-  }
-
-  .image-wrapper {
     width: 100%;
-    max-width: 600px;
+    height: 100%;
+  }
+  .hero :global(.hero__bg-img) {
+    object-fit: cover;
+    object-position: 60% 40%;
+    filter: saturate(0.75) contrast(1.05);
+  }
+  @keyframes bg-in {
+    from {
+      opacity: 0;
+      transform: scale(1.08);
+    }
+  }
+  /* Navy overlay: solid behind the text on the left, easing off to the right so the building shows mildly */
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Cpath d='M22 16h4v6h6v4h-6v6h-4v-6h-6v-4h6z' fill='%23ffffff' fill-opacity='0.04'/%3E%3C/svg%3E"),
+      linear-gradient(90deg, rgb(5 15 36 / 0.97) 0%, rgb(8 24 54 / 0.93) 38%, rgb(10 31 68 / 0.78) 62%, rgb(13 50 102 / 0.68) 100%),
+      linear-gradient(0deg, rgb(5 15 36 / 0.7) 0%, transparent 35%);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero__bg {
+      animation: none;
+    }
+  }
+  .hero__inner {
+    width: 100%;
+  }
+  .hero__content {
     position: relative;
-    border-radius: 32px;
+    z-index: 2;
+    max-width: 720px;
+  }
+
+  /* ── Copy (matches inner page headers) ── */
+  .hero__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--teal-100);
+  }
+  .hero__eyebrow::before {
+    content: "";
+    width: 12px;
+    height: 12px;
+    background:
+      linear-gradient(currentColor, currentColor) center / 4px 12px no-repeat,
+      linear-gradient(currentColor, currentColor) center / 12px 4px no-repeat;
+  }
+  .hero h1 {
+    margin: clamp(0.75rem, 2vh, 1.25rem) 0;
+    color: var(--white);
+    font-size: clamp(2.25rem, min(3.1vw, 6.2vh), 3.5rem);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.06;
+  }
+  .hero h1 .line {
+    display: block;
     overflow: hidden;
-    border: 8px solid #ffffff;
-    box-shadow: 0 20px 45px rgba(2, 6, 23, 0.12), 0 4px 12px rgba(2, 6, 23, 0.04);
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    padding-bottom: 0.06em;
+  }
+  .hero h1 .line > span {
+    display: inline-block;
+    white-space: nowrap;
+  }
+  .hero__accent {
+    color: #7fe0d4;
+  }
+  .hero__lede {
+    max-width: 66ch;
+    font-size: clamp(1rem, 0.9rem + 0.35vw, 1.1875rem);
+    line-height: 1.65;
+    color: rgb(255 255 255 / 0.8);
   }
 
-  .image-wrapper:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 30px 60px rgba(2, 6, 23, 0.18), 0 8px 20px rgba(2, 6, 23, 0.06);
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-3);
+    margin-top: clamp(1.25rem, 3.2vh, 2.25rem);
+  }
+  .hero__btn {
+    min-height: 56px;
+    padding: 0 var(--s-6);
+    font-size: 1rem;
+  }
+  .hero__btn :global(.hero__btn-arrow) {
+    transition: transform var(--dur) var(--ease);
+  }
+  .hero__btn:hover :global(.hero__btn-arrow) {
+    transform: translateX(4px);
   }
 
-  .main-building-img {
+  /* Stats row, same style as inner headers */
+  .hero__stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0;
+    margin-top: clamp(1.5rem, 3.6vh, 2.5rem);
+    padding-top: clamp(1.25rem, 3vh, 2rem);
+    border-top: 1px solid rgb(255 255 255 / 0.14);
+  }
+  .hero__stats div {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    gap: 4px;
+    padding: 0 var(--s-5);
+  }
+  .hero__stats div:first-child {
+    padding-left: 0;
+  }
+  .hero__stats div + div {
+    border-left: 1px solid rgb(255 255 255 / 0.14);
+  }
+  .hero__stats dd {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+    color: var(--white);
+  }
+  .hero__stats dt {
+    font-size: var(--fs-xs);
+    color: rgb(255 255 255 / 0.7);
+  }
+
+  /* ── Doctor sticker (same treatment as inner headers) ── */
+  .hero__figure {
+    position: absolute;
+    right: max(var(--gutter), calc((100vw - var(--container)) / 2));
+    bottom: 0;
+    z-index: 1;
+    width: clamp(340px, 31vw, 480px);
+    animation: fig-in 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+  }
+  .hero__ring {
+    position: absolute;
+    left: 50%;
+    bottom: 10%;
+    width: 96%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    transform: translateX(-50%);
+    background: radial-gradient(circle at 50% 55%, rgb(20 165 151 / 0.45), rgb(27 88 184 / 0.25) 45%, transparent 70%);
+    box-shadow:
+      0 0 0 1px rgb(255 255 255 / 0.12),
+      0 0 0 28px rgb(255 255 255 / 0.03),
+      0 0 0 56px rgb(255 255 255 / 0.02);
+    -webkit-mask-image: linear-gradient(180deg, #000 45%, transparent 72%);
+    mask-image: linear-gradient(180deg, #000 45%, transparent 72%);
+  }
+  .hero__figure :global(.hero__cutout) {
+    position: relative;
+    display: block;
     width: 100%;
     height: auto;
-    display: block;
-    object-fit: cover;
-    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    filter: drop-shadow(0 24px 40px rgb(0 0 0 / 0.45));
+    -webkit-mask-image: linear-gradient(180deg, #000 80%, transparent 98%);
+    mask-image: linear-gradient(180deg, #000 80%, transparent 98%);
   }
-
-  .image-wrapper:hover .main-building-img {
-    transform: scale(1.03);
+  /* ── Motion ── */
+  .rise {
+    animation: rise 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: calc(var(--d) * 110ms + 150ms);
   }
-
-  /* ─── Curved SVG Divider ─── */
-  .hero-curve-divider {
-    position: absolute;
-    bottom: -1px;
-    left: 0;
-    width: 100%;
-    line-height: 0;
-    z-index: 5;
+  .hero h1 .rise {
+    animation-name: rise-line;
   }
-
-  .hero-curve-divider svg {
-    display: block;
-    width: 100%;
-    height: 220px;
-  }
-
-  /* ─── Responsive Adjustments ─── */
-  @media (max-width: 1024px) {
-    .hero-container {
-      gap: 30px;
-    }
-    .hero-bg-circle {
-      width: 450px;
-      height: 450px;
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(22px);
     }
   }
+  @keyframes rise-line {
+    from {
+      transform: translateY(105%);
+    }
+  }
+  @keyframes fig-in {
+    from {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .rise,
+    .hero__figure {
+      animation: none;
+    }
+  }
 
-  @media (max-width: 991px) {
+  /* ── Short laptop screens: tighten so it fits one screen ── */
+  @media (min-width: 1101px) and (max-height: 820px) {
+    .hero h1 {
+      font-size: clamp(2.25rem, min(3vw, 5.8vh), 3.5rem);
+    }
+    .hero__lede {
+      line-height: 1.55;
+    }
+    .hero__btn {
+      min-height: 50px;
+    }
+    .hero__stats dd {
+      font-size: 1.625rem;
+    }
     .hero {
-      padding: 80px 5% 100px;
+      padding-top: 1.25rem;
+      padding-bottom: calc(1.25rem + 72px);
     }
-    .hero-container {
-      grid-template-columns: 1fr;
-      text-align: left;
+    .hero h1 {
+      margin: 0.5rem 0;
     }
-    .hero-visual {
-      justify-content: center;
-      margin-top: 20px;
+    .hero__actions {
+      margin-top: 1.25rem;
     }
-    .image-wrapper {
-      max-width: 500px;
+    .hero__stats {
+      margin-top: 1.25rem;
+      padding-top: 1rem;
     }
-    .hero-info-row {
-      gap: 30px;
+  }
+  @media (min-width: 1101px) and (max-height: 740px) {
+    .hero h1 {
+      font-size: clamp(2.125rem, min(2.8vw, 5.4vh), 3.5rem);
+    }
+    .hero__lede {
+      font-size: 1rem;
     }
   }
 
-  @media (max-width: 576px) {
-    .hero-title {
-      font-size: 2.2rem;
+  /* ── Tablet & mobile: doctor below the text, like inner headers ── */
+  @media (max-width: 1100px) {
+    /* Photo sits at the bottom so the Vairam name board is straight behind the doctor */
+    .hero__bg {
+      top: auto;
+      height: min(820px, 88%);
+      -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 32%);
+      mask-image: linear-gradient(180deg, transparent 0%, #000 32%);
     }
-    .hero-subtitle {
-      font-size: 1.1rem;
+    .hero :global(.hero__bg-img) {
+      object-position: 49% 62%;
     }
-    .hero-btns {
-      flex-direction: column;
+  }
+  @media (max-width: 1100px) {
+    .hero::before {
+      background:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Cpath d='M22 16h4v6h6v4h-6v6h-4v-6h-6v-4h6z' fill='%23ffffff' fill-opacity='0.04'/%3E%3C/svg%3E"),
+        linear-gradient(180deg, rgb(5 15 36 / 0.95) 0%, rgb(8 24 54 / 0.9) 55%, rgb(10 31 68 / 0.8) 100%);
+    }
+    .hero {
+      display: block;
+      min-height: 0;
+      padding: var(--s-9) 0 72px;
+    }
+    .hero__content {
+      max-width: 100%;
+    }
+    .hero__figure {
+      position: relative;
+      right: auto;
+      bottom: auto;
+      width: min(78vw, 380px);
+      margin: var(--s-7) auto 0;
+    }
+  }
+  @media (min-width: 641px) and (max-width: 1100px) {
+    .hero :global(.hero__bg-img) {
+      object-position: 49% 70%;
+    }
+  }
+  @media (max-width: 768px) {
+    .hero h1 .line > span {
+      white-space: normal;
+    }
+    .hero__stats dd {
+      font-size: 1.75rem;
+    }
+  }
+  @media (max-width: 640px) {
+    .hero {
+      padding-top: var(--s-8);
+    }
+    .hero__stats {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      row-gap: var(--s-5);
+    }
+    .hero__stats div + div:nth-child(3) {
+      border-left: 0;
+      padding-left: 0;
+    }
+    .hero__actions .btn {
       width: 100%;
-    }
-    .btn-primary-blue, .btn-outline-blue {
-      width: 100%;
-      justify-content: center;
-    }
-    .hero-info-row {
-      flex-direction: column;
-      gap: 20px;
-    }
-    .hero-curve-divider svg {
-      height: 100px;
     }
   }
 </style>
+
+<script>
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  document.querySelectorAll<HTMLElement>(".hero [data-count]").forEach((el, i) => {
+    if (reduce) return;
+    const target = Number(el.dataset.count);
+    const suffix = el.dataset.suffix ?? "";
+    el.textContent = "0" + suffix;
+    setTimeout(() => {
+      const start = performance.now();
+      const tick = (t: number) => {
+        const k = Math.min(1, Math.max(0, (t - start) / 1400));
+        el.textContent = Math.round(target * (1 - Math.pow(1 - k, 4))) + suffix;
+        if (k < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    }, 900 + i * 120);
+  });
+</script>

@@ -1,321 +1,144 @@
 ---
-// Testimonials Component - Vairam Multi Speciality Hospital
-// Upgraded UI/UX featuring 3-column desktop layout, verified tags, and structured Review Schema.
-
-const testimonials = [
-  {
-    initials: "RK",
-    name: "Rajesh Kumar",
-    stars: 5,
-    text: "The care I received at Vairam Hospital was exceptional. The doctors were attentive, and the facilities were top-notch. Highly recommended for any cardiac issues.",
-    verified: true
-  },
-  {
-    initials: "SM",
-    name: "Sarah M.",
-    stars: 5,
-    text: "My mother had a knee replacement surgery here. The orthopaedic team was brilliant, and her recovery was much faster than we expected. Thank you Vairam!",
-    verified: true
-  },
-  {
-    initials: "AP",
-    name: "Arun Prakash",
-    stars: 4.5,
-    text: "24/7 emergency service saved my father's life. The response time was incredibly fast and the staff handled everything professionally.",
-    verified: true
-  }
-];
+import Icon from "./ui/Icon.astro";
+import { testimonials } from "../data/testimonials";
 ---
 
-<!-- Structured Review Schema (JSON-LD) for SEO, AEO, and GEO search queries -->
-<script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "MedicalBusiness",
-    "@id": "https://vairamhospital.com/#hospital",
-    "name": "Vairam Multi Speciality Hospital",
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.8",
-      "reviewCount": "3"
-    },
-    "review": [
+<section class="section section--tint" aria-labelledby="tTitle">
+  <div class="container tm" data-tm>
+    <div class="tm__head">
+      <p class="eyebrow">Patient stories</p>
+      <h2 id="tTitle">In their words</h2>
+      <div class="tm__controls">
+        <button type="button" class="tm__btn" data-tm-prev aria-label="Previous story"><Icon name="arrow-left" /></button>
+        <span class="tm__count" aria-live="polite"><span data-tm-index>1</span> / {testimonials.length}</span>
+        <button type="button" class="tm__btn" data-tm-next aria-label="Next story"><Icon name="arrow-right" /></button>
+      </div>
+    </div>
+
+    <div class="tm__stage">
       {
-        "@type": "Review",
-        "author": {
-          "@type": "Person",
-          "name": "Rajesh Kumar"
-        },
-        "reviewRating": {
-          "@type": "Rating",
-          "ratingValue": "5"
-        },
-        "reviewBody": "The care I received at Vairam Hospital was exceptional. The doctors were attentive, and the facilities were top-notch. Highly recommended for any cardiac issues."
-      },
-      {
-        "@type": "Review",
-        "author": {
-          "@type": "Person",
-          "name": "Sarah M."
-        },
-        "reviewRating": {
-          "@type": "Rating",
-          "ratingValue": "5"
-        },
-        "reviewBody": "My mother had a knee replacement surgery here. The orthopaedic team was brilliant, and her recovery was much faster than we expected. Thank you Vairam!"
-      },
-      {
-        "@type": "Review",
-        "author": {
-          "@type": "Person",
-          "name": "Arun Prakash"
-        },
-        "reviewRating": {
-          "@type": "Rating",
-          "ratingValue": "4.5"
-        },
-        "reviewBody": "24/7 emergency service saved my father's life. The response time was incredibly fast and the staff handled everything professionally."
+        testimonials.map((t, i) => (
+          <figure class="tm__slide" data-tm-slide hidden={i !== 0}>
+            <Icon name="quote" size={36} class="tm__mark" />
+            <blockquote>
+              <p>{t.text}</p>
+            </blockquote>
+            <figcaption>
+              <strong>{t.name}</strong>
+              <span>{t.context}</span>
+            </figcaption>
+          </figure>
+        ))
       }
-    ]
-  }
-</script>
-
-<section class="testimonials-section" id="testimonials">
-  <div class="container">
-    
-    <!-- Section Header -->
-    <div class="section-header text-center reveal reveal-up">
-      <span class="section-badge">Testimonials</span>
-      <h2 class="section-title">What Our Patients <span class="text-primary">Say</span></h2>
-      <div class="premium-divider"></div>
-      <p class="section-desc">
-        Hear directly from families, corporate clients, and clinical professionals who have experienced our treatment care.
-      </p>
     </div>
-    
-    <!-- Testimonials Grid Layout -->
-    <div class="testimonials-grid">
-      {testimonials.map((test, idx) => (
-        <article class="testimonial-card reveal reveal-up" style={`transition-delay: ${idx * 0.15}s;`}>
-          <div class="quote-icon-premium"><i class="fas fa-quote-right"></i></div>
-          
-          <!-- Testimonial statement -->
-          <blockquote class="review-text">
-            "{test.text}"
-          </blockquote>
-          
-          <!-- Patient Profile -->
-          <div class="patient-info">
-            <div class="avatar-premium">{test.initials}</div>
-            <div class="patient-details">
-              <div class="patient-name-row">
-                <h4>{test.name}</h4>
-                {test.verified && (
-                  <span class="verified-tag">
-                    <i class="fas fa-check-circle"></i> Verified
-                  </span>
-                )}
-              </div>
-              
-              <!-- Star rating parser -->
-              <div class="stars-premium" aria-label={`Rating: ${test.stars} stars`}>
-                {Array.from({ length: Math.floor(test.stars) }).map(() => (
-                  <i class="fas fa-star"></i>
-                ))}
-                {test.stars % 1 !== 0 && (
-                  <i class="fas fa-star-half-alt"></i>
-                )}
-              </div>
-            </div>
-          </div>
-        </article>
-      ))}
-    </div>
-
   </div>
 </section>
 
 <style>
-  .testimonials-section {
-    padding: 100px 5% 120px;
-    background: var(--white);
-    position: relative;
-    z-index: 10;
-  }
-
-  .container {
-    max-width: 1400px;
-    margin: 0 auto;
-  }
-
-  .section-header {
-    text-align: center;
-    max-width: 800px;
-    margin: 0 auto 60px;
-  }
-
-  .section-badge {
-    color: var(--primary);
-    font-size: 0.9rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: 15px;
-    display: block;
-  }
-
-  .section-title {
-    font-size: clamp(2rem, 4vw, 3rem);
-    font-weight: 800;
-    margin-bottom: 15px;
-    color: var(--secondary);
-    line-height: 1.2;
-  }
-
-  .text-primary {
-    color: var(--primary);
-  }
-
-  .premium-divider {
-    height: 4px;
-    width: 50px;
-    background: linear-gradient(90deg, var(--primary), var(--accent));
-    margin: 20px auto 25px;
-    border-radius: 2px;
-  }
-
-  .section-desc {
-    font-size: 1.05rem;
-    line-height: 1.7;
-    color: var(--text-muted);
-  }
-
-  /* Testimonials Grid */
-  .testimonials-grid {
+  .tm {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 30px;
-    margin-top: 50px;
+    grid-template-columns: 0.8fr 2fr;
+    gap: var(--s-8);
   }
-
-  .testimonial-card {
+  .tm__head {
+    display: grid;
+    align-content: start;
+    gap: var(--s-4);
+  }
+  .tm__controls {
+    display: flex;
+    align-items: center;
+    gap: var(--s-3);
+    margin-top: var(--s-4);
+  }
+  .tm__btn {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border: 1px solid var(--line-strong);
+    border-radius: 50%;
     background: var(--white);
-    padding: 50px 40px;
-    border-radius: 30px;
-    box-shadow: var(--shadow-premium);
-    position: relative;
-    border: 1px solid rgba(13, 148, 136, 0.04);
-    transition: var(--transition);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    min-height: 320px;
+    box-shadow: var(--shadow-1);
+    color: var(--navy-900);
+    transition: all var(--dur) var(--ease);
   }
-
-  .testimonial-card:hover {
-    transform: translateY(-8px);
-    border-color: rgba(13, 148, 136, 0.25);
-    box-shadow: 0 25px 50px -20px rgba(13, 148, 136, 0.12);
+  .tm__btn:hover {
+    background: var(--navy-900);
+    border-color: var(--navy-900);
+    color: var(--white);
   }
-
-  .quote-icon-premium {
-    position: absolute;
-    top: 40px;
-    right: 40px;
-    font-size: 2.5rem;
-    color: var(--primary);
-    opacity: 0.08;
-    transition: var(--transition);
-  }
-
-  .testimonial-card:hover .quote-icon-premium {
-    opacity: 0.18;
-    transform: scale(1.1) rotate(5deg);
-  }
-
-  .review-text {
-    font-size: 1.05rem;
-    color: var(--text-muted);
-    line-height: 1.8;
-    font-style: italic;
-    margin-bottom: 35px;
-    position: relative;
-    z-index: 2;
-  }
-
-  .patient-info {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    margin-top: auto;
-  }
-
-  .avatar-premium {
-    width: 55px;
-    height: 55px;
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-    color: white;
-    border-radius: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.1rem;
-    font-weight: 800;
-    box-shadow: 0 10px 20px -5px rgba(13, 148, 136, 0.3);
-    flex-shrink: 0;
-  }
-
-  .patient-details {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .patient-name-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-
-  .patient-details h4 {
-    color: var(--secondary);
-    font-size: 1.1rem;
-    font-weight: 800;
-  }
-
-  .verified-tag {
-    font-size: 0.72rem;
+  .tm__count {
+    min-width: 48px;
+    text-align: center;
+    font-size: var(--fs-sm);
     font-weight: 700;
-    color: var(--primary-dark);
-    background: rgba(13, 148, 136, 0.06);
-    padding: 3px 8px;
-    border-radius: 50px;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    border: 1px solid rgba(13, 148, 136, 0.1);
+    color: var(--ink-muted);
   }
-
-  .stars-premium {
-    color: var(--accent);
-    font-size: 0.85rem;
-    letter-spacing: 2px;
-    margin-top: 6px;
+  .tm__stage {
+    min-height: 260px;
+    padding: clamp(1.5rem, 4vw, 3rem);
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-2);
+    overflow: hidden;
   }
-
-  @media (max-width: 991px) {
-    .testimonials-section {
-      padding: 80px 5% 100px;
+  .tm__slide {
+    animation: tm-in 700ms var(--ease);
+  }
+  @keyframes tm-in {
+    from {
+      opacity: 0;
+      transform: translateX(24px);
+      filter: blur(6px);
     }
   }
-
-  @media (max-width: 576px) {
-    .testimonials-grid {
+  .tm__slide :global(.tm__mark) {
+    color: var(--blue-600);
+    margin-bottom: var(--s-4);
+  }
+  .tm__slide blockquote p {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: clamp(1.1875rem, 1rem + 0.8vw, 1.5rem);
+    letter-spacing: -0.01em;
+    line-height: 1.45;
+    color: var(--navy-900);
+  }
+  .tm__slide figcaption {
+    display: grid;
+    margin-top: var(--s-6);
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--teal-100);
+  }
+  .tm__slide figcaption span {
+    font-size: var(--fs-sm);
+    color: var(--ink-muted);
+  }
+  @media (max-width: 860px) {
+    .tm {
       grid-template-columns: 1fr;
+      gap: var(--s-6);
     }
-    .testimonial-card {
-      padding: 40px 30px;
-      min-height: auto;
+    .tm__controls {
+      order: 3;
     }
   }
 </style>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-tm]").forEach((root) => {
+    const slides = Array.from(root.querySelectorAll<HTMLElement>("[data-tm-slide]"));
+    const indexEl = root.querySelector("[data-tm-index]");
+    let i = 0;
+    const show = (n: number) => {
+      slides[i].hidden = true;
+      i = (n + slides.length) % slides.length;
+      slides[i].hidden = false;
+      if (indexEl) indexEl.textContent = String(i + 1);
+    };
+    root.querySelector("[data-tm-prev]")?.addEventListener("click", () => show(i - 1));
+    root.querySelector("[data-tm-next]")?.addEventListener("click", () => show(i + 1));
+  });
+</script>

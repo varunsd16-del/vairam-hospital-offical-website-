@@ -1,0 +1,162 @@
+---
+import Icon from "../ui/Icon.astro";
+import { specialities } from "../../data/specialities";
+---
+
+<section class="section spec-section" aria-labelledby="specTitle">
+  <div class="container">
+    <div class="section-head section-head--split">
+      <div class="section-head" style="margin:0">
+        <p class="eyebrow">Centres of excellence</p>
+        <h2 id="specTitle">Care across <span class="text-grad">{specialities.length} specialities</span></h2>
+        <p class="lede">From a first consultation to surgery and recovery, your care stays with one coordinated team.</p>
+      </div>
+      <a href="/services" class="btn btn--outline">View all specialities <Icon name="arrow-right" /></a>
+    </div>
+
+    <ul role="list" class="spec-grid">
+      {
+        specialities.map((s) => (
+          <li class="reveal">
+            <a href={`/services/${s.id}`} class:list={["spec lift", { "spec--alert": s.id === "emergency" }]}>
+              <div class="spec__top">
+                <span class="icon-tile spec__icon">
+                  <Icon name={s.icon} size={26} />
+                </span>
+                <span class="spec__go" aria-hidden="true">
+                  <Icon name="arrow-right" size={18} />
+                </span>
+              </div>
+              <h3>{s.short}</h3>
+              <p>{s.desc}</p>
+              <span class="spec__sub">{s.sub}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .spec-section {
+    background: var(--paper-2);
+  }
+  .spec-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--s-5);
+  }
+  .spec {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-3);
+    height: 100%;
+    padding: var(--s-6);
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+  }
+  /* soft colour wash that fades in on hover */
+  /* blue rule that grows along the bottom edge on hover */
+  .spec::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 3px;
+    background: var(--blue-600);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 500ms var(--ease);
+  }
+  .spec:hover::before {
+    transform: scaleX(1);
+  }
+  .spec__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--s-3);
+  }
+  .spec__go {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--r-sm);
+    color: var(--ink-muted);
+    transition: all 400ms var(--ease);
+  }
+  .spec:hover .spec__go {
+    color: var(--blue-600);
+    transform: translateX(4px);
+  }
+  .spec h3 {
+    font-size: 1.25rem;
+  }
+  .spec p {
+    color: var(--ink-muted);
+    font-size: var(--fs-sm);
+    flex: 1;
+  }
+  .spec__sub {
+    align-self: flex-start;
+    margin-top: var(--s-2);
+    padding: 5px 12px;
+    border-radius: var(--r-pill);
+    background: var(--paper-2);
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    color: var(--ink-2);
+  }
+  .spec--alert .icon-tile,
+  .spec--alert:hover .icon-tile {
+    background: var(--alert-600);
+    color: var(--white);
+  }
+  .spec--alert::before {
+    background: var(--alert-600);
+  }
+  .spec--alert:hover .spec__go {
+    color: var(--alert-600);
+  }
+
+  @media (max-width: 960px) {
+    .spec-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (max-width: 560px) {
+    .spec-grid {
+      grid-template-columns: 1fr;
+      gap: var(--s-3);
+    }
+    .spec {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      column-gap: var(--s-4);
+      row-gap: var(--s-1);
+      padding: var(--s-5);
+      border-radius: var(--r-md);
+    }
+    .spec__top {
+      grid-row: span 2;
+      margin: 0;
+    }
+    .spec__go,
+    .spec__sub {
+      display: none;
+    }
+    .spec .icon-tile {
+      width: 48px;
+      height: 48px;
+    }
+    .spec h3 {
+      font-size: 1.125rem;
+    }
+  }
+</style>

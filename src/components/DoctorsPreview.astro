@@ -1,505 +1,480 @@
 ---
-// DoctorsPreview Component - Vairam Multi Speciality Hospital
-// Optimized for SEO, AEO, and GEO search engines with structured JSON-LD Schema.
-
-const previewDoctors = [
-  { 
-    name: "Dr. A. Rajesh", 
-    spec: "Senior Cardiologist", 
-    edu: "MBBS, MD, DM (Cardio)", 
-    img: "/images/consultation.png",
-    icon: "fa-heartbeat",
-    specialtyLink: "/services",
-    availability: "Available Today",
-    desc: "Expert in interventional cardiology, heart failure management, and preventive cardiac wellness in Mayiladuthurai."
-  },
-  { 
-    name: "Dr. K. Vignesh", 
-    spec: "Orthopedic Surgeon", 
-    edu: "MBBS, MS (Ortho)", 
-    img: "/images/consultation.png",
-    icon: "fa-bone",
-    specialtyLink: "/services",
-    availability: "Available Today",
-    desc: "Specialist in joint replacement surgery, trauma management, and advanced arthroscopic treatments."
-  },
-  { 
-    name: "Dr. S. Priya", 
-    spec: "Gynecologist", 
-    edu: "MBBS, DGO, MS", 
-    img: "/images/consultation.png",
-    icon: "fa-baby",
-    specialtyLink: "/services",
-    availability: "Available Today",
-    desc: "Dedicated to complete women's healthcare, pregnancy support, and laparoscopic gynecological surgeries."
-  }
-];
+import { Image } from "astro:assets";
+import Icon from "./ui/Icon.astro";
+import DoctorAvatar from "./ui/DoctorAvatar.astro";
+import { doctors, doctorDepartments } from "../data/doctors";
+import { site, telHref } from "../data/site";
 ---
 
-<!-- Structured Metadata for Search (SEO) and Answer Engines (AEO/GEO) -->
-<script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    "name": "Specialist Doctors at Vairam Hospital Mayiladuthurai",
-    "description": "Meet our team of best doctors and top medical specialists in Mayiladuthurai, providing cardiology, neurology, orthopaedics, gynecology, and general medicine.",
-    "numberOfItems": 3,
-    "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "item": {
-          "@type": "Physician",
-          "name": "Dr. A. Rajesh",
-          "jobTitle": "Senior Cardiologist",
-          "medicalSpecialty": "CardiovascularDisease",
-          "worksFor": {
-            "@type": "Hospital",
-            "name": "Vairam Multi Speciality Hospital"
-          },
-          "address": {
-            "@type": "PostalAddress",
-            "streetAddress": "Pattamangala St",
-            "addressLocality": "Mayiladuthurai",
-            "addressRegion": "TN",
-            "postalCode": "609001",
-            "addressCountry": "IN"
-          }
-        }
-      },
-      {
-        "@type": "ListItem",
-        "position": 2,
-        "item": {
-          "@type": "Physician",
-          "name": "Dr. K. Vignesh",
-          "jobTitle": "Orthopedic Surgeon",
-          "medicalSpecialty": "Orthopedic",
-          "worksFor": {
-            "@type": "Hospital",
-            "name": "Vairam Multi Speciality Hospital"
-          },
-          "address": {
-            "@type": "PostalAddress",
-            "streetAddress": "Pattamangala St",
-            "addressLocality": "Mayiladuthurai",
-            "addressRegion": "TN",
-            "postalCode": "609001",
-            "addressCountry": "IN"
-          }
-        }
-      },
-      {
-        "@type": "ListItem",
-        "position": 3,
-        "item": {
-          "@type": "Physician",
-          "name": "Dr. S. Priya",
-          "jobTitle": "Gynecologist",
-          "medicalSpecialty": "Obstetric",
-          "worksFor": {
-            "@type": "Hospital",
-            "name": "Vairam Multi Speciality Hospital"
-          },
-          "address": {
-            "@type": "PostalAddress",
-            "streetAddress": "Pattamangala St",
-            "addressLocality": "Mayiladuthurai",
-            "addressRegion": "TN",
-            "postalCode": "609001",
-            "addressCountry": "IN"
-          }
-        }
-      }
-    ]
-  }
-</script>
-
-<section class="doctors-preview-section" id="doctorsPreview">
+<section class="dp" aria-labelledby="docsTitle">
   <div class="container">
-    
-    <!-- Section Header optimized for SEO & High Search Intent -->
-    <div class="section-header reveal reveal-up">
-      <span class="section-badge">Medical Team</span>
-      <h2 class="section-title">Meet Our Specialist <br /><span class="text-primary">Doctors in Mayiladuthurai</span></h2>
-      <p class="section-desc">
-        Consult with the best medical specialists in Mayiladuthurai. Our clinical team brings together top-tier cardiologists, orthopedic surgeons, neurologists, and gynecologists to deliver compassionate, high-quality healthcare.
+    <div class="dp__head">
+      <div class="dp__intro">
+        <p class="eyebrow">Our doctors</p>
+        <h2 id="docsTitle">Meet our specialists</h2>
+        <p class="lede">Experienced consultants across every major speciality, now practising close to home in {site.address.city}.</p>
+      </div>
+      <div class="dp__controls">
+        <button type="button" class="dp__arrow" data-dir="-1" aria-label="Previous doctors" disabled>
+          <Icon name="arrow-left" size={20} />
+        </button>
+        <button type="button" class="dp__arrow" data-dir="1" aria-label="Next doctors">
+          <Icon name="arrow-right" size={20} />
+        </button>
+      </div>
+    </div>
+
+    <div class="dp__chips chips" role="group" aria-label="Filter by department">
+      <button type="button" class="chip" data-filter="all" aria-pressed="true">All specialists</button>
+      {doctorDepartments.map((d) => <button type="button" class="chip" data-filter={d} aria-pressed="false">{d}</button>)}
+    </div>
+  </div>
+
+  <div class="dp__viewport">
+    <ul role="list" class="dp__track" id="dpTrack">
+      {
+        doctors.map((d) => (
+          <li class="dp__item" data-dept={d.speciality}>
+            <article class="dc">
+              {d.photo ? (
+                <Image
+                  src={d.photo}
+                  alt={`${d.name}, ${d.role} at Vairam Hospital, Mayiladuthurai`}
+                  widths={[320, 480, 640]}
+                  sizes="(max-width: 560px) 78vw, 300px"
+                  loading="lazy"
+                  class="dc__img"
+                />
+              ) : (
+                <span class="dc__img dc__img--avatar">
+                  <DoctorAvatar doctor={d} />
+                </span>
+              )}
+              {!d.detailsPending && (
+                <span class="dc__exp">
+                  <Icon name="award" size={14} /> {d.experience}
+                </span>
+              )}
+              <div class="dc__panel">
+                <span class="dc__dept">{d.speciality}</span>
+                <h3>{d.name}</h3>
+                <p class="dc__role">{d.role}</p>
+                <div class="dc__more">
+                  <div class="dc__more-inner">
+                    <p>
+                      <Icon name="graduation" size={15} /> {d.education}
+                    </p>
+                    <p>
+                      <Icon name="clock" size={15} /> {d.days} · {d.hours}
+                    </p>
+                    <div class="dc__actions">
+                      <button type="button" class="btn btn--sm dc__book" data-book data-dept={d.speciality} data-doctor={d.name}>
+                        <Icon name="calendar" size={16} /> Book
+                      </button>
+                      <a href={`/doctors#${d.id}`} class="dc__profile">
+                        Profile <Icon name="arrow-right" size={16} />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </li>
+        ))
+      }
+      <li class="dp__item dp__item--cta">
+        <a href="/doctors" class="dp__all">
+          <span class="dp__all-icon"><Icon name="user-search" size={28} /></span>
+          <strong>View all doctors</strong>
+          <span>Search by name or department, see OPD timings and book online.</span>
+          <span class="dp__all-link">Find a doctor <Icon name="arrow-right" size={18} /></span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="container">
+    <div class="dp__foot">
+      <span class="dp__progress" aria-hidden="true"><span id="dpBar"></span></span>
+      <p>
+        Not sure which specialist to see? <a href={telHref}>Call {site.phoneDisplay}</a> and we'll guide you.
       </p>
     </div>
-
-    <!-- Doctors Cards Grid -->
-    <div class="doctors-grid">
-      {previewDoctors.map((doc, idx) => (
-        <article class="doc-preview-card reveal reveal-up" style={`transition-delay: ${idx * 0.15}s;`}>
-          
-          <!-- Image Wrapper with Availability Status -->
-          <div class="doc-image-wrap">
-            <img src={doc.img} alt={`Photo of ${doc.name}, ${doc.spec} at Vairam Hospital Mayiladuthurai`} class="doc-img" />
-            <div class="availability-badge">
-              <span class="status-dot"></span>
-              {doc.availability}
-            </div>
-          </div>
-
-          <!-- Doctor Body Details -->
-          <div class="doc-body">
-            <div class="doc-header">
-              <div class="doc-title-group">
-                <h3 class="doc-name">{doc.name}</h3>
-                <span class="doc-spec">{doc.spec}</span>
-              </div>
-              <div class="doc-spec-icon">
-                <i class={`fas ${doc.icon}`}></i>
-              </div>
-            </div>
-            
-            <p class="doc-edu">{doc.edu}</p>
-            <p class="doc-desc">{doc.desc}</p>
-            
-            <!-- Booking and Detail triggers -->
-            <div class="doc-actions">
-              <a href="/contact" class="btn-book-now" aria-label={`Book an appointment with ${doc.name}`}>
-                Book Appointment <i class="fas fa-calendar-check"></i>
-              </a>
-            </div>
-          </div>
-        </article>
-      ))}
-    </div>
-
-    <!-- Secondary Call-to-Action to View All Doctors -->
-    <div class="section-footer reveal reveal-up">
-      <a href="/doctors" class="btn-view-all" aria-label="View all doctors and clinical specialists at Vairam Hospital">
-        View All Specialist Doctors <i class="fas fa-arrow-right"></i>
-      </a>
-    </div>
-
   </div>
 </section>
 
 <style>
-  .doctors-preview-section {
-    padding: 100px 5% 120px;
-    background: var(--white);
-    position: relative;
-    z-index: 10;
-  }
-
-  .container {
-    max-width: 1400px;
-    margin: 0 auto;
-  }
-
-  .section-header {
-    max-width: 800px;
-    margin: 0 auto 60px;
-    text-align: center;
-  }
-
-  .section-badge {
-    color: var(--primary-dark);
-    font-size: 0.9rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    margin-bottom: 15px;
-    display: inline-block;
-    position: relative;
-    padding-left: 20px;
-  }
-
-  .section-badge::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 12px;
-    height: 3px;
-    background: var(--primary);
-    border-radius: 2px;
-  }
-
-  .section-title {
-    font-size: clamp(2rem, 3.5vw, 2.75rem);
-    font-weight: 800;
-    line-height: 1.2;
-    color: var(--secondary);
-    margin-bottom: 20px;
-    letter-spacing: -0.02em;
-  }
-
-  .text-primary {
-    color: var(--primary);
-    background: linear-gradient(120deg, var(--primary) 0%, var(--primary-dark) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  .section-desc {
-    font-size: 1.05rem;
-    line-height: 1.7;
-    color: var(--text-muted);
-  }
-
-  /* Doctors Card Grid */
-  .doctors-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 40px;
-    margin-bottom: 60px;
-  }
-
-  .doc-preview-card {
-    background: var(--white);
-    border: 1px solid rgba(13, 148, 136, 0.08);
-    border-radius: 28px;
-    box-shadow: 0 15px 35px -15px rgba(0, 0, 0, 0.04);
+  .dp {
+    padding-block: var(--section);
+    background:
+      radial-gradient(60% 50% at 100% 0%, rgb(27 88 184 / 0.06), transparent 70%),
+      var(--paper-2);
     overflow: hidden;
-    transition: var(--transition);
+  }
+  .dp__head {
     display: flex;
-    flex-direction: column;
-    position: relative;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--s-6);
+  }
+  .dp__intro {
+    display: grid;
+    gap: var(--s-4);
+    max-width: 640px;
+  }
+  .dp__controls {
+    display: flex;
+    gap: var(--s-2);
+  }
+  .dp__arrow {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 1px solid var(--line-strong);
+    background: var(--white);
+    color: var(--navy-900);
+    transition: background var(--dur) var(--ease), color var(--dur) var(--ease), border-color var(--dur) var(--ease), opacity var(--dur);
+  }
+  .dp__arrow:hover:not(:disabled) {
+    background: var(--navy-900);
+    border-color: var(--navy-900);
+    color: var(--white);
+  }
+  .dp__arrow:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+  .dp__chips {
+    margin-top: var(--s-6);
   }
 
-  .doc-preview-card:hover {
-    transform: translateY(-8px);
-    border-color: rgba(13, 148, 136, 0.25);
-    box-shadow: 0 25px 50px -20px rgba(13, 148, 136, 0.12);
+  /* ── Track: aligned to the container on the left, bleeds off the right edge ── */
+  .dp__viewport {
+    margin-top: var(--s-6);
+  }
+  .dp__track {
+    --edge: max(var(--gutter), calc((100vw - var(--container)) / 2));
+    display: flex;
+    gap: var(--s-5);
+    padding: var(--s-2) var(--edge) var(--s-5);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--edge);
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+  }
+  .dp__track::-webkit-scrollbar {
+    display: none;
+  }
+  .dp__item {
+    flex: 0 0 clamp(250px, 23vw, 300px);
+    scroll-snap-align: start;
+    transition: opacity 400ms var(--ease), transform 400ms var(--ease);
+  }
+  .dp__item[hidden] {
+    display: none;
   }
 
-  /* Image Wrap styling */
-  .doc-image-wrap {
-    height: 280px;
+  /* ── Doctor card ── */
+  .dc {
     position: relative;
+    aspect-ratio: 3 / 4;
+    border-radius: var(--r-lg);
     overflow: hidden;
-    background: #f0f7f7;
+    background: linear-gradient(160deg, #dfe9f6, #d6ece9);
+    box-shadow: 0 1px 2px rgb(10 31 68 / 0.06), 0 18px 40px -24px rgb(10 31 68 / 0.45);
+    transition: transform 500ms var(--ease), box-shadow 500ms var(--ease);
+    isolation: isolate;
   }
-
-  .doc-img {
+  .dc:hover,
+  .dc:focus-within {
+    transform: translateY(-6px);
+    box-shadow: 0 30px 60px -28px rgb(10 31 68 / 0.6);
+  }
+  .dc__img--avatar {
+    display: block;
+    padding-bottom: 38%;
+    background: linear-gradient(150deg, var(--navy-900), var(--blue-700) 70%, var(--teal-600));
+  }
+  .dc :global(.dc__img) {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    object-position: center 12%;
+    transition: transform 900ms var(--ease);
   }
-
-  .doc-preview-card:hover .doc-img {
-    transform: scale(1.05);
+  .dc:hover :global(.dc__img) {
+    transform: scale(1.06);
   }
-
-  /* Availability status badge */
-  .availability-badge {
+  .dc::after {
+    content: "";
     position: absolute;
-    top: 20px;
-    left: 20px;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(4px);
-    padding: 8px 16px;
-    border-radius: 50px;
-    font-size: 0.78rem;
-    font-weight: 700;
-    color: var(--primary-dark);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-    border: 1px solid rgba(13, 148, 136, 0.1);
+    inset: 40% 0 0;
+    z-index: 0;
+    background: linear-gradient(180deg, transparent 0%, rgb(5 15 36 / 0.55) 40%, rgb(5 15 36 / 0.94) 100%);
+    pointer-events: none;
   }
-
-  .status-dot {
-    width: 8px;
-    height: 8px;
-    background: #25d366;
-    border-radius: 50%;
-    display: inline-block;
-    position: relative;
-    animation: statusPulse 2s infinite;
-  }
-
-  @keyframes statusPulse {
-    0% {
-      transform: scale(1);
-      box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
-    }
-    70% {
-      transform: scale(1.1);
-      box-shadow: 0 0 0 6px rgba(37, 211, 102, 0);
-    }
-    100% {
-      transform: scale(1);
-      box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
-    }
-  }
-
-  /* Card Body */
-  .doc-body {
-    padding: 30px;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-  }
-
-  .doc-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 15px;
-    margin-bottom: 8px;
-  }
-
-  .doc-title-group {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .doc-name {
-    font-size: 1.3rem;
-    font-weight: 800;
-    color: var(--secondary);
-    line-height: 1.2;
-  }
-
-  .doc-spec {
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: var(--primary);
-    margin-top: 4px;
-  }
-
-  /* FontAwesome Icon frame overlay */
-  .doc-spec-icon {
-    width: 44px;
-    height: 44px;
-    background: rgba(13, 148, 136, 0.06);
-    color: var(--primary);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    flex-shrink: 0;
-    transition: var(--transition);
-  }
-
-  .doc-preview-card:hover .doc-spec-icon {
-    background: var(--primary);
-    color: var(--white);
-    transform: rotate(5deg);
-  }
-
-  .doc-edu {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    font-weight: 600;
-    margin-bottom: 15px;
-    background: #f4fbfb;
-    padding: 4px 12px;
-    border-radius: 6px;
-    align-self: flex-start;
-  }
-
-  .doc-desc {
-    font-size: 0.92rem;
-    line-height: 1.6;
-    color: var(--text-muted);
-    margin-bottom: 25px;
-    flex-grow: 1;
-  }
-
-  /* Action Buttons inside Card */
-  .doc-actions {
-    display: flex;
-    margin-top: auto;
-  }
-
-  .btn-book-now {
-    width: 100%;
-    text-align: center;
-    text-decoration: none;
-    background: linear-gradient(135deg, rgba(20, 184, 166, 0.08) 0%, rgba(13, 148, 136, 0.04) 100%);
-    border: 1px solid rgba(13, 148, 136, 0.12);
-    color: var(--primary-dark);
-    padding: 14px;
-    border-radius: 16px;
-    font-weight: 700;
-    font-size: 0.9rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    transition: var(--transition);
-  }
-
-  .btn-book-now i {
-    font-size: 0.95rem;
-    transition: var(--transition);
-  }
-
-  .doc-preview-card:hover .btn-book-now {
-    background: var(--primary);
-    color: var(--white);
-    border-color: var(--primary);
-    box-shadow: 0 10px 20px -5px rgba(13, 148, 136, 0.3);
-  }
-
-  .doc-preview-card:hover .btn-book-now i {
-    transform: translateY(-1px);
-  }
-
-  /* Section Footer */
-  .section-footer {
-    text-align: center;
-  }
-
-  .btn-view-all {
-    text-decoration: none;
+  .dc__exp {
+    position: absolute;
+    top: var(--s-3);
+    left: var(--s-3);
+    z-index: 1;
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    background: var(--white);
-    color: var(--primary-dark);
-    border: 1.5px solid rgba(13, 148, 136, 0.25);
-    padding: 16px 36px;
-    border-radius: 16px;
+    gap: 5px;
+    padding: 6px 11px;
+    border-radius: var(--r-sm);
+    background: rgb(255 255 255 / 0.92);
+    color: var(--navy-900);
+    font-size: 0.75rem;
     font-weight: 700;
-    font-size: 0.95rem;
-    transition: var(--transition);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+    box-shadow: var(--shadow-1);
+  }
+  .dc__panel {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    padding: var(--s-5);
+    color: var(--white);
+  }
+  .dc__dept {
+    display: inline-block;
+    margin-bottom: var(--s-2);
+    padding: 4px 10px;
+    border-radius: var(--r-sm);
+    background: var(--teal-500);
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+  .dc h3 {
+    color: var(--white);
+    font-size: 1.25rem;
+    line-height: 1.25;
+  }
+  .dc__role {
+    margin-top: 2px;
+    font-size: var(--fs-sm);
+    color: rgb(255 255 255 / 0.78);
+  }
+  /* details slide open on hover / keyboard focus */
+  .dc__more {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 500ms var(--ease);
+  }
+  .dc__more-inner {
+    min-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 400ms var(--ease);
+  }
+  .dc:hover .dc__more,
+  .dc:focus-within .dc__more {
+    grid-template-rows: 1fr;
+  }
+  .dc:hover .dc__more-inner,
+  .dc:focus-within .dc__more-inner {
+    opacity: 1;
+  }
+  .dc__more p {
+    display: flex;
+    gap: 6px;
+    margin-top: var(--s-2);
+    font-size: var(--fs-xs);
+    color: rgb(255 255 255 / 0.82);
+  }
+  .dc__more p :global(svg) {
+    flex: none;
+    margin-top: 2px;
+    color: var(--teal-400);
+  }
+  .dc__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--s-3);
+    margin-top: var(--s-4);
+    padding-top: var(--s-4);
+    border-top: 1px solid rgb(255 255 255 / 0.16);
+  }
+  .dc__book {
+    flex: 1;
+  }
+  .dc__profile {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: var(--fs-sm);
+    font-weight: 700;
+    color: var(--white);
+  }
+  .dc__profile:hover {
+    color: var(--teal-100);
   }
 
-  .btn-view-all:hover {
-    background: rgba(13, 148, 136, 0.04);
-    border-color: var(--primary);
-    color: var(--primary);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px -10px rgba(13, 148, 136, 0.2);
+  /* ── "View all" card ── */
+  .dp__all {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--s-3);
+    height: 100%;
+    aspect-ratio: 3 / 4;
+    padding: var(--s-6);
+    border-radius: var(--r-lg);
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cpath d='M18 13h4v5h5v4h-5v5h-4v-5h-5v-4h5z' fill='%23ffffff' fill-opacity='0.06'/%3E%3C/svg%3E"),
+      linear-gradient(150deg, var(--navy-900), var(--blue-700));
+    color: rgb(255 255 255 / 0.8);
+    font-size: var(--fs-sm);
+    transition: transform 500ms var(--ease);
+  }
+  .dp__all:hover {
+    transform: translateY(-6px);
+  }
+  .dp__all-icon {
+    display: grid;
+    place-items: center;
+    width: 60px;
+    height: 60px;
+    margin-bottom: var(--s-2);
+    border-radius: var(--r-md);
+    background: var(--teal-500);
+    color: var(--white);
+  }
+  .dp__all strong {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    color: var(--white);
+  }
+  .dp__all-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: var(--s-3);
+    font-weight: 700;
+    color: var(--white);
+  }
+  .dp__all:hover .dp__all-link :global(svg) {
+    transform: translateX(4px);
+  }
+  .dp__all-link :global(svg) {
+    transition: transform var(--dur) var(--ease);
   }
 
-  .btn-view-all i {
-    transition: var(--transition);
+  /* ── Footer row ── */
+  .dp__foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-6);
+    margin-top: var(--s-4);
+    font-size: var(--fs-sm);
+    color: var(--ink-muted);
+  }
+  .dp__foot a {
+    font-weight: 700;
+    color: var(--blue-600);
+  }
+  .dp__progress {
+    flex: 0 1 280px;
+    height: 3px;
+    border-radius: 3px;
+    background: var(--line-strong);
+    overflow: hidden;
+  }
+  .dp__progress span {
+    display: block;
+    height: 100%;
+    width: 30%;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--blue-600), var(--teal-500));
+    transform-origin: left;
+    transition: transform 300ms var(--ease), width 300ms var(--ease);
   }
 
-  .btn-view-all:hover i {
-    transform: translateX(5px);
-  }
-
-  /* Responsiveness overrides */
-  @media (max-width: 991px) {
-    .doctors-preview-section {
-      padding: 80px 5% 100px;
+  /* Touch devices: no hover, so show details permanently */
+  @media (hover: none) {
+    .dc__more {
+      grid-template-rows: 1fr;
     }
-    .doctors-grid {
-      gap: 30px;
+    .dc__more-inner {
+      opacity: 1;
+    }
+    .dc {
+      aspect-ratio: 3 / 4.4;
+    }
+    .dc::after {
+      inset: 30% 0 0;
     }
   }
-
-  @media (max-width: 576px) {
-    .doctors-grid {
-      grid-template-columns: 1fr;
+  @media (max-width: 768px) {
+    .dp__controls {
+      display: none;
     }
-    .btn-view-all {
+    .dp__foot {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--s-3);
+    }
+    .dp__progress {
+      flex-basis: auto;
       width: 100%;
-      justify-content: center;
+    }
+  }
+  @media (max-width: 560px) {
+    .dp__item {
+      flex-basis: 78vw;
     }
   }
 </style>
+
+<script>
+  const track = document.getElementById("dpTrack");
+  const bar = document.getElementById("dpBar");
+  const arrows = Array.from(document.querySelectorAll<HTMLButtonElement>(".dp__arrow"));
+  const chips = Array.from(document.querySelectorAll<HTMLButtonElement>(".dp__chips .chip"));
+  const items = Array.from(document.querySelectorAll<HTMLElement>(".dp__item[data-dept]"));
+
+  function update() {
+    if (!track) return;
+    const max = track.scrollWidth - track.clientWidth;
+    const visible = max > 0 ? track.clientWidth / track.scrollWidth : 1;
+    if (bar) {
+      bar.style.width = `${Math.max(visible * 100, 12)}%`;
+      bar.style.transform = `translateX(${max > 0 ? (track.scrollLeft / max) * ((1 / visible) * 100 - 100) : 0}%)`;
+    }
+    arrows[0] && (arrows[0].disabled = track.scrollLeft <= 4);
+    arrows[1] && (arrows[1].disabled = track.scrollLeft >= max - 4);
+  }
+
+  arrows.forEach((a) =>
+    a.addEventListener("click", () => {
+      if (!track) return;
+      const card = track.querySelector<HTMLElement>(".dp__item:not([hidden])");
+      const step = card ? card.offsetWidth + 24 : 300;
+      track.scrollBy({ left: Number(a.dataset.dir) * step * 2 });
+    }),
+  );
+
+  chips.forEach((chip) =>
+    chip.addEventListener("click", () => {
+      const f = chip.dataset.filter;
+      chips.forEach((c) => c.setAttribute("aria-pressed", String(c === chip)));
+      items.forEach((it) => (it.hidden = f !== "all" && it.dataset.dept !== f));
+      track?.scrollTo({ left: 0 });
+      requestAnimationFrame(update);
+    }),
+  );
+
+  track?.addEventListener("scroll", () => requestAnimationFrame(update), { passive: true });
+  window.addEventListener("resize", update);
+  update();
+</script>

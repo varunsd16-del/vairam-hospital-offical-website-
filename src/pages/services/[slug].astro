@@ -1,0 +1,853 @@
+---
+import type { GetStaticPaths } from "astro";
+import { Image } from "astro:assets";
+import Layout from "../../layouts/Layout.astro";
+import PageHeader from "../../components/PageHeader.astro";
+import FeatureBand from "../../components/ui/FeatureBand.astro";
+import Icon from "../../components/ui/Icon.astro";
+import DoctorCard from "../../components/ui/DoctorCard.astro";
+import { specialities, type Speciality } from "../../data/specialities";
+import { specialityDetails } from "../../data/specialityDetails";
+import { doctors } from "../../data/doctors";
+import { site, telHref } from "../../data/site";
+import consultation from "../../assets/images/consultation.png";
+import building from "../../assets/images/hero-building.png";
+
+export const getStaticPaths = (() =>
+  specialities.map((s) => ({ params: { slug: s.id }, props: { s } }))) satisfies GetStaticPaths;
+
+interface Props {
+  s: Speciality;
+}
+const { s } = Astro.props;
+const d = specialityDetails[s.id];
+const isER = s.id === "emergency";
+
+const deptDoctors = doctors.filter((doc) => doc.speciality === s.short);
+const idx = specialities.findIndex((x) => x.id === s.id);
+const prev = specialities[(idx - 1 + specialities.length) % specialities.length];
+const next = specialities[(idx + 1) % specialities.length];
+const related = [
+  ...specialities.filter((x) => x.id !== s.id && x.category === s.category),
+  ...specialities.filter((x) => x.id !== s.id && x.category !== s.category),
+].slice(0, 3);
+
+const journey = [
+  { icon: "calendar", title: "Book", text: "Book online, on WhatsApp or by phone. We confirm your slot." },
+  { icon: "stethoscope", title: "Consult", text: `Meet our ${s.short.toLowerCase()} specialist for a detailed assessment.` },
+  { icon: "microscope", title: "Diagnose", text: "Tests and imaging in the same building, with fast reports." },
+  { icon: "heart", title: "Treat & recover", text: "A clear treatment plan, with follow-up until you are well." },
+] as const;
+
+const sections = [
+  { id: "overview", label: "Overview" },
+  { id: "conditions", label: "Conditions" },
+  { id: "treatments", label: "Treatments" },
+  ...(deptDoctors.length ? [{ id: "doctors", label: "Doctors" }] : []),
+  { id: "faqs", label: "FAQs" },
+];
+
+const ld = [
+  {
+    "@context": "https://schema.org",
+    "@type": "MedicalSpecialty",
+    name: s.name,
+    description: s.desc,
+    url: `${site.url}/services/${s.id}`,
+    provider: { "@id": `${site.url}/#hospital` },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: site.url },
+      { "@type": "ListItem", position: 2, name: "Specialities", item: `${site.url}/services` },
+      { "@type": "ListItem", position: 3, name: s.name, item: `${site.url}/services/${s.id}` },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: d.faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+  },
+];
+---
+
+<Layout
+  title={`${s.name} in Mayiladuthurai | Vairam Multi Speciality Hospital`}
+  description={`${s.desc} Book a ${s.short.toLowerCase()} appointment at Vairam Hospital, Mayiladuthurai.`}
+>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(ld)} />
+
+  <!-- Hero -->
+  <PageHeader
+    crumb={s.short}
+    parent={{ href: "/services", label: "Specialities" }}
+    eyebrow={`${s.short} · Vairam Hospital`}
+    title={d.h1}
+    lede={d.lede}
+    stats={
+      isER
+        ? [
+            { value: "24/7", label: "Open every day" },
+            { value: `${d.conditions.length}+`, label: "Emergencies handled" },
+            { value: "On call", label: "Ambulance support" },
+            { value: "Direct", label: "ICU & theatre access" },
+          ]
+        : [
+            { value: `${d.conditions.length}+`, label: "Conditions treated" },
+            { value: `${s.features.length + s.procedures.length}`, label: "Services & procedures" },
+            deptDoctors.length
+              ? { value: `${deptDoctors.length}`, label: "Specialist consultants" }
+              : { value: "Same day", label: "Reports for most tests" },
+            { value: "24/7", label: "Emergency support" },
+          ]
+    }
+  >
+    <div class="sp-actions">
+      {
+        isER ? (
+          <a href={telHref} class="btn btn--alert">
+            <Icon name="phone" /> Call {site.phoneDisplay}
+          </a>
+        ) : (
+          <button type="button" class="btn" data-book data-dept={s.short}>
+            <Icon name="calendar" /> Book an appointment
+          </button>
+        )
+      }
+      <a href={telHref} class="btn btn--ghost-light">
+        <Icon name="phone" /> {isER ? "Ambulance on call" : "Talk to us"}
+      </a>
+    </div>
+  </PageHeader>
+
+  <!-- In-page nav -->
+  <nav class="sp-tabs" aria-label="On this page">
+    <div class="container">
+      <ul role="list">
+        {sections.map((x) => <li><a href={`#${x.id}`} data-tab={x.id}>{x.label}</a></li>)}
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Overview -->
+  <section class="section" id="overview">
+    <div class="container ov">
+      <div class="ov__copy">
+        <div class="section-head">
+          <p class="eyebrow">Overview</p>
+          <h2>About our {s.short.toLowerCase()} department</h2>
+        </div>
+        {d.overview.map((p, i) => <p class:list={{ "ov__lead": i === 0 }}>{p}</p>)}
+        <div class="ov__why">
+          <h3>Why choose Vairam for {s.short.toLowerCase()}</h3>
+          <ul role="list">
+            {
+              s.why.map((w) => (
+                <li>
+                  <span class="ov__tick"><Icon name="check" size={16} /></span>
+                  {w}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+      <figure class="ov__media clip8 reveal">
+        <Image src={isER ? building : consultation} alt={`${s.name} at Vairam Hospital`} widths={[480, 720, 960]} sizes="(max-width: 960px) 100vw, 45vw" loading="lazy" />
+      </figure>
+    </div>
+  </section>
+
+  <!-- Conditions -->
+  <section class="section section--paper2" id="conditions">
+    <div class="container">
+      <div class="section-head section-head--split">
+        <div class="section-head" style="margin:0">
+          <p class="eyebrow">What we treat</p>
+          <h2>Conditions we treat</h2>
+        </div>
+        <p class="lede">Not sure if your condition is listed? Call us and we'll guide you to the right specialist.</p>
+      </div>
+      <ul role="list" class="cond">
+        {
+          d.conditions.map((c) => (
+            <li class="cond__item reveal">
+              <span class="cond__icon"><Icon name={s.icon} size={20} /></span>
+              {c}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- Treatments -->
+  <section class="section section--white" id="treatments">
+    <div class="container">
+      <div class="section-head section-head--center">
+        <p class="eyebrow">Treatments & services</p>
+        <h2>Diagnosis and treatment, under one roof</h2>
+      </div>
+      <div class="tr">
+        <div class="tr__card lift reveal">
+          <div class="tr__head">
+            <span class="icon-tile"><Icon name="scan" size={24} /></span>
+            <h3>Services & diagnostics</h3>
+          </div>
+          <ul class="check-list">{s.features.map((f) => <li>{f}</li>)}</ul>
+        </div>
+        <div class="tr__card lift reveal">
+          <div class="tr__head">
+            <span class="icon-tile"><Icon name="stethoscope" size={24} /></span>
+            <h3>Procedures</h3>
+          </div>
+          <ul class="check-list">{s.procedures.map((f) => <li>{f}</li>)}</ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- When to see a specialist -->
+  <section class="section section--white sp-when-wrap">
+    <div class="container">
+      <div class="when reveal">
+        <div class="when__copy">
+          <p class="eyebrow eyebrow--light">{isER ? "Call immediately if" : "When to see a specialist"}</p>
+          <h2>{isER ? "Don't wait. Come in straight away." : "Don't ignore these signs"}</h2>
+          <ul role="list" class="when__list">
+            {
+              d.whenToSee.map((w) => (
+                <li>
+                  <Icon name="check" size={18} />
+                  {w}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+        <div class="when__cta">
+          <p>{isER ? "Our emergency team is ready 24/7." : "Early diagnosis makes treatment simpler and more effective."}</p>
+          {
+            isER ? (
+              <a href={telHref} class="btn btn--alert btn--block">
+                <Icon name="phone" /> {site.phoneDisplay}
+              </a>
+            ) : (
+              <button type="button" class="btn btn--block when__btn" data-book data-dept={s.short}>
+                <Icon name="calendar" /> Book a consultation
+              </button>
+            )
+          }
+          <a href={telHref} class="when__phone"><Icon name="phone" size={16} /> Or call {site.phoneDisplay}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Journey -->
+  <section class="section section--paper2">
+    <div class="container">
+      <div class="section-head section-head--center">
+        <p class="eyebrow">Your visit</p>
+        <h2>What to expect</h2>
+      </div>
+      <ol role="list" class="jr">
+        {
+          journey.map((j, i) => (
+            <li class="jr__step reveal">
+              <span class="jr__num">{String(i + 1).padStart(2, "0")}</span>
+              <span class="icon-tile"><Icon name={j.icon} size={24} /></span>
+              <h3>{j.title}</h3>
+              <p>{j.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- Why choose us (navy band) -->
+  <FeatureBand
+    eyebrow={`Why Vairam for ${s.short.toLowerCase()}`}
+    title={isER ? "Fast, expert care when it matters most" : `${s.short} care you can rely on`}
+    text={isER
+      ? "Our emergency team, ICU and theatres work as one, so critical patients are stabilised and treated without delay."
+      : `Our ${s.short.toLowerCase()} team combines specialist expertise with in-house diagnostics and round-the-clock support.`}
+    items={[
+      ...s.why.map((w, i) => ({ icon: (["award", "users", "clock"] as const)[i % 3], title: w })),
+      { icon: "shield", title: "24/7 backup", text: "Emergency, ICU, pharmacy and lab support available round the clock." },
+    ].slice(0, 4)}
+    cta={isER ? { label: "Call emergency", action: "call" } : { label: "Book an appointment", action: "book", dept: s.short }}
+  />
+
+  <!-- Doctors -->
+  {
+    deptDoctors.length > 0 && (
+      <section class="section section--white" id="doctors">
+        <div class="container">
+          <div class="section-head section-head--split">
+            <div class="section-head" style="margin:0">
+              <p class="eyebrow">Our specialists</p>
+              <h2>Meet the {s.short.toLowerCase()} team</h2>
+            </div>
+            <a href="/doctors" class="btn btn--outline">
+              All doctors <Icon name="arrow-right" />
+            </a>
+          </div>
+          <ul role="list" class="docs">
+            {deptDoctors.map((doc) => (
+              <li class="reveal">
+                <DoctorCard doctor={doc} />
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- FAQs -->
+  <section class:list={["section", deptDoctors.length ? "section--paper2" : "section--white"]} id="faqs">
+    <div class="container fq">
+      <div>
+        <div class="section-head">
+          <p class="eyebrow">FAQs</p>
+          <h2>{s.short}: common questions</h2>
+        </div>
+        <div class="faq">
+          {
+            d.faqs.map((f) => (
+              <details>
+                <summary>{f.q}</summary>
+                <p>{f.a}</p>
+              </details>
+            ))
+          }
+        </div>
+      </div>
+      <aside class="fq__help">
+        <span class="icon-tile"><Icon name="phone" size={24} /></span>
+        <h3>Still have questions?</h3>
+        <p>Our helpdesk can answer questions about appointments, costs and insurance.</p>
+        <a href={telHref} class="btn btn--block"><Icon name="phone" /> {site.phoneDisplay}</a>
+        <a href="/contact" class="btn btn--outline btn--block">Contact & directions</a>
+      </aside>
+    </div>
+  </section>
+
+  <!-- Related -->
+  <section class="section section--white">
+    <div class="container">
+      <div class="section-head section-head--split">
+        <div class="section-head" style="margin:0">
+          <p class="eyebrow">Explore more</p>
+          <h2>Related specialities</h2>
+        </div>
+        <a href="/services" class="btn btn--outline">All specialities <Icon name="arrow-right" /></a>
+      </div>
+      <ul role="list" class="rel">
+        {
+          related.map((r) => (
+            <li class="reveal">
+              <a href={`/services/${r.id}`} class:list={["rel__card lift", { "rel__card--er": r.id === "emergency" }]}>
+                <span class="icon-tile"><Icon name={r.icon} size={24} /></span>
+                <h3>{r.short}</h3>
+                <p>{r.desc}</p>
+                <span class="link-arrow">Learn more <Icon name="arrow-right" /></span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <nav class="pn" aria-label="More specialities">
+        <a href={`/services/${prev.id}`} class="pn__link">
+          <Icon name="arrow-left" />
+          <span><small>Previous</small>{prev.short}</span>
+        </a>
+        <a href={`/services/${next.id}`} class="pn__link pn__link--next">
+          <span><small>Next</small>{next.short}</span>
+          <Icon name="arrow-right" />
+        </a>
+      </nav>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .clip8 {
+    --c: 24px;
+    margin: 0;
+    filter: drop-shadow(0 16px 36px rgb(10 31 68 / 0.14));
+  }
+  .clip8 :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    clip-path: polygon(var(--c) 0, calc(100% - var(--c)) 0, 100% var(--c), 100% calc(100% - var(--c)), calc(100% - var(--c)) 100%, var(--c) 100%, 0 calc(100% - var(--c)), 0 var(--c));
+  }
+  .eyebrow--light {
+    color: var(--teal-100);
+  }
+
+  /* Hero actions (inside the shared PageHeader) */
+  .sp-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-3);
+    margin-top: var(--s-6);
+  }
+
+  /* Tabs */
+  .sp-tabs {
+    position: sticky;
+    top: var(--header-h);
+    z-index: 20;
+    background: var(--white);
+    border-bottom: 1px solid var(--line);
+  }
+  .sp-tabs ul {
+    display: flex;
+    gap: var(--s-1);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .sp-tabs a {
+    position: relative;
+    display: block;
+    padding: var(--s-4) var(--s-4);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    color: var(--ink-muted);
+    white-space: nowrap;
+    transition: color var(--dur) var(--ease);
+  }
+  .sp-tabs a::after {
+    content: "";
+    position: absolute;
+    left: var(--s-4);
+    right: var(--s-4);
+    bottom: 0;
+    height: 3px;
+    border-radius: 3px 3px 0 0;
+    background: var(--blue-600);
+    transform: scaleX(0);
+    transition: transform var(--dur) var(--ease);
+  }
+  .sp-tabs a:hover,
+  .sp-tabs a.is-active {
+    color: var(--blue-600);
+  }
+  .sp-tabs a.is-active::after {
+    transform: scaleX(1);
+  }
+  section[id] {
+    scroll-margin-top: calc(var(--header-h) + 56px);
+  }
+
+  /* Overview */
+  .ov {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: clamp(2rem, 5vw, 5rem);
+    align-items: center;
+  }
+  .ov__copy > p {
+    color: var(--ink-2);
+    margin-bottom: var(--s-4);
+    max-width: 64ch;
+  }
+  .ov__lead {
+    font-size: var(--fs-lg);
+    color: var(--navy-900) !important;
+    font-weight: 500;
+  }
+  .ov__why {
+    position: relative;
+    margin-top: var(--s-6);
+    padding: var(--s-6);
+    border-radius: var(--r-lg);
+    background: linear-gradient(135deg, #ffffff 0%, #f4f8fb 100%);
+    border: 1px solid var(--line-strong);
+    box-shadow: 0 10px 30px -10px rgba(10, 31, 68, 0.07), 0 2px 6px -1px rgba(20, 165, 151, 0.04);
+    overflow: hidden;
+  }
+  .ov__why::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 140px;
+    height: 140px;
+    background: radial-gradient(circle at top right, rgba(20, 165, 151, 0.12), transparent 70%);
+    pointer-events: none;
+  }
+  .ov__why h3 {
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--navy-900);
+    margin-bottom: var(--s-4);
+    letter-spacing: -0.01em;
+  }
+  .ov__why ul {
+    display: grid;
+    gap: var(--s-3);
+  }
+  .ov__why li {
+    display: flex;
+    align-items: center;
+    gap: var(--s-3);
+    font-weight: 600;
+    color: var(--navy-900);
+    font-size: var(--fs-sm);
+    padding: 8px 12px;
+    border-radius: var(--r-sm);
+    background: rgba(255, 255, 255, 0.75);
+    border: 1px solid rgba(231, 236, 243, 0.8);
+    transition: all 250ms var(--ease);
+  }
+  .ov__why li:hover {
+    background: #ffffff;
+    border-color: rgba(20, 165, 151, 0.3);
+    transform: translateX(4px);
+    box-shadow: 0 4px 12px rgba(10, 31, 68, 0.05);
+  }
+  .ov__tick {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--teal-500) 0%, var(--teal-600) 100%);
+    color: var(--white);
+    box-shadow: 0 2px 6px rgba(20, 165, 151, 0.35);
+  }
+  .ov__media {
+    aspect-ratio: 4 / 4.4;
+  }
+
+  /* Conditions */
+  .cond {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--s-3);
+  }
+  .cond__item {
+    display: flex;
+    align-items: center;
+    gap: var(--s-3);
+    padding: var(--s-4) var(--s-5);
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    font-weight: 600;
+    font-size: var(--fs-sm);
+    color: var(--navy-900);
+    transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease), transform var(--dur) var(--ease);
+  }
+  .cond__item:hover {
+    border-color: var(--blue-100);
+    box-shadow: var(--shadow-1);
+    transform: translateY(-2px);
+  }
+  .cond__icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 38px;
+    height: 38px;
+    border-radius: var(--r-sm);
+    background: var(--blue-50);
+    color: var(--blue-600);
+  }
+
+  /* Treatments */
+  .tr {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s-5);
+  }
+  .tr__card {
+    padding: var(--s-7);
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+  }
+  .tr__head {
+    display: flex;
+    align-items: center;
+    gap: var(--s-4);
+    margin-bottom: var(--s-5);
+    padding-bottom: var(--s-5);
+    border-bottom: 1px solid var(--line);
+  }
+  .tr__head h3 {
+    font-size: 1.25rem;
+  }
+
+  /* When */
+  .sp-when-wrap {
+    padding-top: 0;
+  }
+  .when {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: var(--s-8);
+    align-items: center;
+    padding: clamp(2rem, 5vw, 3.5rem);
+    border-radius: var(--r-lg);
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Cpath d='M22 16h4v6h6v4h-6v6h-4v-6h-6v-4h6z' fill='%23ffffff' fill-opacity='0.05'/%3E%3C/svg%3E"),
+      linear-gradient(120deg, var(--navy-900), var(--blue-700));
+    color: var(--white);
+    box-shadow: var(--shadow-3);
+  }
+  .when h2 {
+    margin: var(--s-3) 0 var(--s-5);
+    color: var(--white);
+  }
+  .when__list {
+    display: grid;
+    gap: var(--s-3);
+  }
+  .when__list li {
+    display: flex;
+    gap: var(--s-3);
+    color: rgb(255 255 255 / 0.9);
+  }
+  .when__list :global(svg) {
+    flex: none;
+    margin-top: 3px;
+    color: var(--teal-400);
+  }
+  .when__cta {
+    display: grid;
+    gap: var(--s-4);
+    padding: var(--s-6);
+    border-radius: var(--r-md);
+    background: rgb(255 255 255 / 0.08);
+    border: 1px solid rgb(255 255 255 / 0.16);
+  }
+  .when__cta p {
+    color: rgb(255 255 255 / 0.85);
+  }
+  .when__btn {
+    --btn-bg: var(--white);
+    --btn-fg: var(--blue-700);
+    --btn-bd: var(--white);
+  }
+  .when__btn:hover {
+    --btn-bg: var(--blue-50);
+  }
+  .when__phone {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--s-2);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    color: rgb(255 255 255 / 0.85);
+  }
+
+  /* Journey */
+  .jr {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--s-5);
+    counter-reset: jr;
+  }
+  .jr__step {
+    position: relative;
+    display: grid;
+    gap: var(--s-3);
+    padding: var(--s-6);
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+  }
+  .jr__num {
+    position: absolute;
+    top: var(--s-5);
+    right: var(--s-5);
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--line-strong);
+  }
+  .jr__step h3 {
+    font-size: 1.125rem;
+    margin-top: var(--s-2);
+  }
+  .jr__step p {
+    font-size: var(--fs-sm);
+    color: var(--ink-muted);
+  }
+
+  /* Doctors */
+  .docs {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 300px));
+    gap: var(--s-5);
+  }
+
+  /* FAQ */
+  .fq {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: start;
+  }
+  .fq__help {
+    position: sticky;
+    top: calc(var(--header-h) + 80px);
+    display: grid;
+    gap: var(--s-3);
+    padding: var(--s-6);
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-1);
+  }
+  .fq__help h3 {
+    font-size: 1.25rem;
+    margin-top: var(--s-2);
+  }
+  .fq__help p {
+    font-size: var(--fs-sm);
+    color: var(--ink-muted);
+    margin-bottom: var(--s-2);
+  }
+
+  /* Related */
+  .rel {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--s-5);
+  }
+  .rel__card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-3);
+    height: 100%;
+    padding: var(--s-6);
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+  }
+  .rel__card h3 {
+    font-size: 1.25rem;
+    margin-top: var(--s-2);
+  }
+  .rel__card p {
+    flex: 1;
+    font-size: var(--fs-sm);
+    color: var(--ink-muted);
+  }
+  .rel__card--er .icon-tile,
+  .rel__card--er:hover .icon-tile {
+    background: var(--alert-600);
+    color: var(--white);
+  }
+  .pn {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--s-4);
+    margin-top: var(--s-8);
+    padding-top: var(--s-6);
+    border-top: 1px solid var(--line);
+  }
+  .pn__link {
+    min-width: 0;
+    max-width: 50%;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-3);
+    padding: var(--s-3) var(--s-4);
+    border-radius: var(--r-md);
+    font-weight: 700;
+    color: var(--navy-900);
+    transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+  }
+  .pn__link small {
+    display: block;
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    color: var(--ink-muted);
+  }
+  .pn__link--next {
+    text-align: right;
+  }
+  .pn__link:hover {
+    background: var(--blue-50);
+    color: var(--blue-600);
+  }
+
+  /* Responsive */
+  @media (max-width: 1100px) {
+    .cond {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .jr {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (max-width: 960px) {
+    .ov,
+    .when,
+    .fq {
+      grid-template-columns: 1fr;
+    }
+    .ov__media {
+      aspect-ratio: 4 / 3;
+      order: -1;
+    }
+    .fq__help {
+      position: static;
+    }
+    .cond {
+      grid-template-columns: 1fr 1fr;
+    }
+    .rel {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 640px) {
+    .tr,
+    .jr {
+      grid-template-columns: 1fr;
+    }
+    .tr__card {
+      padding: var(--s-5);
+    }
+    .sp-actions .btn {
+      width: 100%;
+    }
+  }
+  @media (max-width: 420px) {
+    .cond {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  // Highlight the in-page tab for the section in view
+  const tabs = Array.from(document.querySelectorAll<HTMLAnchorElement>("[data-tab]"));
+  const spy = new IntersectionObserver(
+    (entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting) tabs.forEach((t) => t.classList.toggle("is-active", t.dataset.tab === e.target.id));
+      }
+    },
+    { rootMargin: "-35% 0px -55% 0px" },
+  );
+  tabs.forEach((t) => {
+    const el = document.getElementById(t.dataset.tab!);
+    if (el) spy.observe(el);
+  });
+</script>

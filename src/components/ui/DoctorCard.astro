@@ -1,0 +1,139 @@
+---
+import { Image } from "astro:assets";
+import Icon from "./Icon.astro";
+import DoctorAvatar from "./DoctorAvatar.astro";
+import type { Doctor } from "../../data/doctors";
+
+interface Props {
+  doctor: Doctor;
+  /** Show "View profile" (opens the profile dialog on /doctors) */
+  profile?: boolean;
+}
+const { doctor: d, profile = false } = Astro.props;
+---
+
+<article class="doc lift" data-dept={d.speciality} data-search={`${d.name} ${d.role} ${d.speciality} ${d.education}`.toLowerCase()}>
+  <div class="doc__photo">
+    {
+      d.photo ? (
+        <Image
+          src={d.photo}
+          alt={`${d.name}, ${d.role}`}
+          widths={[320, 480, 640]}
+          sizes="(max-width: 560px) 80vw, (max-width: 1024px) 45vw, 300px"
+          loading="lazy"
+        />
+      ) : (
+        <DoctorAvatar doctor={d} />
+      )
+    }
+    <span class="doc__dept">{d.speciality}</span>
+    {!d.detailsPending && <span class="doc__exp"><Icon name="award" size={14} /> {d.experience}</span>}
+  </div>
+  <div class="doc__body">
+    <h3>{d.name}</h3>
+    <p class="doc__role">{d.role}</p>
+    <p class="doc__edu"><Icon name="graduation" size={16} /> {d.education}</p>
+    <p class="doc__time"><Icon name="clock" size={16} /> {d.days} · {d.hours}</p>
+  </div>
+  <div class="doc__actions">
+    {
+      profile ? (
+        <button type="button" class="btn btn--outline btn--sm" data-profile={d.id}>
+          View profile
+        </button>
+      ) : (
+        <a href={`/doctors#${d.id}`} class="btn btn--outline btn--sm">
+          View profile
+        </a>
+      )
+    }
+    <button type="button" class="btn btn--sm" data-book data-dept={d.speciality} data-doctor={d.name}>Book</button>
+  </div>
+</article>
+
+<style>
+  .doc {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+  }
+  .doc__photo {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    background: var(--paper-2);
+    overflow: hidden;
+  }
+  .doc__photo :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 15%;
+    transition: transform 900ms var(--ease);
+  }
+  .doc:hover .doc__photo :global(img) {
+    transform: scale(1.06);
+  }
+  .doc__dept {
+    position: absolute;
+    left: var(--s-3);
+    bottom: var(--s-3);
+    padding: 6px 12px;
+    border-radius: var(--r-pill);
+    background: var(--white);
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    color: var(--teal-700);
+  }
+  .doc__exp {
+    position: absolute;
+    top: var(--s-3);
+    right: var(--s-3);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 10px;
+    border-radius: var(--r-pill);
+    background: var(--navy-900);
+    color: var(--white);
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+  .doc__body {
+    flex: 1;
+    display: grid;
+    align-content: start;
+    gap: var(--s-2);
+    padding: var(--s-5) var(--s-5) var(--s-4);
+  }
+  .doc__body h3 {
+    font-size: 1.25rem;
+  }
+  .doc__role {
+    font-weight: 600;
+    color: var(--blue-600);
+    font-size: var(--fs-sm);
+  }
+  .doc__edu,
+  .doc__time {
+    display: flex;
+    gap: var(--s-2);
+    font-size: var(--fs-xs);
+    color: var(--ink-muted);
+  }
+  .doc__edu :global(svg),
+  .doc__time :global(svg) {
+    flex: none;
+    margin-top: 2px;
+  }
+  .doc__actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s-2);
+    padding: 0 var(--s-5) var(--s-5);
+  }
+</style>

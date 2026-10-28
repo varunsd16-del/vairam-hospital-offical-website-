@@ -1,0 +1,109 @@
+---
+import Icon from "../ui/Icon.astro";
+
+const steps = [
+  { icon: "calendar", title: "Book", text: "Request an appointment online, on WhatsApp or by phone. We confirm your slot." },
+  { icon: "stethoscope", title: "Consult", text: "Meet your specialist for an unhurried assessment and a clear plan." },
+  { icon: "microscope", title: "Diagnose", text: "Lab tests and imaging in the same building, with fast reports." },
+  { icon: "activity", title: "Recover", text: "Treatment, surgery if needed, and rehabilitation with follow-up." },
+] as const;
+---
+
+<section class="section section--white" aria-labelledby="journeyTitle">
+  <div class="container">
+    <div class="section-head section-head--center">
+      <p class="eyebrow">Your visit</p>
+      <h2 id="journeyTitle">What to expect at Vairam</h2>
+    </div>
+    <ol role="list" class="journey">
+      {
+        steps.map((s, i) => (
+          <li class="journey__step reveal">
+            <span class="journey__marker">
+              <Icon name={s.icon} size={22} />
+            </span>
+            <span class="journey__num">Step {i + 1}</span>
+            <h3>{s.title}</h3>
+            <p>{s.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .journey {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--s-6);
+    position: relative;
+  }
+  .journey::before {
+    content: "";
+    position: absolute;
+    top: 28px;
+    left: 28px;
+    right: 28px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--teal-100), #d6e4f5);
+  }
+  .journey__step {
+    position: relative;
+    display: grid;
+    align-content: start;
+    gap: var(--s-2);
+  }
+  .journey__marker {
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    margin-bottom: var(--s-3);
+    border-radius: var(--r-md);
+    background: var(--blue-600);
+    color: var(--white);
+    box-shadow: var(--shadow-teal);
+    transition: transform 450ms var(--ease);
+  }
+  .journey__step:hover .journey__marker {
+    transform: translateY(-3px);
+  }
+  .journey__num {
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+  .journey h3 {
+    font-size: 1.375rem;
+  }
+  .journey p {
+    color: var(--ink-muted);
+    font-size: var(--fs-sm);
+  }
+  @media (max-width: 860px) {
+    .journey {
+      grid-template-columns: 1fr;
+      gap: var(--s-5);
+    }
+    .journey::before {
+      top: 28px;
+      bottom: 28px;
+      left: 28px;
+      right: auto;
+      width: 2px;
+      height: auto;
+      background: linear-gradient(180deg, var(--teal-100), #d6e4f5);
+    }
+    .journey__step {
+      grid-template-columns: 56px 1fr;
+      column-gap: var(--s-5);
+    }
+    .journey__marker {
+      grid-row: span 3;
+      margin: 0;
+    }
+  }
+</style>

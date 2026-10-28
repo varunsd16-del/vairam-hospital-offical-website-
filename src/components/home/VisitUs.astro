@@ -1,0 +1,108 @@
+---
+import Icon from "../ui/Icon.astro";
+import { site, telHref } from "../../data/site";
+---
+
+<section class="section" aria-labelledby="visitTitle">
+  <div class="container visit">
+    <div class="visit__copy">
+      <div class="section-head">
+        <p class="eyebrow">Visit us</p>
+        <h2 id="visitTitle">In the heart of Mayiladuthurai</h2>
+      </div>
+      <p class="visit__addr"><Icon name="map-pin" size={20} /> {site.addressLine}</p>
+      <table class="hours">
+        <caption class="visually-hidden">Opening hours</caption>
+        <tbody>
+          {
+            site.hours.map((h) => (
+              <tr>
+                <th scope="row">{h.label}</th>
+                <td>{h.value}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+      <div class="visit__actions">
+        <a href={site.directions} target="_blank" rel="noopener" class="btn btn--navy"><Icon name="map-pin" /> Get directions</a>
+        <a href={telHref} class="btn btn--outline"><Icon name="phone" /> {site.phoneDisplay}</a>
+      </div>
+    </div>
+    <div class="visit__map reveal">
+      <iframe
+        src={site.mapEmbed}
+        title={`Map showing ${site.name}`}
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        allowfullscreen></iframe>
+    </div>
+  </div>
+</section>
+
+<style>
+  .visit {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+  }
+  .visit__addr {
+    display: flex;
+    gap: var(--s-3);
+    font-size: var(--fs-lg);
+    font-weight: 600;
+    color: var(--navy-900);
+    margin-bottom: var(--s-5);
+  }
+  .visit__addr :global(svg) {
+    flex: none;
+    margin-top: 4px;
+    color: var(--teal-600);
+  }
+  .hours {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: var(--s-6);
+    font-size: var(--fs-sm);
+  }
+  .hours th,
+  .hours td {
+    padding: var(--s-3) 0;
+    border-bottom: 1px solid var(--line);
+    text-align: left;
+    vertical-align: top;
+  }
+  .hours th {
+    font-weight: 600;
+    color: var(--ink-2);
+    padding-right: var(--s-4);
+  }
+  .hours td {
+    color: var(--ink-muted);
+    text-align: right;
+  }
+  .visit__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-3);
+  }
+  .visit__map {
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    border: 6px solid var(--white);
+    box-shadow: var(--shadow-3);
+    aspect-ratio: 4 / 3;
+    background: var(--paper-2);
+  }
+  .visit__map iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  @media (max-width: 860px) {
+    .visit {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

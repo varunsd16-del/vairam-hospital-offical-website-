@@ -1,0 +1,167 @@
+---
+import Icon from "../ui/Icon.astro";
+import { site, telHref } from "../../data/site";
+---
+
+<section class="qa" aria-label="Quick access">
+  <div class="container">
+    <ul role="list" class="qa__panel">
+      <li>
+        <button type="button" class="qa__item" data-book>
+          <span class="qa__icon"><Icon name="calendar" size={24} /></span>
+          <span class="qa__text">
+            <strong>Book appointment</strong>
+            <small>Request a slot in under a minute</small>
+          </span>
+          <Icon name="arrow-right" class="qa__arrow" />
+        </button>
+      </li>
+      <li>
+        <a href="/doctors" class="qa__item">
+          <span class="qa__icon"><Icon name="user-search" size={24} /></span>
+          <span class="qa__text">
+            <strong>Find a doctor</strong>
+            <small>Search by name or speciality</small>
+          </span>
+          <Icon name="arrow-right" class="qa__arrow" />
+        </a>
+      </li>
+      <li>
+        <a href="/services" class="qa__item">
+          <span class="qa__icon"><Icon name="grid" size={24} /></span>
+          <span class="qa__text">
+            <strong>Our specialities</strong>
+            <small>Treatments & procedures</small>
+          </span>
+          <Icon name="arrow-right" class="qa__arrow" />
+        </a>
+      </li>
+      <li>
+        <a href={telHref} class="qa__item qa__item--alert">
+          <span class="qa__icon"><Icon name="siren" size={24} /></span>
+          <span class="qa__text">
+            <strong>24/7 Emergency</strong>
+            <small>{site.phoneDisplay}</small>
+          </span>
+          <Icon name="arrow-right" class="qa__arrow" />
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<style>
+  .qa {
+    position: relative;
+    z-index: 2;
+    margin-top: -72px;
+  }
+  .qa__panel {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--s-2);
+    padding: var(--s-2);
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-3);
+    animation: qa-in 1s var(--ease) 0.7s both;
+  }
+  @keyframes qa-in {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+  }
+  .qa__item {
+    display: flex;
+    align-items: center;
+    gap: var(--s-4);
+    width: 100%;
+    height: 100%;
+    min-height: 104px;
+    padding: var(--s-5);
+    border-radius: var(--r-md);
+    text-align: left;
+    transition: background var(--dur) var(--ease), transform var(--dur) var(--ease);
+  }
+  .qa__item:hover {
+    background: var(--paper-2);
+  }
+  .qa__icon {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: var(--r-md);
+    background: var(--blue-50);
+    color: var(--blue-600);
+    transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+  }
+  .qa__item:hover .qa__icon {
+    background: var(--blue-600);
+    color: var(--white);
+  }
+  .qa__text {
+    flex: 1;
+    display: grid;
+    gap: 2px;
+  }
+  .qa__text strong {
+    color: var(--navy-900);
+    font-size: 1rem;
+  }
+  .qa__text small {
+    color: var(--ink-muted);
+    font-size: var(--fs-xs);
+  }
+  .qa__item :global(.qa__arrow) {
+    flex: none;
+    color: var(--ink-muted);
+    transition: transform var(--dur) var(--ease), color var(--dur) var(--ease);
+  }
+  .qa__item:hover :global(.qa__arrow) {
+    color: var(--blue-600);
+    transform: translateX(4px);
+  }
+  .qa__item--alert {
+    background: var(--alert-50);
+  }
+  .qa__item--alert:hover {
+    background: #fbe1e2;
+  }
+  .qa__item--alert .qa__icon,
+  .qa__item--alert:hover .qa__icon {
+    background: var(--alert-600);
+    color: var(--white);
+  }
+  .qa__item--alert .qa__text small {
+    color: var(--alert-600);
+    font-weight: 700;
+    font-size: var(--fs-sm);
+  }
+
+  @media (max-width: 1024px) {
+    .qa__panel {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (max-width: 560px) {
+    .qa {
+      margin-top: -40px;
+    }
+    .qa__panel {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+    .qa__item {
+      min-height: 76px;
+      padding: var(--s-4);
+    }
+    .qa__icon {
+      width: 44px;
+      height: 44px;
+    }
+  }
+</style>

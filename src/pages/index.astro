@@ -1,55 +1,40 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Hero from '../components/Hero.astro';
-import QuickServices from '../components/QuickServices.astro';
-import AboutPreview from '../components/AboutPreview.astro';
-import WhyChooseUs from '../components/WhyChooseUs.astro';
-import DoctorsPreview from '../components/DoctorsPreview.astro';
-import Testimonials from '../components/Testimonials.astro';
+import Layout from "../layouts/Layout.astro";
+import Hero from "../components/Hero.astro";
+import QuickAccess from "../components/home/QuickAccess.astro";
+import Specialities from "../components/home/Specialities.astro";
+import EmergencyBand from "../components/home/EmergencyBand.astro";
+import WhyVairam from "../components/home/WhyVairam.astro";
+import DoctorsPreview from "../components/DoctorsPreview.astro";
+import PatientJourney from "../components/home/PatientJourney.astro";
+import Testimonials from "../components/Testimonials.astro";
+import VisitUs from "../components/home/VisitUs.astro";
+import FeatureBand from "../components/ui/FeatureBand.astro";
 ---
 
-<Layout title="Vairam Multi Speciality Hospital | Home">
+<Layout
+  title="Vairam Multi Speciality Hospital, Mayiladuthurai | 24/7 Emergency & Specialist Care"
+  description="Multi speciality hospital in Mayiladuthurai with 24/7 emergency and ICU, cardiology, orthopaedics, neurology, paediatrics, diagnostics and experienced specialist doctors. Book an appointment online."
+>
   <Hero />
-
-  <QuickServices />
-  <WhyChooseUs />
-  <AboutPreview />
+  <QuickAccess />
+  <Specialities />
+  <EmergencyBand />
+  <WhyVairam />
   <DoctorsPreview />
-
+  <PatientJourney />
+  <FeatureBand
+    eyebrow="Your health, our responsibility"
+    title="Care that puts you and your family first"
+    text="From the first phone call to your final follow-up, every step at Vairam is designed around comfort, clarity and safety."
+    items={[
+      { icon: "heart", title: "Patient-first care", text: "Doctors who listen, explain clearly and involve your family in every decision." },
+      { icon: "wallet", title: "Transparent billing", text: "Written estimates before planned treatment, with no surprises at discharge." },
+      { icon: "shield", title: "Cashless insurance", text: "Help with pre-authorisation from major insurers, TPAs and eligible government schemes." },
+      { icon: "file-text", title: "Follow-up that continues", text: "Clear discharge summaries, reminders and reports shared on WhatsApp." },
+    ]}
+    cta={{ label: "Book an appointment", action: "book" }}
+  />
   <Testimonials />
-
-  <style>
-    @media (max-width: 1024px) {
-      .hero-container { gap: 30px; }
-    }
-
-    @media (max-width: 768px) {
-      .hero { 
-        text-align: center; 
-        padding: 80px 5% 60px; 
-      }
-      .hero-container { 
-        grid-template-columns: 1fr;
-      }
-      .hero-content { 
-        margin: 0 auto; 
-        order: 2;
-      }
-      .hero-visual {
-        order: 1;
-        margin-bottom: 40px;
-      }
-      .visual-card {
-        transform: none;
-        max-width: 400px;
-        margin: 0 auto;
-      }
-      .hero-btns { flex-direction: column; width: 100%; gap: 15px; }
-      .btn-premium, .btn-outline-premium { justify-content: center; width: 100%; }
-      
-      .hero-stats { justify-content: center; }
-
-      .section-title { font-size: 2.2rem; }
-    }
-  </style>
+  <VisitUs />
 </Layout>

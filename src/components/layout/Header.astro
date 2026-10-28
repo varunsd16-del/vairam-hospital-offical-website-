@@ -1,0 +1,1111 @@
+---
+import { Image } from "astro:assets";
+import Icon from "../ui/Icon.astro";
+import logo from "../../assets/images/logo.png";
+import nabh from "../../assets/images/nabh.webp";
+import nabhEntry from "../../assets/images/nabh-2.png";
+import { nav, site, telHref, waHref } from "../../data/site";
+import { specialities } from "../../data/specialities";
+
+const path = Astro.url.pathname.replace(/\/$/, "") || "/";
+const isActive = (href: string) => (href === "/" ? path === "/" : path.startsWith(href));
+
+const navIcons = {
+  "/": "building",
+  "/about": "award",
+  "/services": "grid",
+  "/doctors": "stethoscope",
+  "/facilities": "bed",
+  "/contact": "mail",
+} as const;
+---
+
+<div class="utility" role="region" aria-label="Emergency contact">
+  <div class="container utility__inner">
+    <a href={telHref} class="utility__er">
+      <span class="utility__dot" aria-hidden="true"></span>
+      24/7 Emergency <strong>{site.phoneDisplay}</strong>
+    </a>
+    <ul class="utility__meta" role="list">
+      <li><Icon name="clock" size={14} /> OPD 8 AM – 9 PM, all days</li>
+      <li><Icon name="map-pin" size={14} /> {site.address.city}, {site.address.region}</li>
+      <li><a href={`mailto:${site.email}`}><Icon name="mail" size={14} /> {site.email}</a></li>
+    </ul>
+  </div>
+</div>
+
+<header class="header" id="siteHeader">
+  <div class="container header__inner">
+    <a href="/" class="header__logo" aria-label={`${site.name}, home`}>
+      <Image src={logo} alt="" height={104} widths={[208]} loading="eager" />
+    </a>
+    <span class="header__nabh" title="NABH accredited: patient safety & quality of care">
+      <Image src={nabh} alt="NABH accredited hospital" width={56} height={56} widths={[112]} loading="eager" />
+      <Image src={nabhEntry} alt="NABH entry level certified" height={56} widths={[130]} loading="eager" class="header__nabh-tri" />
+    </span>
+
+    <nav class="nav" aria-label="Main">
+      <ul role="list" class="nav__list" id="navList">
+        <li class="nav__indicator" role="presentation" aria-hidden="true"></li>
+        {
+          nav.map((item) =>
+            "mega" in item && item.mega ? (
+              <li class="nav__item has-mega">
+                <a
+                  href={item.href}
+                  class="nav__link"
+                  aria-current={isActive(item.href) ? "page" : undefined}
+                  aria-haspopup="true"
+                >
+                  {item.label}
+                  <Icon name="chevron-down" size={14} class="nav__chev" />
+                </a>
+                <div class="mega">
+                  <div class="mega__main">
+                    <div class="mega__head">
+                      <div>
+                        <p class="eyebrow">Centres of care</p>
+                        <p class="mega__title">Specialist care for every stage of life</p>
+                      </div>
+                      <a href="/services" class="link-arrow">
+                        All specialities <Icon name="arrow-right" />
+                      </a>
+                    </div>
+                    <ul role="list" class="mega__grid">
+                      {specialities
+                        .filter((s) => s.id !== "emergency")
+                        .map((s) => (
+                          <li>
+                            <a href={`/services/${s.id}`} class="mega__link">
+                              <span class="mega__icon">
+                                <Icon name={s.icon} size={20} />
+                              </span>
+                              <span>
+                                <strong>{s.short}</strong>
+                                <small>{s.sub}</small>
+                              </span>
+                            </a>
+                          </li>
+                        ))}
+                    </ul>
+                  </div>
+                  <a href="/services/emergency" class="mega__er">
+                    <span class="mega__er-icon">
+                      <Icon name="ambulance" size={24} />
+                    </span>
+                    <span class="mega__er-tag"><span class="utility__dot" aria-hidden="true"></span> Open 24/7</span>
+                    <strong>Emergency & Trauma Care</strong>
+                    <span class="mega__er-text">Immediate care for accidents, heart attacks, strokes and more.</span>
+                    <span class="mega__er-call"><Icon name="phone" size={16} /> {site.phoneDisplay}</span>
+                  </a>
+                </div>
+              </li>
+            ) : (
+              <li class="nav__item">
+                <a href={item.href} class="nav__link" aria-current={isActive(item.href) ? "page" : undefined}>
+                  {item.label}
+                </a>
+              </li>
+            ),
+          )
+        }
+      </ul>
+    </nav>
+
+    <div class="header__actions">
+      <a href={telHref} class="header__call" aria-label={`Call helpline ${site.phoneDisplay}`}>
+        <span class="header__call-icon"><Icon name="phone" size={18} /></span>
+        <span class="header__call-text">
+          <small>24/7 Helpline</small>
+          {site.phoneDisplay}
+        </span>
+      </a>
+      <span class="header__divider" aria-hidden="true"></span>
+      <button type="button" class="btn header__book" data-book>
+        <Icon name="calendar" size={18} /> Book appointment
+      </button>
+
+      <!-- Mobile only -->
+      <a href={telHref} class="header__m-call" aria-label={`Call emergency ${site.phoneDisplay}`}>
+        <Icon name="phone" size={20} />
+      </a>
+      <button type="button" class="header__burger" id="drawerOpen" aria-controls="drawer" aria-expanded="false">
+        <span class="burger" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="visually-hidden">Open menu</span>
+      </button>
+    </div>
+  </div>
+  <span class="header__progress" id="scrollProgress" aria-hidden="true"></span>
+</header>
+
+<!-- Mobile drawer -->
+<div class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer__scrim" data-drawer-close></div>
+  <div class="drawer__panel" role="dialog" aria-modal="true" aria-label="Menu">
+    <div class="drawer__head">
+      <Image src={logo} alt={site.name} height={80} widths={[160]} />
+      <button type="button" class="drawer__close" data-drawer-close>
+        <Icon name="x" size={22} />
+        <span class="visually-hidden">Close menu</span>
+      </button>
+    </div>
+
+    <div class="drawer__body">
+      <ul role="list" class="drawer__nav">
+        {
+          nav.map((item, i) =>
+            "mega" in item && item.mega ? (
+              <li style={`--i:${i}`}>
+                <details class="drawer__acc">
+                  <summary aria-current={isActive(item.href) ? "page" : undefined}>
+                    <span class="drawer__ico">
+                      <Icon name={navIcons[item.href]} size={20} />
+                    </span>
+                    {item.label}
+                    <Icon name="chevron-down" size={18} class="drawer__chev" />
+                  </summary>
+                  <ul role="list" class="drawer__sub">
+                    {specialities.map((s) => (
+                      <li>
+                        <a href={`/services/${s.id}`} class:list={{ "is-er": s.id === "emergency" }}>
+                          <Icon name={s.icon} size={18} /> {s.short}
+                        </a>
+                      </li>
+                    ))}
+                    <li>
+                      <a href="/services" class="drawer__all">
+                        All specialities <Icon name="arrow-right" size={16} />
+                      </a>
+                    </li>
+                  </ul>
+                </details>
+              </li>
+            ) : (
+              <li style={`--i:${i}`}>
+                <a href={item.href} class="drawer__link" aria-current={isActive(item.href) ? "page" : undefined}>
+                  <span class="drawer__ico">
+                    <Icon name={navIcons[item.href]} size={20} />
+                  </span>
+                  {item.label}
+                  <Icon name="chevron-right" size={18} class="drawer__chev" />
+                </a>
+              </li>
+            ),
+          )
+        }
+      </ul>
+
+      <div class="drawer__quick">
+        <a href={telHref} class="drawer__card drawer__card--er">
+          <Icon name="siren" size={22} />
+          <span><small>24/7 Emergency</small>{site.phoneDisplay}</span>
+        </a>
+        <a href={waHref()} target="_blank" rel="noopener" class="drawer__card drawer__card--wa">
+          <Icon name="whatsapp" size={22} />
+          <span><small>Chat with us</small>WhatsApp</span>
+        </a>
+      </div>
+
+      <ul role="list" class="drawer__info">
+        <li><Icon name="map-pin" size={16} /> {site.addressLine}</li>
+        <li><Icon name="clock" size={16} /> OPD 8 AM – 9 PM, all days</li>
+      </ul>
+    </div>
+
+    <div class="drawer__foot">
+      <button type="button" class="btn btn--block" data-book data-drawer-close>
+        <Icon name="calendar" /> Book an appointment
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* ── Utility bar ── */
+  .utility {
+    background: var(--navy-950);
+    color: rgb(255 255 255 / 0.75);
+    font-size: var(--fs-xs);
+  }
+  .utility__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-5);
+    min-height: var(--utility-h);
+  }
+  .utility__er {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+    color: var(--white);
+    font-weight: 600;
+  }
+  .utility__er strong {
+    letter-spacing: 0.02em;
+  }
+  .utility__dot {
+    position: relative;
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ff5a5f;
+  }
+  .utility__dot::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: inherit;
+    animation: u-ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+  @keyframes u-ping {
+    to {
+      transform: scale(2.6);
+      opacity: 0;
+    }
+  }
+  .utility__meta {
+    display: flex;
+    gap: var(--s-6);
+  }
+  .utility__meta li,
+  .utility__meta a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .utility__meta a:hover {
+    color: var(--white);
+  }
+
+  /* ── Header ── */
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 900;
+    background: rgb(255 255 255 / 0.92);
+    backdrop-filter: saturate(180%) blur(14px);
+    -webkit-backdrop-filter: saturate(180%) blur(14px);
+    border-bottom: 1px solid var(--line);
+    transition: box-shadow 400ms var(--ease), background 400ms var(--ease);
+  }
+  .header.is-scrolled {
+    background: rgb(255 255 255 / 0.97);
+    box-shadow: 0 12px 32px -20px rgb(10 31 68 / 0.35);
+  }
+  .header__inner {
+    display: flex;
+    align-items: center;
+    gap: var(--s-4);
+    height: var(--header-h);
+  }
+  .header__logo {
+    flex: none;
+  }
+  .header__logo :global(img) {
+    height: 52px;
+    width: auto;
+    transition: transform 400ms var(--ease);
+  }
+  .header__logo:hover :global(img) {
+    transform: scale(1.03);
+  }
+  /* NABH accreditation seal next to the logo */
+  .header__nabh {
+    flex: none;
+    display: flex;
+    align-items: center;
+    margin-left: 0;
+    padding-left: var(--s-4);
+    border-left: 1px solid var(--line-strong);
+  }
+  .header__nabh {
+    gap: var(--s-2);
+  }
+  .header__nabh :global(img) {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+  }
+  /* triangular mark is wider than tall */
+  .header__nabh :global(.header__nabh-tri) {
+    width: auto;
+    height: 42px;
+  }
+  .header__progress {
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(90deg, var(--blue-600), var(--teal-500));
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  /* ── Desktop nav with gliding indicator ── */
+  .nav {
+    margin-inline: auto;
+  }
+  .nav__list {
+    position: relative;
+    display: flex;
+    gap: 0;
+  }
+  /* slim underline that glides between links */
+  .nav__indicator {
+    position: absolute;
+    bottom: 14px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--blue-600);
+    opacity: 0;
+    transform: translateX(var(--x, 0));
+    transition:
+      transform 450ms cubic-bezier(0.2, 0.9, 0.25, 1),
+      width 450ms cubic-bezier(0.2, 0.9, 0.25, 1),
+      opacity 250ms var(--ease);
+    pointer-events: none;
+  }
+  .nav__list.has-indicator .nav__indicator {
+    opacity: 1;
+  }
+  .nav__item {
+    position: relative;
+    z-index: 1;
+  }
+  .nav__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    height: var(--header-h);
+    padding: 0 var(--s-3);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    color: var(--ink-2);
+    white-space: nowrap;
+    transition: color var(--dur) var(--ease);
+  }
+  .nav__link:hover {
+    color: var(--navy-900);
+  }
+  .nav__link[aria-current="page"] {
+    color: var(--blue-600);
+  }
+  /* no-JS fallback for the current page */
+  .nav__list:not(.has-indicator) .nav__link[aria-current="page"] {
+    box-shadow: inset 0 -2px 0 var(--blue-600);
+  }
+  .nav__link :global(.nav__chev) {
+    transition: transform 350ms var(--ease);
+  }
+  .has-mega:hover :global(.nav__chev),
+  .has-mega:focus-within :global(.nav__chev) {
+    transform: rotate(180deg);
+  }
+
+  /* ── Mega menu ── */
+  .mega {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    width: min(940px, 92vw);
+    display: grid;
+    grid-template-columns: 1fr 260px;
+    gap: var(--s-4);
+    padding: var(--s-4);
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    box-shadow: 0 40px 80px -30px rgb(10 31 68 / 0.4);
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(-42%, 10px);
+    transition:
+      opacity 300ms var(--ease),
+      transform 300ms var(--ease),
+      visibility 300ms;
+  }
+  /* hover bridge so the menu doesn't close while moving the pointer down */
+  .mega::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -18px;
+    height: 18px;
+  }
+  .has-mega:hover .mega,
+  .has-mega:focus-within .mega {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-42%, 0);
+  }
+  .mega__main {
+    padding: var(--s-3) var(--s-3) var(--s-2);
+  }
+  .mega__head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--s-4);
+    padding: 0 var(--s-2) var(--s-4);
+    margin-bottom: var(--s-3);
+    border-bottom: 1px solid var(--line);
+  }
+  .mega__title {
+    margin-top: var(--s-2);
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--navy-900);
+  }
+  .mega__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px var(--s-2);
+  }
+  .mega__link {
+    display: flex;
+    align-items: center;
+    gap: var(--s-3);
+    padding: var(--s-3);
+    border-radius: var(--r-md);
+    transition: background var(--dur) var(--ease), transform var(--dur) var(--ease);
+  }
+  .mega__link:hover {
+    background: var(--paper-2);
+    transform: translateX(3px);
+  }
+  .mega__icon {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: var(--r-md);
+    background: var(--blue-50);
+    color: var(--blue-600);
+    transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+  }
+  .mega__link:hover .mega__icon {
+    background: var(--blue-600);
+    color: var(--white);
+  }
+  .mega__link strong {
+    display: block;
+    font-size: var(--fs-sm);
+    color: var(--navy-900);
+  }
+  .mega__link small {
+    font-size: var(--fs-xs);
+    color: var(--ink-muted);
+  }
+  .mega__er {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-2);
+    padding: var(--s-6) var(--s-5);
+    border-radius: var(--r-md);
+    color: var(--white);
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cpath d='M18 13h4v5h5v4h-5v5h-4v-5h-5v-4h5z' fill='%23ffffff' fill-opacity='0.06'/%3E%3C/svg%3E"),
+      linear-gradient(160deg, var(--navy-900), #4a1420);
+    transition: transform var(--dur) var(--ease);
+  }
+  .mega__er:hover {
+    transform: translateY(-2px);
+  }
+  .mega__er-icon {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    margin-bottom: var(--s-3);
+    border-radius: var(--r-md);
+    background: var(--alert-600);
+  }
+  .mega__er-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #ffb3b5;
+  }
+  .mega__er strong {
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    line-height: 1.3;
+  }
+  .mega__er-text {
+    font-size: var(--fs-xs);
+    color: rgb(255 255 255 / 0.75);
+  }
+  .mega__er-call {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: auto;
+    padding-top: var(--s-4);
+    font-weight: 700;
+  }
+
+  /* ── Actions ── */
+  .header__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--s-4);
+  }
+  .header__call {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-3);
+  }
+  .header__call-icon {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--teal-50);
+    color: var(--teal-700);
+    transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+  }
+  .header__call:hover .header__call-icon {
+    background: var(--teal-600);
+    color: var(--white);
+  }
+  .header__call-text {
+    font-size: var(--fs-sm);
+    font-weight: 700;
+    color: var(--navy-900);
+    line-height: 1.25;
+    white-space: nowrap;
+  }
+  .header__call-text small {
+    display: block;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--ink-muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .header__divider {
+    width: 1px;
+    height: 32px;
+    background: var(--line-strong);
+  }
+  .header__book {
+    min-height: 46px;
+    padding: 0 var(--s-5);
+  }
+  .header__m-call,
+  .header__burger {
+    display: none;
+  }
+
+  /* Morphing burger */
+  .header__burger {
+    width: 46px;
+    height: 46px;
+    place-items: center;
+    border-radius: var(--r-md);
+    background: var(--navy-900);
+    color: var(--white);
+  }
+  .burger {
+    position: relative;
+    display: block;
+    width: 20px;
+    height: 14px;
+  }
+  .burger span {
+    position: absolute;
+    left: 0;
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+    transition: transform 350ms var(--ease), opacity 250ms var(--ease), width 350ms var(--ease), top 350ms var(--ease);
+  }
+  .burger span:nth-child(1) {
+    top: 0;
+    width: 100%;
+  }
+  .burger span:nth-child(2) {
+    top: 6px;
+    width: 70%;
+  }
+  .burger span:nth-child(3) {
+    top: 12px;
+    width: 100%;
+  }
+  .header__burger[aria-expanded="true"] .burger span:nth-child(1) {
+    top: 6px;
+    transform: rotate(45deg);
+  }
+  .header__burger[aria-expanded="true"] .burger span:nth-child(2) {
+    opacity: 0;
+    width: 0;
+  }
+  .header__burger[aria-expanded="true"] .burger span:nth-child(3) {
+    top: 6px;
+    transform: rotate(-45deg);
+  }
+
+  /* ── Drawer ── */
+  .drawer {
+    position: fixed;
+    inset: 0;
+    z-index: 1200;
+    visibility: hidden;
+    transition: visibility 0s linear 400ms;
+  }
+  .drawer.is-open {
+    visibility: visible;
+    transition-delay: 0s;
+  }
+  .drawer__scrim {
+    position: absolute;
+    inset: 0;
+    background: rgb(5 15 36 / 0.55);
+    backdrop-filter: blur(4px);
+    opacity: 0;
+    transition: opacity 400ms var(--ease);
+  }
+  .drawer__panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(420px, 100%);
+    display: flex;
+    flex-direction: column;
+    background: var(--white);
+    box-shadow: -30px 0 60px -30px rgb(5 15 36 / 0.5);
+    transform: translateX(100%);
+    transition: transform 450ms cubic-bezier(0.2, 0.9, 0.25, 1);
+  }
+  .drawer.is-open .drawer__scrim {
+    opacity: 1;
+  }
+  .drawer.is-open .drawer__panel {
+    transform: none;
+  }
+  .drawer__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--s-4) var(--gutter);
+    border-bottom: 1px solid var(--line);
+  }
+  .drawer__head :global(img) {
+    height: 42px;
+    width: auto;
+  }
+  .drawer__close {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--r-md);
+    background: var(--paper-2);
+    color: var(--navy-900);
+  }
+  .drawer__body {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--s-4) var(--gutter) var(--s-5);
+  }
+  .drawer__nav > li {
+    opacity: 0;
+    transform: translateX(24px);
+    transition: opacity 400ms var(--ease), transform 500ms var(--ease);
+    transition-delay: calc(var(--i) * 50ms + 120ms);
+  }
+  .drawer.is-open .drawer__nav > li {
+    opacity: 1;
+    transform: none;
+  }
+  .drawer__link,
+  .drawer__acc summary {
+    display: flex;
+    align-items: center;
+    gap: var(--s-3);
+    min-height: 58px;
+    padding: 0 var(--s-2);
+    border-radius: var(--r-md);
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--navy-900);
+    cursor: pointer;
+    list-style: none;
+    transition: background var(--dur) var(--ease);
+  }
+  .drawer__acc summary::-webkit-details-marker {
+    display: none;
+  }
+  .drawer__link:hover,
+  .drawer__acc summary:hover {
+    background: var(--paper-2);
+  }
+  .drawer__link[aria-current="page"],
+  .drawer__acc summary[aria-current="page"] {
+    background: var(--blue-50);
+    color: var(--blue-600);
+  }
+  .drawer__ico {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--r-md);
+    background: var(--paper-2);
+    color: var(--blue-600);
+  }
+  [aria-current="page"] .drawer__ico {
+    background: var(--blue-600);
+    color: var(--white);
+  }
+  .drawer__nav :global(.drawer__chev) {
+    margin-left: auto;
+    color: var(--ink-muted);
+    transition: transform var(--dur) var(--ease);
+  }
+  .drawer__acc[open] :global(.drawer__chev) {
+    transform: rotate(180deg);
+  }
+  .drawer__sub {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    padding: var(--s-2) 0 var(--s-3) var(--s-2);
+    animation: sub-in 350ms var(--ease);
+  }
+  @keyframes sub-in {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+  }
+  .drawer__sub a {
+    display: flex;
+    align-items: center;
+    gap: var(--s-2);
+    min-height: 44px;
+    padding: 0 var(--s-3);
+    border-radius: var(--r-sm);
+    background: var(--paper-2);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    color: var(--ink-2);
+  }
+  .drawer__sub a :global(svg) {
+    color: var(--blue-600);
+    flex: none;
+  }
+  .drawer__sub a.is-er,
+  .drawer__sub a.is-er :global(svg) {
+    color: var(--alert-600);
+  }
+  .drawer__sub .drawer__all {
+    background: transparent;
+    color: var(--blue-600);
+  }
+
+  .drawer__quick {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s-3);
+    margin-top: var(--s-5);
+  }
+  .drawer__card {
+    display: flex;
+    align-items: center;
+    gap: var(--s-3);
+    padding: var(--s-4);
+    border-radius: var(--r-md);
+    font-weight: 700;
+    font-size: var(--fs-sm);
+  }
+  .drawer__card small {
+    display: block;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    opacity: 0.8;
+  }
+  .drawer__card--er {
+    background: var(--alert-50);
+    color: var(--alert-600);
+  }
+  .drawer__card--wa {
+    background: #e8f8ee;
+    color: #15803d;
+  }
+  .drawer__info {
+    display: grid;
+    gap: var(--s-2);
+    margin-top: var(--s-5);
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--line);
+    font-size: var(--fs-xs);
+    color: var(--ink-muted);
+  }
+  .drawer__info li {
+    display: flex;
+    gap: var(--s-2);
+  }
+  .drawer__info :global(svg) {
+    flex: none;
+    margin-top: 1px;
+    color: var(--teal-600);
+  }
+  .drawer__foot {
+    padding: var(--s-4) var(--gutter) calc(var(--s-4) + env(safe-area-inset-bottom));
+    border-top: 1px solid var(--line);
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 1240px) {
+    .header__call-text,
+    .header__divider {
+      display: none;
+    }
+    .nav__link {
+      padding: 0 var(--s-3);
+    }
+  }
+  /* Mid-size laptops: make room for the NABH seal */
+  @media (min-width: 1101px) and (max-width: 1320px) {
+    .header__inner {
+      gap: var(--s-4);
+    }
+    .header__nabh {
+      margin-left: 0;
+      padding-left: var(--s-3);
+    }
+    .header__nabh :global(img) {
+      width: 40px;
+      height: 40px;
+    }
+    .header__nabh :global(.header__nabh-tri) {
+      width: auto;
+      height: 34px;
+    }
+    .header__call,
+    .header__divider {
+      display: none;
+    }
+    .nav__link {
+      padding: 0 var(--s-2);
+    }
+  }
+  @media (max-width: 1100px) {
+    .nav,
+    .header__call {
+      display: none;
+    }
+    .header__actions {
+      margin-left: auto;
+      gap: var(--s-2);
+    }
+    .header__m-call,
+    .header__burger {
+      display: grid;
+    }
+    .header__m-call {
+      place-items: center;
+      width: 46px;
+      height: 46px;
+      border-radius: var(--r-md);
+      background: var(--alert-50);
+      color: var(--alert-600);
+    }
+    .utility__meta li:not(:first-child) {
+      display: none;
+    }
+  }
+  @media (max-width: 640px) {
+    .header__nabh {
+      padding-left: var(--s-3);
+    }
+    .header__nabh :global(img) {
+      width: 34px;
+      height: 34px;
+    }
+    .header__nabh :global(.header__nabh-tri) {
+      width: auto;
+      height: 30px;
+    }
+    :global(:root) {
+      --header-h: 66px;
+    }
+    .header__logo :global(img) {
+      height: 42px;
+    }
+    .header__book {
+      display: none;
+    }
+    .utility__meta {
+      display: none;
+    }
+    .utility__inner {
+      justify-content: center;
+    }
+  }
+  /* Small phones: logo + two badges + two buttons must fit */
+  @media (max-width: 420px) {
+    .header__inner {
+      gap: var(--s-2);
+    }
+    .header__logo :global(img) {
+      height: 36px;
+    }
+    .header__nabh {
+      gap: 4px;
+      padding-left: var(--s-2);
+    }
+    .header__nabh :global(img) {
+      width: 28px;
+      height: 28px;
+    }
+    .header__nabh :global(.header__nabh-tri) {
+      width: auto;
+      height: 24px;
+    }
+    .header__m-call,
+    .header__burger {
+      width: 42px;
+      height: 42px;
+    }
+  }
+  @media (max-width: 340px) {
+    .header__logo :global(img) {
+      height: 32px;
+    }
+    .header__m-call,
+    .header__burger {
+      width: 40px;
+      height: 40px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .drawer__nav > li {
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  const header = document.getElementById("siteHeader");
+  const progress = document.getElementById("scrollProgress");
+  let ticking = false;
+  const onScroll = () => {
+    header?.classList.toggle("is-scrolled", window.scrollY > 8);
+    if (progress) {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      progress.style.transform = `scaleX(${max > 0 ? Math.min(1, window.scrollY / max) : 0})`;
+    }
+    ticking = false;
+  };
+  onScroll();
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(onScroll);
+      }
+    },
+    { passive: true },
+  );
+
+  /* Gliding nav indicator: rests on the current page, follows hover/focus */
+  const list = document.getElementById("navList");
+  const indicator = list?.querySelector<HTMLElement>(".nav__indicator");
+  const links = Array.from(list?.querySelectorAll<HTMLElement>(".nav__link") ?? []);
+  const current = links.find((l) => l.getAttribute("aria-current") === "page");
+  const moveTo = (el?: HTMLElement) => {
+    if (!list || !indicator) return;
+    if (!el) {
+      list.classList.remove("has-indicator");
+      return;
+    }
+    const pad = parseFloat(getComputedStyle(el).paddingLeft) || 0;
+    indicator.style.width = `${el.offsetWidth - pad * 2}px`;
+    const x = el.getBoundingClientRect().left - list.getBoundingClientRect().left;
+    indicator.style.setProperty("--x", `${x + pad}px`);
+    list.classList.add("has-indicator");
+  };
+  if (list && indicator) {
+    // place instantly on load, then enable the glide
+    indicator.style.transition = "none";
+    moveTo(current);
+    requestAnimationFrame(() => (indicator.style.transition = ""));
+    links.forEach((l) => {
+      l.addEventListener("mouseenter", () => moveTo(l));
+      l.addEventListener("focus", () => moveTo(l));
+    });
+    list.addEventListener("mouseleave", () => {
+      if (!list.contains(document.activeElement)) moveTo(current);
+    });
+    list.addEventListener("focusout", (e) => {
+      if (!list.contains(e.relatedTarget as Node)) moveTo(current);
+    });
+    // keep the pill on "Specialities" while its mega menu is in use
+    list.querySelectorAll<HTMLElement>(".has-mega").forEach((li) => {
+      const link = li.querySelector<HTMLElement>(".nav__link")!;
+      li.addEventListener("mouseenter", () => moveTo(link));
+      li.addEventListener("focusin", () => moveTo(link));
+    });
+    window.addEventListener("resize", () => moveTo(current));
+    document.fonts?.ready.then(() => moveTo(current));
+  }
+
+  /* Drawer */
+  const drawer = document.getElementById("drawer");
+  const openBtn = document.getElementById("drawerOpen");
+  const panel = drawer?.querySelector<HTMLElement>(".drawer__panel");
+
+  const focusables = () =>
+    Array.from(panel?.querySelectorAll<HTMLElement>("a[href], button:not([disabled]), summary") ?? []).filter(
+      (el) => el.offsetParent !== null,
+    );
+
+  function setOpen(open: boolean) {
+    if (!drawer) return;
+    drawer.classList.toggle("is-open", open);
+    drawer.setAttribute("aria-hidden", String(!open));
+    openBtn?.setAttribute("aria-expanded", String(open));
+    document.documentElement.style.overflow = open ? "hidden" : "";
+    if (open) setTimeout(() => focusables()[0]?.focus(), 50);
+    else openBtn?.focus({ preventScroll: true });
+  }
+
+  openBtn?.addEventListener("click", () => setOpen(openBtn.getAttribute("aria-expanded") !== "true"));
+  drawer?.querySelectorAll("[data-drawer-close]").forEach((el) => el.addEventListener("click", () => setOpen(false)));
+  drawer?.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") setOpen(false);
+    if (e.key !== "Tab") return;
+    const items = focusables();
+    const first = items[0];
+    const last = items[items.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  });
+</script>

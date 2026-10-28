@@ -1,0 +1,82 @@
+/* Vairam design tokens — derived from the logo (navy "V", teal leaf) and building signage (red). */
+:root {
+  /* Brand */
+  --navy-950: #050f24;
+  --navy-900: #0a1f44;
+  --navy-800: #0f2a5c;
+  --navy-700: #163a7a;
+  --navy-100: #e5ecf7;
+  --teal-700: #0b6f68;
+  --teal-600: #0e8a80;
+  --teal-500: #14a597;
+  --teal-400: #2cc3b2;
+  --teal-100: #d4f0ec;
+  --teal-50: #ecf8f6;
+  --alert-600: #d6343a;
+  --alert-50: #fdeeee;
+
+  /* Clinical blue (from the logo "V") is the action colour; teal is a supporting accent */
+  --blue-800: #123d82;
+  --blue-700: #164a9c;
+  --blue-600: #1b58b8;
+  --blue-100: #dce7f7;
+  --blue-50: #eef4fc;
+  --grad-brand: #1b58b8;
+  --grad-navy: #0a1f44;
+
+  /* Neutrals — cool, clean */
+  --paper: #ffffff;
+  --paper-2: #f4f7fb;
+  --white: #ffffff;
+  --ink: #0b1526;
+  --ink-2: #2a3546;
+  --ink-muted: #5d6879;
+  --line: #e7ecf3;
+  --line-strong: #d4dce7;
+
+  /* Type */
+  --font-display: "Poppins", "Noto Sans Tamil", system-ui, sans-serif;
+  --font-body: "Manrope", "Noto Sans Tamil", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --fs-xs: 0.8125rem;
+  --fs-sm: 0.9375rem;
+  --fs-base: 1.0625rem;
+  --fs-lg: 1.1875rem;
+  --fs-h4: 1.25rem;
+  --fs-h3: clamp(1.25rem, 1.05rem + 0.6vw, 1.5rem);
+  --fs-h2: clamp(1.75rem, 1.25rem + 1.6vw, 2.5rem);
+  --fs-h1: clamp(2.375rem, 1.5rem + 3vw, 3.75rem);
+
+  /* Space (8px scale) */
+  --s-1: 0.25rem;
+  --s-2: 0.5rem;
+  --s-3: 0.75rem;
+  --s-4: 1rem;
+  --s-5: 1.5rem;
+  --s-6: 2rem;
+  --s-7: 2.5rem;
+  --s-8: 3rem;
+  --s-9: 4rem;
+  --s-10: 6rem;
+  --section: clamp(4rem, 3rem + 4vw, 6.5rem);
+
+  /* Layout */
+  --container: 1240px;
+  --gutter: clamp(1rem, 0.5rem + 2.5vw, 2rem);
+  --header-h: 80px;
+  --utility-h: 38px;
+
+  /* Shape */
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 12px;
+  --r-pill: 8px;
+  --shadow-1: 0 1px 2px rgb(10 31 68 / 0.04), 0 4px 14px -6px rgb(10 31 68 / 0.08);
+  --shadow-2: 0 2px 4px rgb(10 31 68 / 0.04), 0 24px 48px -20px rgb(10 31 68 / 0.22);
+  --shadow-3: 0 30px 70px -28px rgb(10 31 68 / 0.35);
+  --shadow-teal: 0 8px 18px -10px rgb(27 88 184 / 0.55);
+
+  /* Motion */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur: 320ms;
+}
