@@ -21,8 +21,11 @@ const {
   cta = true,
 } = Astro.props;
 
-const canonical = new URL(Astro.url.pathname, site.url).href;
-const ogImageUrl = new URL(ogImage, site.url).href;
+// Netlify sets URL to the site's main address (the netlify.app link now, vairamhospital.com once the
+// domain is connected), so share previews always point at a server that actually exists.
+const baseUrl = (process.env.URL || site.url).replace(/\/$/, "");
+const canonical = new URL(Astro.url.pathname, baseUrl).href;
+const ogImageUrl = new URL(ogImage, baseUrl).href;
 
 const jsonLd = {
   "@context": "https://schema.org",
